@@ -163,7 +163,7 @@
 
     .main-container {
       padding: 1rem 1.25rem;
-      max-width: 1680px;
+      max-width: 1750px;
       margin: 0 auto;
       width: 100%;
       flex: 1;
@@ -256,26 +256,33 @@
       padding: 0.75rem 0.75rem;
       border-bottom: 1px solid rgba(38, 51, 77, 0.4);
       color: var(--text-main);
-      vertical-align: top;
+      vertical-align: middle;
     }
 
     tr:hover td { background-color: var(--surface-card); }
 
-    .passenger-badge-row {
+    .passenger-chip-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .passenger-chip {
+      background: rgba(18, 23, 34, 0.7);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 0.25rem;
-    }
-    .passenger-badge-row:last-child {
-      margin-bottom: 0;
+      gap: 0.5rem;
+      font-size: 0.75rem;
     }
 
     .badge {
       display: inline-block;
-      padding: 0.2rem 0.5rem;
+      padding: 0.15rem 0.45rem;
       border-radius: 4px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
     }
@@ -297,7 +304,7 @@
       color: var(--accent-purple);
       border: 1px solid var(--accent-purple);
       padding: 0.1rem 0.35rem;
-      border-radius: 3px;
+      border-radius: 4px;
       font-size: 0.68rem;
     }
 
@@ -310,7 +317,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.82);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(8px);
       display: none;
       place-items: center;
@@ -325,7 +332,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       width: 100%;
-      max-width: 900px;
+      max-width: 980px;
       max-height: 94vh;
       overflow-y: auto;
       padding: 1.5rem;
@@ -379,36 +386,56 @@
       box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
     }
 
-    /* Dynamic Passenger Rows */
-    .passenger-section {
+    /* Improved Modular Passenger Card Styling */
+    .passenger-wrapper {
       grid-column: 1 / -1;
-      background: #0d121c;
+      background: #0d121a;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
       margin-top: 0.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
-    .passenger-header-row {
+    .passenger-card {
+      background: #151c29;
+      border: 1px solid #283750;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .passenger-card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.4rem;
     }
 
-    .passenger-list-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
+    .passenger-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .passenger-entry-row {
+    .passenger-card-grid {
       display: grid;
-      grid-template-columns: 1fr 100px 110px 42px;
+      grid-template-columns: 2fr 1fr 1.2fr 1.5fr 1.5fr 1.2fr;
       gap: 0.6rem;
-      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .passenger-card-grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     .sync-status {
@@ -482,7 +509,7 @@
       <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑️</button>
     </div>
     <div id="vipInfoBadge" style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">
-      Scope: <span id="currentVipDisplay" style="color:#fff; font-weight:700;">-</span>
+      Active Scope: <span id="currentVipDisplay" style="color:#fff; font-weight:700;">-</span>
     </div>
   </div>
 
@@ -496,7 +523,7 @@
     <!-- Live Calculator Summary Bar -->
     <div class="summary-grid">
       <div class="summary-card">
-        <span>VIP Tab Tickets</span>
+        <span>Active Tab Records</span>
         <strong id="statCount">0</strong>
       </div>
       <div class="summary-card">
@@ -524,11 +551,8 @@
             <th>TRAIN NO/NAME</th>
             <th>FROM</th>
             <th>TO</th>
-            <th>PASSENGER DETAILS</th>
+            <th>PASSENGER DETAILS & SEATS</th>
             <th>TOTAL PAX</th>
-            <th>TKT CONFIRMED?</th>
-            <th>COACH / SEAT</th>
-            <th>QUOTA</th>
             <th>PNR</th>
             <th>TOTAL FARE</th>
             <th>REFUND AMT</th>
@@ -564,7 +588,7 @@
     </div>
   </div>
 
-  <!-- Record Modal with Dynamic Passenger Inputs -->
+  <!-- Record Modal with Clean Passenger Cards -->
   <div class="modal-overlay" id="recordModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -598,38 +622,26 @@
             <label>To Station</label>
             <input type="text" id="fTo" placeholder="e.g. NGP / SURAT" required>
           </div>
-
-          <!-- Dynamic Passengers Area -->
-          <div class="passenger-section">
-            <div class="passenger-header-row">
-              <label style="color:var(--accent-cyan); font-weight:700;">PASSENGERS LIST (NAME, AGE & GENDER)</label>
-              <button type="button" class="btn btn-purple" style="padding:0.3rem 0.6rem; font-size:0.75rem;" onclick="addPassengerRow()">➕ Add Passenger</button>
-            </div>
-            <div id="passengerContainer" class="passenger-list-container">
-              <!-- Dynamically Appended -->
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>TKT Confirmed?</label>
-            <select id="fConfirmed">
-              <option value="YES">YES</option>
-              <option value="NO (WL/RAC)">NO (WL/RAC)</option>
-              <option value="CANCELLED">CANCELLED</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Coach / Seat Please</label>
-            <input type="text" id="fSeat" placeholder="e.g. B4 - 34, 35">
-          </div>
-          <div class="form-group">
-            <label>Quota</label>
-            <input type="text" id="fQuota" placeholder="GN / TQ / PT" value="GN">
-          </div>
           <div class="form-group">
             <label>PNR</label>
             <input type="text" id="fPnr" placeholder="10 Digit IRCTC PNR" maxlength="10">
           </div>
+
+          <!-- Dynamic Individual Passenger Cards -->
+          <div class="passenger-wrapper">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="color:var(--accent-cyan); font-size:0.85rem; font-family:'JetBrains Mono', monospace;">PASSENGERS & INDIVIDUAL BERTH DETAILS</strong>
+                <p style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Har passenger ka status, seat aur quota alag configure karein.</p>
+              </div>
+              <button type="button" class="btn btn-purple" onclick="addPassengerCard()">➕ Add Passenger</button>
+            </div>
+            
+            <div id="passengerContainer" style="display:flex; flex-direction:column; gap:0.75rem;">
+              <!-- Passenger cards dynamically injected -->
+            </div>
+          </div>
+
           <div class="form-group">
             <label>Total Fare (₹)</label>
             <input type="number" step="0.01" id="fFare" placeholder="0.00" oninput="calculateSplitPreview()">
@@ -837,11 +849,11 @@
 
     async function deleteCurrentVip() {
       if (clientAppStore.vips.length <= 1) {
-        alert("At least ek client hona zaroori hai. Aakhri person delete nahi ho sakta.");
+        alert("Kam se kam ek client rehna zaroori hai.");
         return;
       }
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
-      if (confirm(`Delete VIP Client "${activeObj.name}"? Yeh turant GitHub par sync ho jayega.`)) {
+      if (confirm(`Delete VIP Client "${activeObj.name}"? Yeh cloud par bhi sync hoga.`)) {
         clientAppStore.vips = clientAppStore.vips.filter(v => v.id !== currentVipId);
         delete clientAppStore.data[currentVipId];
         currentVipId = clientAppStore.vips[0].id;
@@ -859,50 +871,98 @@
       renderTable();
     }
 
-    // Dynamic Passenger Row Handlers
-    function addPassengerRow(name = "", age = "", gender = "M") {
+    // Modular Passenger Card Creator with Individual Attributes
+    function addPassengerCard(data = {}) {
       const container = document.getElementById("passengerContainer");
-      const div = document.createElement("div");
-      div.className = "passenger-entry-row";
-      div.innerHTML = `
-        <input type="text" placeholder="Passenger Name" class="p-name" value="${escapeHtml(name)}" required>
-        <input type="text" placeholder="Age" class="p-age" value="${escapeHtml(age)}">
-        <select class="p-gender">
-          <option value="M" ${gender === 'M' ? 'selected' : ''}>Male</option>
-          <option value="F" ${gender === 'F' ? 'selected' : ''}>Female</option>
-          <option value="Other" ${gender === 'Other' ? 'selected' : ''}>Other</option>
-        </select>
-        <button type="button" class="btn btn-danger" style="padding:0.4rem;" onclick="removePassengerRow(this)">✕</button>
+      const card = document.createElement("div");
+      card.className = "passenger-card";
+      
+      const pIndex = container.children.length + 1;
+      const name = data.name || "";
+      const age = data.age || "";
+      const gender = data.gender || "M";
+      const confirmed = data.confirmed || "YES";
+      const seat = data.seat || "";
+      const quota = data.quota || "GN";
+
+      card.innerHTML = `
+        <div class="passenger-card-top">
+          <span class="passenger-tag">Passenger #${pIndex}</span>
+          <button type="button" class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="removePassengerCard(this)">🗑️ Remove</button>
+        </div>
+        <div class="passenger-card-grid">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" placeholder="Full Name" class="p-name" value="${escapeHtml(name)}" required>
+          </div>
+          <div class="form-group">
+            <label>Age</label>
+            <input type="text" placeholder="Age" class="p-age" value="${escapeHtml(age)}">
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select class="p-gender">
+              <option value="M" ${gender === 'M' ? 'selected' : ''}>Male</option>
+              <option value="F" ${gender === 'F' ? 'selected' : ''}>Female</option>
+              <option value="Other" ${gender === 'Other' ? 'selected' : ''}>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select class="p-confirmed">
+              <option value="YES" ${confirmed === 'YES' ? 'selected' : ''}>YES (CNF)</option>
+              <option value="NO (WL)" ${confirmed.includes('WL') ? 'selected' : ''}>NO (WL)</option>
+              <option value="RAC" ${confirmed.includes('RAC') ? 'selected' : ''}>RAC</option>
+              <option value="CANCELLED" ${confirmed === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Coach / Seat</label>
+            <input type="text" placeholder="e.g. B4-34" class="p-seat" value="${escapeHtml(seat)}">
+          </div>
+          <div class="form-group">
+            <label>Quota</label>
+            <input type="text" placeholder="GN/TQ/PT" class="p-quota" value="${escapeHtml(quota)}">
+          </div>
+        </div>
       `;
-      container.appendChild(div);
-      updatePassengerCount();
+      container.appendChild(card);
+      updatePassengerStats();
     }
 
-    function removePassengerRow(btn) {
+    function removePassengerCard(btn) {
       const container = document.getElementById("passengerContainer");
-      if (container.querySelectorAll(".passenger-entry-row").length > 1) {
-        btn.closest(".passenger-entry-row").remove();
-        updatePassengerCount();
+      if (container.querySelectorAll(".passenger-card").length > 1) {
+        btn.closest(".passenger-card").remove();
+        // Renumber labels
+        container.querySelectorAll(".passenger-card").forEach((card, idx) => {
+          card.querySelector(".passenger-tag").innerText = `Passenger #${idx + 1}`;
+        });
+        updatePassengerStats();
       } else {
-        alert("Kam se kam ek passenger hona zaroori hai.");
+        alert("Kam se kam ek passenger card hona zaroori hai.");
       }
     }
 
-    function updatePassengerCount() {
-      const count = document.querySelectorAll(".passenger-entry-row").length;
+    function updatePassengerStats() {
+      const count = document.querySelectorAll(".passenger-card").length;
       document.getElementById("fSeatCount").value = count;
       calculateSplitPreview();
     }
 
-    function getPassengersFromForm() {
-      const rows = document.querySelectorAll(".passenger-entry-row");
+    function getPassengersFromModal() {
+      const cards = document.querySelectorAll(".passenger-card");
       const list = [];
-      rows.forEach(r => {
-        const name = r.querySelector(".p-name").value.trim();
-        const age = r.querySelector(".p-age").value.trim();
-        const gender = r.querySelector(".p-gender").value;
+      cards.forEach(c => {
+        const name = c.querySelector(".p-name").value.trim();
+        const age = c.querySelector(".p-age").value.trim();
+        const gender = c.querySelector(".p-gender").value;
+        const confirmed = c.querySelector(".p-confirmed").value;
+        const seat = c.querySelector(".p-seat").value.trim();
+        const quota = c.querySelector(".p-quota").value.trim();
+
         if (name) {
-          list.push({ name, age, gender });
+          list.push({ name, age, gender, confirmed, seat, quota });
         }
       });
       return list;
@@ -910,12 +970,11 @@
 
     function escapeHtml(text) {
       if (!text) return "";
-      return text.replace(/[&<>"']/g, function(m) {
+      return String(text).replace(/[&<>"']/g, function(m) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
       });
     }
 
-    // Split Calculator Engine
     function calculateSplitPreview() {
       const fare = parseFloat(document.getElementById("fFare").value) || 0;
       const refund = parseFloat(document.getElementById("fRefund").value) || 0;
@@ -941,12 +1000,19 @@
         const fare = parseFloat(row.fare) || 0;
         const refund = parseFloat(row.refund) || 0;
 
-        // Support both passenger array and old string formats
+        // Backward compatibility layer
         let paxList = [];
         if (Array.isArray(row.passengers) && row.passengers.length > 0) {
           paxList = row.passengers;
         } else if (row.passenger) {
-          paxList = [{ name: row.passenger, age: row.age || "", gender: row.gender || "M" }];
+          paxList = [{ 
+            name: row.passenger, 
+            age: row.age || "", 
+            gender: row.gender || "M",
+            confirmed: row.confirmed || "YES",
+            seat: row.seat || "-",
+            quota: row.quota || "GN"
+          }];
         }
 
         const count = paxList.length > 0 ? paxList.length : (parseInt(row.seatCount) || 1);
@@ -956,19 +1022,24 @@
         totalFareSum += fare;
         totalRefundSum += refund;
 
-        const isCnf = (row.confirmed || "").toUpperCase().includes("YES");
-        const statusBadge = isCnf 
-          ? `<span class="badge badge-cnf">CNF</span>` 
-          : `<span class="badge badge-wl">${row.confirmed || 'WL/RAC'}</span>`;
+        // Render Individual Passenger Details
+        let paxHtml = paxList.map(p => {
+          const isCnf = (p.confirmed || "").toUpperCase().includes("YES");
+          const cnfBadge = isCnf 
+            ? `<span class="badge badge-cnf">CNF</span>` 
+            : `<span class="badge badge-wl">${p.confirmed || 'WL'}</span>`;
 
-        // Render Individual Passenger List inside Table Cell
-        let paxHtml = paxList.map(p => `
-          <div class="passenger-badge-row">
-            <span style="font-weight:700; color:var(--accent-cyan);">${escapeHtml(p.name)}</span>
-            ${p.age ? `<small style="color:var(--text-muted);">(${p.age}y)</small>` : ''}
-            <span class="badge-gender">${p.gender || 'M'}</span>
-          </div>
-        `).join('');
+          return `
+            <div class="passenger-chip">
+              <strong style="color:var(--accent-cyan); font-size:0.8rem;">${escapeHtml(p.name)}</strong>
+              ${p.age ? `<small style="color:var(--text-muted); font-size:0.7rem;">(${p.age}y)</small>` : ''}
+              <span class="badge-gender">${p.gender || 'M'}</span>
+              ${cnfBadge}
+              <span style="color:var(--accent-amber); font-weight:700; font-family:monospace;">${p.seat || '-'}</span>
+              <span style="color:var(--text-muted); font-size:0.7rem;">[${p.quota || 'GN'}]</span>
+            </div>
+          `;
+        }).join('');
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -981,11 +1052,12 @@
           <td style="font-weight:700; color:#fff;">${row.train || '-'}</td>
           <td>${row.from || '-'}</td>
           <td>${row.to || '-'}</td>
-          <td>${paxHtml || '-'}</td>
+          <td>
+            <div class="passenger-chip-container">
+              ${paxHtml || '-'}
+            </div>
+          </td>
           <td><strong style="color:var(--accent-purple); font-family:monospace;">${count} Pax</strong></td>
-          <td>${statusBadge}</td>
-          <td><strong style="color:var(--accent-amber);">${row.seat || '-'}</strong></td>
-          <td>${row.quota || '-'}</td>
           <td style="font-family:monospace;">${row.pnr || '-'}</td>
           <td style="font-family:monospace;">₹${fare.toFixed(2)}</td>
           <td style="font-family:monospace; color:var(--accent-red);">₹${refund.toFixed(2)}</td>
@@ -1011,10 +1083,9 @@
       document.getElementById("fCategory").value = currentTab;
       document.getElementById("recordModalTitle").innerText = "Create Travel Record";
       
-      // Reset passengers to single default row
       const pContainer = document.getElementById("passengerContainer");
       pContainer.innerHTML = "";
-      addPassengerRow();
+      addPassengerCard();
 
       calculateSplitPreview();
       document.getElementById("recordModal").classList.add("active");
@@ -1028,10 +1099,10 @@
       e.preventDefault();
       const targetCategory = document.getElementById("fCategory").value;
       const editId = document.getElementById("editRowId").value;
-      const passengersList = getPassengersFromForm();
+      const passengersList = getPassengersFromModal();
 
       if (passengersList.length === 0) {
-        alert("Please enter at least one passenger name.");
+        alert("Please add at least one passenger.");
         return;
       }
 
@@ -1042,12 +1113,6 @@
         from: document.getElementById("fFrom").value.trim(),
         to: document.getElementById("fTo").value.trim(),
         passengers: passengersList,
-        passenger: passengersList.map(p => p.name).join(", "),
-        age: passengersList.map(p => p.age).join(", "),
-        gender: passengersList.map(p => p.gender).join(", "),
-        confirmed: document.getElementById("fConfirmed").value,
-        seat: document.getElementById("fSeat").value.trim(),
-        quota: document.getElementById("fQuota").value.trim(),
         pnr: document.getElementById("fPnr").value.trim(),
         fare: parseFloat(document.getElementById("fFare").value) || 0,
         refund: parseFloat(document.getElementById("fRefund").value) || 0,
@@ -1092,24 +1157,28 @@
       document.getElementById("fTrain").value = targetRow.train || "";
       document.getElementById("fFrom").value = targetRow.from || "";
       document.getElementById("fTo").value = targetRow.to || "";
+      document.getElementById("fPnr").value = targetRow.pnr || "";
 
-      // Populate Passenger Rows
+      // Load Individual Passenger Cards
       const pContainer = document.getElementById("passengerContainer");
       pContainer.innerHTML = "";
       if (Array.isArray(targetRow.passengers) && targetRow.passengers.length > 0) {
-        targetRow.passengers.forEach(p => addPassengerRow(p.name, p.age, p.gender));
+        targetRow.passengers.forEach(p => addPassengerCard(p));
       } else if (targetRow.passenger) {
-        // Fallback for previous records
+        // Fallback for previous legacy format
         const names = targetRow.passenger.split(",");
-        names.forEach(n => addPassengerRow(n.trim(), targetRow.age || "", targetRow.gender || "M"));
+        names.forEach(n => addPassengerCard({
+          name: n.trim(),
+          age: targetRow.age || "",
+          gender: targetRow.gender || "M",
+          confirmed: targetRow.confirmed || "YES",
+          seat: targetRow.seat || "",
+          quota: targetRow.quota || "GN"
+        }));
       } else {
-        addPassengerRow();
+        addPassengerCard();
       }
 
-      document.getElementById("fConfirmed").value = targetRow.confirmed || "YES";
-      document.getElementById("fSeat").value = targetRow.seat || "";
-      document.getElementById("fQuota").value = targetRow.quota || "GN";
-      document.getElementById("fPnr").value = targetRow.pnr || "";
       document.getElementById("fFare").value = targetRow.fare || 0;
       document.getElementById("fRefund").value = targetRow.refund || 0;
       document.getElementById("fRemarks").value = targetRow.remarks || "";
@@ -1117,7 +1186,7 @@
       document.getElementById("fId").value = targetRow.idProof || "";
       document.getElementById("fBank").value = targetRow.bank || "";
 
-      updatePassengerCount();
+      updatePassengerStats();
       document.getElementById("recordModalTitle").innerText = "Edit Travel Record";
       document.getElementById("recordModal").classList.add("active");
     }
@@ -1130,14 +1199,14 @@
       }
     }
 
-    // Export to Excel / CSV Engine
+    // Clean, Sober Excel / CSV Export Engine matching template format
     function exportToExcel() {
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
       const vipName = activeObj ? activeObj.name : "VIP";
       const rows = clientAppStore.data[currentVipId][currentTab] || [];
 
       if (rows.length === 0) {
-        alert("Export karne ke liye koi record nahi hai.");
+        alert("Export karne ke liye koi record maujood nahi hai.");
         return;
       }
 
@@ -1153,41 +1222,46 @@
       csvRows.push([]);
       csvRows.push(headers);
 
-      rows.forEach((r, idx) => {
-        let paxNames = "";
-        let paxAges = "";
-        let paxGenders = "";
+      let serialCounter = 1;
 
-        if (Array.isArray(r.passengers)) {
-          paxNames = r.passengers.map(p => p.name).join(" | ");
-          paxAges = r.passengers.map(p => p.age).join(" | ");
-          paxGenders = r.passengers.map(p => p.gender).join(" | ");
+      rows.forEach((r) => {
+        let paxList = [];
+        if (Array.isArray(r.passengers) && r.passengers.length > 0) {
+          paxList = r.passengers;
         } else {
-          paxNames = r.passenger || "";
-          paxAges = r.age || "";
-          paxGenders = r.gender || "";
+          paxList = [{
+            name: r.passenger || "-",
+            age: r.age || "",
+            gender: r.gender || "M",
+            confirmed: r.confirmed || "YES",
+            seat: r.seat || "",
+            quota: r.quota || "GN"
+          }];
         }
 
-        csvRows.push([
-          idx + 1,
-          r.date || "",
-          r.train || "",
-          r.from || "",
-          r.to || "",
-          paxNames,
-          paxAges,
-          paxGenders,
-          r.confirmed || "",
-          r.seat || "",
-          r.quota || "",
-          r.pnr || "",
-          r.remarks || "",
-          r.remarks1 || "",
-          parseFloat(r.fare || 0).toFixed(2),
-          parseFloat(r.refund || 0).toFixed(2),
-          r.idProof || "",
-          r.bank || ""
-        ]);
+        // Export neat row for each passenger, sharing common journey billing
+        paxList.forEach((p, pIndex) => {
+          csvRows.push([
+            serialCounter++,
+            r.date || "",
+            r.train || "",
+            r.from || "",
+            r.to || "",
+            p.name || "",
+            p.age || "",
+            p.gender || "",
+            p.confirmed || "",
+            p.seat || "",
+            p.quota || "",
+            r.pnr || "",
+            r.remarks || "",
+            r.remarks1 || "",
+            pIndex === 0 ? parseFloat(r.fare || 0).toFixed(2) : "", // Fare only on first pax row for clean totals
+            pIndex === 0 ? parseFloat(r.refund || 0).toFixed(2) : "",
+            r.idProof || "",
+            r.bank || ""
+          ]);
+        });
       });
 
       const csvContent = "\uFEFF" + csvRows.map(e => e.map(item => `"${String(item).replace(/"/g, '""')}"`).join(",")).join("\r\n");
@@ -1220,7 +1294,7 @@
         try {
           const parsed = JSON.parse(e.target.result);
           if (parsed && parsed.vips && parsed.data) {
-            if (confirm("Restore karne par aapka current data overwrite ho jayega. Continue karein?")) {
+            if (confirm("Restore karne se current memory update ho jayegi. Continue karein?")) {
               clientAppStore = parsed;
               saveLocally();
               currentVipId = clientAppStore.vips[0].id;
