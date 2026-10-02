@@ -90,15 +90,16 @@
 
     .header-actions {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.55rem 0.9rem;
+      padding: 0.5rem 0.85rem;
       border-radius: var(--radius);
       font-size: 0.82rem;
       font-weight: 600;
@@ -144,6 +145,7 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      flex-wrap: wrap;
     }
 
     .vip-dropdown {
@@ -156,12 +158,12 @@
       font-size: 0.9rem;
       outline: none;
       cursor: pointer;
-      min-width: 220px;
+      min-width: 200px;
     }
 
     .main-container {
       padding: 1rem 1.25rem;
-      max-width: 1650px;
+      max-width: 1680px;
       margin: 0 auto;
       width: 100%;
       flex: 1;
@@ -254,9 +256,20 @@
       padding: 0.75rem 0.75rem;
       border-bottom: 1px solid rgba(38, 51, 77, 0.4);
       color: var(--text-main);
+      vertical-align: top;
     }
 
     tr:hover td { background-color: var(--surface-card); }
+
+    .passenger-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.25rem;
+    }
+    .passenger-badge-row:last-child {
+      margin-bottom: 0;
+    }
 
     .badge {
       display: inline-block;
@@ -279,6 +292,15 @@
       border: 1px solid var(--accent-amber);
     }
 
+    .badge-gender {
+      background: rgba(139, 92, 246, 0.2);
+      color: var(--accent-purple);
+      border: 1px solid var(--accent-purple);
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      font-size: 0.68rem;
+    }
+
     .calc-tag {
       font-family: 'JetBrains Mono', monospace;
       color: var(--accent-cyan);
@@ -288,7 +310,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.82);
       backdrop-filter: blur(8px);
       display: none;
       place-items: center;
@@ -303,8 +325,8 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       width: 100%;
-      max-width: 840px;
-      max-height: 92vh;
+      max-width: 900px;
+      max-height: 94vh;
       overflow-y: auto;
       padding: 1.5rem;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
@@ -357,6 +379,38 @@
       box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
     }
 
+    /* Dynamic Passenger Rows */
+    .passenger-section {
+      grid-column: 1 / -1;
+      background: #0d121c;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .passenger-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .passenger-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .passenger-entry-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 110px 42px;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
     .sync-status {
       display: inline-flex;
       align-items: center;
@@ -399,7 +453,7 @@
 
   <header>
     <div class="brand">
-      <div class="brand-icon">👑</div>
+      <div class="brand-icon">🚆</div>
       <div>
         <div class="brand-title">Irctc My Calculator</div>
         <div class="brand-sub">TechIsInMyDNA/Irctc-My-Calculator</div>
@@ -410,7 +464,11 @@
         <span class="status-dot" id="syncDot"></span>
         <span id="syncText">Syncing...</span>
       </div>
-      <button class="btn" onclick="openMasterPasscodeModal()">⚙️️ Settings</button>
+      <button class="btn btn-green" onclick="exportToExcel()">📊 Export Excel</button>
+      <button class="btn" onclick="downloadBackup()">💾 Backup</button>
+      <button class="btn" onclick="document.getElementById('restoreFileInput').click()">📥 Restore</button>
+      <input type="file" id="restoreFileInput" style="display:none;" accept=".json" onchange="restoreBackupFile(event)">
+      <button class="btn" onclick="openMasterPasscodeModal()">⚙ Settings</button>
       <button class="btn btn-primary" onclick="openRecordModal()">➕ New Entry</button>
     </div>
   </header>
@@ -424,7 +482,7 @@
       <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑️</button>
     </div>
     <div id="vipInfoBadge" style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">
-      Category Scope: <span id="currentVipDisplay" style="color:#fff; font-weight:700;">-</span>
+      Scope: <span id="currentVipDisplay" style="color:#fff; font-weight:700;">-</span>
     </div>
   </div>
 
@@ -435,7 +493,7 @@
       <button class="tab-btn" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
     </div>
 
-    <!-- Live Split Calculator Bar -->
+    <!-- Live Calculator Summary Bar -->
     <div class="summary-grid">
       <div class="summary-card">
         <span>VIP Tab Tickets</span>
@@ -455,7 +513,7 @@
       </div>
     </div>
 
-    <!-- Table -->
+    <!-- Data Table -->
     <div class="table-responsive">
       <table id="mainDataTable">
         <thead>
@@ -466,9 +524,8 @@
             <th>TRAIN NO/NAME</th>
             <th>FROM</th>
             <th>TO</th>
-            <th>PASSENGER NAME</th>
-            <th>AGE</th>
-            <th>GENDER</th>
+            <th>PASSENGER DETAILS</th>
+            <th>TOTAL PAX</th>
             <th>TKT CONFIRMED?</th>
             <th>COACH / SEAT</th>
             <th>QUOTA</th>
@@ -507,7 +564,7 @@
     </div>
   </div>
 
-  <!-- Record Modal -->
+  <!-- Record Modal with Dynamic Passenger Inputs -->
   <div class="modal-overlay" id="recordModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -541,22 +598,18 @@
             <label>To Station</label>
             <input type="text" id="fTo" placeholder="e.g. NGP / SURAT" required>
           </div>
-          <div class="form-group">
-            <label>Name of Passenger(s)</label>
-            <input type="text" id="fPassenger" placeholder="Separate multiple names by commas" required>
+
+          <!-- Dynamic Passengers Area -->
+          <div class="passenger-section">
+            <div class="passenger-header-row">
+              <label style="color:var(--accent-cyan); font-weight:700;">PASSENGERS LIST (NAME, AGE & GENDER)</label>
+              <button type="button" class="btn btn-purple" style="padding:0.3rem 0.6rem; font-size:0.75rem;" onclick="addPassengerRow()">➕ Add Passenger</button>
+            </div>
+            <div id="passengerContainer" class="passenger-list-container">
+              <!-- Dynamically Appended -->
+            </div>
           </div>
-          <div class="form-group">
-            <label>Age</label>
-            <input type="text" id="fAge" placeholder="e.g. 26">
-          </div>
-          <div class="form-group">
-            <label>Gender</label>
-            <select id="fGender">
-              <option value="M">Male</option>
-              <option value="F">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
+
           <div class="form-group">
             <label>TKT Confirmed?</label>
             <select id="fConfirmed">
@@ -586,8 +639,8 @@
             <input type="number" step="0.01" id="fRefund" placeholder="0.00" oninput="calculateSplitPreview()">
           </div>
           <div class="form-group">
-            <label>Individual Count (For Split)</label>
-            <input type="number" id="fSeatCount" value="1" min="1" oninput="calculateSplitPreview()">
+            <label>Total Passengers (Headcount)</label>
+            <input type="number" id="fSeatCount" value="1" min="1" readonly style="background:#0d121c; color:var(--accent-purple); font-weight:700;">
           </div>
           <div class="form-group">
             <label>Net Cost Per Person (Auto)</label>
@@ -625,7 +678,7 @@
         <h3>🔐 Security Authorization</h3>
       </div>
       <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1.25rem;">
-        Enter Master Key to configure background GitHub syncing parameters.
+        Enter Master Key to configure cloud sync parameters.
       </p>
       <form onsubmit="verifyMasterPasscode(event)">
         <div class="form-group" style="margin-bottom:1.25rem;">
@@ -660,7 +713,7 @@
         <div class="form-group">
           <label>AES-256 Military Passphrase</label>
           <input type="password" id="vaultKey" placeholder="Passphrase to encrypt cloud JSON">
-          <small style="color:var(--text-muted); font-size:0.7rem;">Data gets encrypted locally before push.</small>
+          <small style="color:var(--text-muted); font-size:0.7rem;">Data encrypted before push.</small>
         </div>
         <button class="btn btn-primary" onclick="saveCredentials()">💾 Save & Connect Cloud</button>
       </div>
@@ -718,7 +771,7 @@
         await liveSyncPull(true);
       }
 
-      // Live Auto-Sync Polling Har 5 seconds me
+      // Auto-Sync Polling Every 5 Seconds
       setInterval(() => {
         if (!isSyncing && localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
           liveSyncPull(false);
@@ -806,13 +859,70 @@
       renderTable();
     }
 
+    // Dynamic Passenger Row Handlers
+    function addPassengerRow(name = "", age = "", gender = "M") {
+      const container = document.getElementById("passengerContainer");
+      const div = document.createElement("div");
+      div.className = "passenger-entry-row";
+      div.innerHTML = `
+        <input type="text" placeholder="Passenger Name" class="p-name" value="${escapeHtml(name)}" required>
+        <input type="text" placeholder="Age" class="p-age" value="${escapeHtml(age)}">
+        <select class="p-gender">
+          <option value="M" ${gender === 'M' ? 'selected' : ''}>Male</option>
+          <option value="F" ${gender === 'F' ? 'selected' : ''}>Female</option>
+          <option value="Other" ${gender === 'Other' ? 'selected' : ''}>Other</option>
+        </select>
+        <button type="button" class="btn btn-danger" style="padding:0.4rem;" onclick="removePassengerRow(this)">✕</button>
+      `;
+      container.appendChild(div);
+      updatePassengerCount();
+    }
+
+    function removePassengerRow(btn) {
+      const container = document.getElementById("passengerContainer");
+      if (container.querySelectorAll(".passenger-entry-row").length > 1) {
+        btn.closest(".passenger-entry-row").remove();
+        updatePassengerCount();
+      } else {
+        alert("Kam se kam ek passenger hona zaroori hai.");
+      }
+    }
+
+    function updatePassengerCount() {
+      const count = document.querySelectorAll(".passenger-entry-row").length;
+      document.getElementById("fSeatCount").value = count;
+      calculateSplitPreview();
+    }
+
+    function getPassengersFromForm() {
+      const rows = document.querySelectorAll(".passenger-entry-row");
+      const list = [];
+      rows.forEach(r => {
+        const name = r.querySelector(".p-name").value.trim();
+        const age = r.querySelector(".p-age").value.trim();
+        const gender = r.querySelector(".p-gender").value;
+        if (name) {
+          list.push({ name, age, gender });
+        }
+      });
+      return list;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return text.replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+      });
+    }
+
+    // Split Calculator Engine
     function calculateSplitPreview() {
       const fare = parseFloat(document.getElementById("fFare").value) || 0;
       const refund = parseFloat(document.getElementById("fRefund").value) || 0;
       const count = parseInt(document.getElementById("fSeatCount").value) || 1;
       const netTotal = Math.max(0, fare - refund);
       const perSeat = (netTotal / count).toFixed(2);
-      document.getElementById("fNetPerSeat").value = `₹${perSeat} (${count} Seat${count > 1 ? 's' : ''})`;
+      document.getElementById("fNetPerSeat").value = `₹${perSeat} (${count} Pax)`;
     }
 
     function renderTable() {
@@ -830,7 +940,16 @@
       rows.forEach((row, index) => {
         const fare = parseFloat(row.fare) || 0;
         const refund = parseFloat(row.refund) || 0;
-        const count = parseInt(row.seatCount) || 1;
+
+        // Support both passenger array and old string formats
+        let paxList = [];
+        if (Array.isArray(row.passengers) && row.passengers.length > 0) {
+          paxList = row.passengers;
+        } else if (row.passenger) {
+          paxList = [{ name: row.passenger, age: row.age || "", gender: row.gender || "M" }];
+        }
+
+        const count = paxList.length > 0 ? paxList.length : (parseInt(row.seatCount) || 1);
         const netCost = fare - refund;
         const perSeat = (netCost / count).toFixed(2);
 
@@ -841,6 +960,15 @@
         const statusBadge = isCnf 
           ? `<span class="badge badge-cnf">CNF</span>` 
           : `<span class="badge badge-wl">${row.confirmed || 'WL/RAC'}</span>`;
+
+        // Render Individual Passenger List inside Table Cell
+        let paxHtml = paxList.map(p => `
+          <div class="passenger-badge-row">
+            <span style="font-weight:700; color:var(--accent-cyan);">${escapeHtml(p.name)}</span>
+            ${p.age ? `<small style="color:var(--text-muted);">(${p.age}y)</small>` : ''}
+            <span class="badge-gender">${p.gender || 'M'}</span>
+          </div>
+        `).join('');
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -853,16 +981,15 @@
           <td style="font-weight:700; color:#fff;">${row.train || '-'}</td>
           <td>${row.from || '-'}</td>
           <td>${row.to || '-'}</td>
-          <td style="color:var(--accent-cyan); font-weight:600;">${row.passenger || '-'}</td>
-          <td>${row.age || '-'}</td>
-          <td>${row.gender || '-'}</td>
+          <td>${paxHtml || '-'}</td>
+          <td><strong style="color:var(--accent-purple); font-family:monospace;">${count} Pax</strong></td>
           <td>${statusBadge}</td>
           <td><strong style="color:var(--accent-amber);">${row.seat || '-'}</strong></td>
           <td>${row.quota || '-'}</td>
           <td style="font-family:monospace;">${row.pnr || '-'}</td>
           <td style="font-family:monospace;">₹${fare.toFixed(2)}</td>
           <td style="font-family:monospace; color:var(--accent-red);">₹${refund.toFixed(2)}</td>
-          <td class="calc-tag">₹${perSeat} <small>(${count}p)</small></td>
+          <td class="calc-tag">₹${perSeat} <small>/seat</small></td>
           <td>${row.remarks || '-'}</td>
           <td>${row.remarks1 || '-'}</td>
           <td>${row.idProof || '-'}</td>
@@ -883,6 +1010,12 @@
       document.getElementById("editRowId").value = "";
       document.getElementById("fCategory").value = currentTab;
       document.getElementById("recordModalTitle").innerText = "Create Travel Record";
+      
+      // Reset passengers to single default row
+      const pContainer = document.getElementById("passengerContainer");
+      pContainer.innerHTML = "";
+      addPassengerRow();
+
       calculateSplitPreview();
       document.getElementById("recordModal").classList.add("active");
     }
@@ -895,6 +1028,12 @@
       e.preventDefault();
       const targetCategory = document.getElementById("fCategory").value;
       const editId = document.getElementById("editRowId").value;
+      const passengersList = getPassengersFromForm();
+
+      if (passengersList.length === 0) {
+        alert("Please enter at least one passenger name.");
+        return;
+      }
 
       const record = {
         id: editId || 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
@@ -902,16 +1041,17 @@
         train: document.getElementById("fTrain").value.trim(),
         from: document.getElementById("fFrom").value.trim(),
         to: document.getElementById("fTo").value.trim(),
-        passenger: document.getElementById("fPassenger").value.trim(),
-        age: document.getElementById("fAge").value.trim(),
-        gender: document.getElementById("fGender").value,
+        passengers: passengersList,
+        passenger: passengersList.map(p => p.name).join(", "),
+        age: passengersList.map(p => p.age).join(", "),
+        gender: passengersList.map(p => p.gender).join(", "),
         confirmed: document.getElementById("fConfirmed").value,
         seat: document.getElementById("fSeat").value.trim(),
         quota: document.getElementById("fQuota").value.trim(),
         pnr: document.getElementById("fPnr").value.trim(),
         fare: parseFloat(document.getElementById("fFare").value) || 0,
         refund: parseFloat(document.getElementById("fRefund").value) || 0,
-        seatCount: parseInt(document.getElementById("fSeatCount").value) || 1,
+        seatCount: passengersList.length,
         remarks: document.getElementById("fRemarks").value.trim(),
         remarks1: document.getElementById("fRemarks1").value.trim(),
         idProof: document.getElementById("fId").value.trim(),
@@ -952,22 +1092,32 @@
       document.getElementById("fTrain").value = targetRow.train || "";
       document.getElementById("fFrom").value = targetRow.from || "";
       document.getElementById("fTo").value = targetRow.to || "";
-      document.getElementById("fPassenger").value = targetRow.passenger || "";
-      document.getElementById("fAge").value = targetRow.age || "";
-      document.getElementById("fGender").value = targetRow.gender || "M";
+
+      // Populate Passenger Rows
+      const pContainer = document.getElementById("passengerContainer");
+      pContainer.innerHTML = "";
+      if (Array.isArray(targetRow.passengers) && targetRow.passengers.length > 0) {
+        targetRow.passengers.forEach(p => addPassengerRow(p.name, p.age, p.gender));
+      } else if (targetRow.passenger) {
+        // Fallback for previous records
+        const names = targetRow.passenger.split(",");
+        names.forEach(n => addPassengerRow(n.trim(), targetRow.age || "", targetRow.gender || "M"));
+      } else {
+        addPassengerRow();
+      }
+
       document.getElementById("fConfirmed").value = targetRow.confirmed || "YES";
       document.getElementById("fSeat").value = targetRow.seat || "";
       document.getElementById("fQuota").value = targetRow.quota || "GN";
       document.getElementById("fPnr").value = targetRow.pnr || "";
       document.getElementById("fFare").value = targetRow.fare || 0;
       document.getElementById("fRefund").value = targetRow.refund || 0;
-      document.getElementById("fSeatCount").value = targetRow.seatCount || 1;
       document.getElementById("fRemarks").value = targetRow.remarks || "";
       document.getElementById("fRemarks1").value = targetRow.remarks1 || "";
       document.getElementById("fId").value = targetRow.idProof || "";
       document.getElementById("fBank").value = targetRow.bank || "";
 
-      calculateSplitPreview();
+      updatePassengerCount();
       document.getElementById("recordModalTitle").innerText = "Edit Travel Record";
       document.getElementById("recordModal").classList.add("active");
     }
@@ -980,6 +1130,117 @@
       }
     }
 
+    // Export to Excel / CSV Engine
+    function exportToExcel() {
+      const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
+      const vipName = activeObj ? activeObj.name : "VIP";
+      const rows = clientAppStore.data[currentVipId][currentTab] || [];
+
+      if (rows.length === 0) {
+        alert("Export karne ke liye koi record nahi hai.");
+        return;
+      }
+
+      const headers = [
+        "SR NO:-", "DATE OF TRAVEL:-", "TRAIN NO/NAME:-", "FROM:-", "TO:-",
+        "NAME OF PASSENGER:-", "AGE:-", "GENDER:-", "TKT CONFIRMED?:-",
+        "IF YES, COACH/SEAT PLEASE:-", "QUOTA:-", "PNR:-", "REMARKS:-",
+        "REMARKS1:-", "TOTAL FARE:-", "REFUND AMT,IF ANY:-", "ID:-", "BANK:-"
+      ];
+
+      const csvRows = [];
+      csvRows.push([`FY26_27 TRAVEL JOURNEY PLAN:- ${vipName} (${currentTab})`]);
+      csvRows.push([]);
+      csvRows.push(headers);
+
+      rows.forEach((r, idx) => {
+        let paxNames = "";
+        let paxAges = "";
+        let paxGenders = "";
+
+        if (Array.isArray(r.passengers)) {
+          paxNames = r.passengers.map(p => p.name).join(" | ");
+          paxAges = r.passengers.map(p => p.age).join(" | ");
+          paxGenders = r.passengers.map(p => p.gender).join(" | ");
+        } else {
+          paxNames = r.passenger || "";
+          paxAges = r.age || "";
+          paxGenders = r.gender || "";
+        }
+
+        csvRows.push([
+          idx + 1,
+          r.date || "",
+          r.train || "",
+          r.from || "",
+          r.to || "",
+          paxNames,
+          paxAges,
+          paxGenders,
+          r.confirmed || "",
+          r.seat || "",
+          r.quota || "",
+          r.pnr || "",
+          r.remarks || "",
+          r.remarks1 || "",
+          parseFloat(r.fare || 0).toFixed(2),
+          parseFloat(r.refund || 0).toFixed(2),
+          r.idProof || "",
+          r.bank || ""
+        ]);
+      });
+
+      const csvContent = "\uFEFF" + csvRows.map(e => e.map(item => `"${String(item).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${vipName.replace(/\s+/g, '_')}_${currentTab}_Hisaab.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Direct Full Backup & Restore Engine
+    function downloadBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clientAppStore, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `IRCTC_VIP_BACKUP_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function restoreBackupFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && parsed.vips && parsed.data) {
+            if (confirm("Restore karne par aapka current data overwrite ho jayega. Continue karein?")) {
+              clientAppStore = parsed;
+              saveLocally();
+              currentVipId = clientAppStore.vips[0].id;
+              refreshVipDropdown();
+              renderTable();
+              await liveSyncPush();
+              alert("Backup successfully restore ho gaya!");
+            }
+          } else {
+            alert("Invalid backup file structure!");
+          }
+        } catch (err) {
+          alert("Backup restore karne me error: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = "";
+    }
+
+    // Passcode Interceptor & Settings
     function openMasterPasscodeModal() {
       document.getElementById("inputMasterKey").value = "";
       document.getElementById("passcodeError").style.display = "none";
@@ -1080,7 +1341,6 @@
       return JSON.parse(new TextDecoder().decode(decrypted));
     }
 
-    // Helper: Fresh Remote SHA fetcher (Cache-Busting)
     async function fetchFreshSha(token) {
       const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?_nocache=${Date.now()}`;
       const res = await fetch(url, {
@@ -1114,11 +1374,10 @@
         const encryptedData = await encryptPayload(clientAppStore, vaultKey);
         const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
-        // Hamesha fresh sha fetch karein race conditions aur conflicts se bachne ke liye
         const latestSha = await fetchFreshSha(token);
 
         const bodyPayload = {
-          message: `Live Sync VIP Delete/Update: ${new Date().toISOString()}`,
+          message: `Live Sync VIP Update: ${new Date().toISOString()}`,
           content: btoa(unescape(encodeURIComponent(encryptedData))),
           ...(latestSha && { sha: latestSha })
         };
@@ -1148,7 +1407,7 @@
       }
     }
 
-    // Live GitHub Pull with Cache-Buster & Sha Checking
+    // Live GitHub Pull with Cache-Buster
     async function liveSyncPull(isManualOrInit = false) {
       const token = localStorage.getItem("IRCTC_GH_TOKEN");
       const vaultKey = localStorage.getItem("IRCTC_VAULT_KEY");
@@ -1167,7 +1426,6 @@
 
         if (res.ok) {
           const data = await res.json();
-          // Agar file SHA change nahi hui hai, to duplicate decrypt skip karein
           if (!isManualOrInit && data.sha === lastKnownRemoteSha) {
             setSyncStatus("synced", "Real-Time Synced");
             return;
@@ -1178,7 +1436,6 @@
           const remoteStore = await decryptPayload(encryptedString, vaultKey);
 
           if (remoteStore && remoteStore.vips) {
-            // Check karein remote data newer hai ya nahi
             const localMod = clientAppStore.lastModified || 0;
             const remoteMod = remoteStore.lastModified || 0;
 
@@ -1196,7 +1453,6 @@
           setSyncStatus("synced", "Real-Time Synced");
         }
       } catch (err) {
-        // Background polling errors do not interrupt UI
         if (isManualOrInit) {
           console.warn("Pull error", err);
           setSyncStatus("error", "Sync Pending");
