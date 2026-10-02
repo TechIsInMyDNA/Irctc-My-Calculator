@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Irctc My Calculator</title>
+  <title>Irctc My Calculator - VIP Multi-Client</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -20,6 +20,7 @@
       --accent-red: #ef4444;
       --accent-amber: #f59e0b;
       --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --radius: 10px;
@@ -62,16 +63,16 @@
     }
 
     .brand-icon {
-      background: linear-gradient(135deg, #2563eb, #06b6d4);
-      width: 36px;
-      height: 36px;
+      background: linear-gradient(135deg, #2563eb, #8b5cf6);
+      width: 38px;
+      height: 38px;
       border-radius: 8px;
       display: grid;
       place-items: center;
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: #fff;
-      box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
     }
 
     .brand-title {
@@ -89,7 +90,7 @@
 
     .header-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.6rem;
       align-items: center;
     }
 
@@ -113,22 +114,11 @@
       border-color: var(--border-focus);
     }
 
-    .btn-primary {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      border-color: var(--primary-hover);
-    }
-
-    .btn-green {
-      background: var(--accent-green);
-      border-color: var(--accent-green);
-      color: #fff;
-    }
-
+    .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+    .btn-green { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+    .btn-purple { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
+    
     .btn-danger {
       background: rgba(239, 68, 68, 0.15);
       border-color: var(--accent-red);
@@ -139,9 +129,40 @@
       color: #fff;
     }
 
+    /* VIP Selector Panel */
+    .vip-selection-bar {
+      background: #0f1523;
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .vip-selector-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .vip-dropdown {
+      background: var(--surface-card);
+      color: #fff;
+      border: 1px solid var(--accent-purple);
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+      min-width: 220px;
+    }
+
     .main-container {
       padding: 1rem 1.25rem;
-      max-width: 1600px;
+      max-width: 1650px;
       margin: 0 auto;
       width: 100%;
       flex: 1;
@@ -236,9 +257,7 @@
       color: var(--text-main);
     }
 
-    tr:hover td {
-      background-color: var(--surface-card);
-    }
+    tr:hover td { background-color: var(--surface-card); }
 
     .badge {
       display: inline-block;
@@ -278,9 +297,7 @@
       padding: 1rem;
     }
 
-    .modal-overlay.active {
-      display: grid;
-    }
+    .modal-overlay.active { display: grid; }
 
     .modal-box {
       background: var(--surface);
@@ -303,11 +320,7 @@
       padding-bottom: 0.75rem;
     }
 
-    .modal-header h3 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-    }
+    .modal-header h3 { font-size: 1.15rem; font-weight: 700; color: #fff; }
 
     .form-grid {
       display: grid;
@@ -348,7 +361,7 @@
     .sync-status {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
       font-size: 0.75rem;
       font-family: 'JetBrains Mono', monospace;
       color: var(--text-muted);
@@ -366,8 +379,20 @@
       box-shadow: 0 0 8px var(--accent-green);
     }
 
+    .status-dot.busy {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan);
+      animation: pulse 1s infinite alternate;
+    }
+
     .status-dot.error {
       background: var(--accent-red);
+      box-shadow: 0 0 8px var(--accent-red);
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.4; }
+      to { opacity: 1; }
     }
   </style>
 </head>
@@ -375,7 +400,7 @@
 
   <header>
     <div class="brand">
-      <div class="brand-icon">🚆</div>
+      <div class="brand-icon">👑</div>
       <div>
         <div class="brand-title">Irctc My Calculator</div>
         <div class="brand-sub">TechIsInMyDNA/Irctc-My-Calculator</div>
@@ -384,12 +409,25 @@
     <div class="header-actions">
       <div class="sync-status">
         <span class="status-dot" id="syncDot"></span>
-        <span id="syncText">Local Only</span>
+        <span id="syncText">Live Cloud Sync</span>
       </div>
-      <button class="btn" onclick="openMasterPasscodeModal()">⚙️ Settings & Sync</button>
+      <button class="btn" onclick="openMasterPasscodeModal()">⚙️ Settings</button>
       <button class="btn btn-primary" onclick="openRecordModal()">➕ New Entry</button>
     </div>
   </header>
+
+  <!-- VIP Customer Selector Bar -->
+  <div class="vip-selection-bar">
+    <div class="vip-selector-group">
+      <span style="font-size:0.8rem; font-weight:700; color:var(--accent-purple); font-family:monospace;">ACTIVE VIP PERSON:</span>
+      <select id="vipSelect" class="vip-dropdown" onchange="onVipChange()"></select>
+      <button class="btn btn-purple" onclick="openNewVipModal()">➕ Add Person / VIP</button>
+      <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑️</button>
+    </div>
+    <div id="vipInfoBadge" style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">
+      Category Scope: <span id="currentVipDisplay" style="color:#fff; font-weight:700;">-</span>
+    </div>
+  </div>
 
   <main class="main-container">
     <div class="tab-bar">
@@ -398,10 +436,10 @@
       <button class="tab-btn" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
     </div>
 
-    <!-- Smart Split Calculator Bar -->
+    <!-- Smart Built-in Live Split Calculator Bar -->
     <div class="summary-grid">
       <div class="summary-card">
-        <span>Active Tab Records</span>
+        <span>VIP Tab Tickets</span>
         <strong id="statCount">0</strong>
       </div>
       <div class="summary-card">
@@ -413,12 +451,12 @@
         <strong id="statRefund" style="color: var(--accent-amber);">₹0.00</strong>
       </div>
       <div class="summary-card">
-        <span>Net Final Cost (Hisaab)</span>
+        <span>Net Final Balance (Hisaab)</span>
         <strong id="statNet" style="color: var(--accent-green);">₹0.00</strong>
       </div>
     </div>
 
-    <!-- Sheet Data Table -->
+    <!-- Data Table -->
     <div class="table-responsive">
       <table id="mainDataTable">
         <thead>
@@ -449,6 +487,26 @@
       </table>
     </div>
   </main>
+
+  <!-- Create VIP Person Modal -->
+  <div class="modal-overlay" id="vipModal">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3>👑 Create New VIP Person / Client</h3>
+        <button class="btn btn-danger" onclick="closeVipModal()">✕</button>
+      </div>
+      <form onsubmit="handleCreateVip(event)">
+        <div class="form-group" style="margin-bottom:1.25rem;">
+          <label>VIP Person / Client Name</label>
+          <input type="text" id="newVipName" placeholder="e.g. Ramesh Bhai Tour / Sharma Family" required>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+          <button type="button" class="btn btn-danger" onclick="closeVipModal()">Cancel</button>
+          <button type="submit" class="btn btn-green">Create & Switch</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Record Modal -->
   <div class="modal-overlay" id="recordModal">
@@ -555,39 +613,39 @@
         </div>
         <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
           <button type="button" class="btn btn-danger" onclick="closeRecordModal()">Cancel</button>
-          <button type="submit" class="btn btn-green">Save Entry</button>
+          <button type="submit" class="btn btn-green">Save & Live Sync</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Master Passcode Modal: Irctc@144 -->
+  <!-- Master Passcode Modal (Irctc@144) -->
   <div class="modal-overlay" id="masterAuthModal">
     <div class="modal-box" style="max-width:400px; text-align:center;">
       <div class="modal-header" style="justify-content:center; border:none; margin-bottom:0.5rem;">
         <h3>🔐 Security Authorization</h3>
       </div>
       <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1.25rem;">
-        Enter Master Passcode to unlock GitHub Token and Cloud Sync Configuration.
+        Enter Master Key to configure background GitHub syncing parameters.
       </p>
       <form onsubmit="verifyMasterPasscode(event)">
         <div class="form-group" style="margin-bottom:1.25rem;">
           <input type="password" id="inputMasterKey" placeholder="Enter Security Key..." autofocus style="text-align:center; font-size:1.1rem; letter-spacing:2px;" required>
-          <span id="passcodeError" style="color:var(--accent-red); font-size:0.75rem; display:none; margin-top:0.4rem;">Invalid Master Key! Access Denied.</span>
+          <span id="passcodeError" style="color:var(--accent-red); font-size:0.75rem; display:none; margin-top:0.4rem;">Invalid Master Key!</span>
         </div>
         <div style="display:flex; gap:0.5rem;">
           <button type="button" class="btn btn-danger" style="flex:1;" onclick="closeMasterPasscodeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary" style="flex:1;">Unlock Settings</button>
+          <button type="submit" class="btn btn-primary" style="flex:1;">Unlock</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Unlocked Security & Token Sync Modal -->
+  <!-- Settings Modal -->
   <div class="modal-overlay" id="securityModal">
     <div class="modal-box" style="max-width:560px;">
       <div class="modal-header">
-        <h3>🔒 Vault Security & Cloud Sync</h3>
+        <h3>🔒 Cloud Background Credentials</h3>
         <button class="btn btn-danger" onclick="closeSecurityModal()">✕</button>
       </div>
       <div style="display:flex; flex-direction:column; gap:1rem;">
@@ -598,55 +656,141 @@
         <div class="form-group">
           <label>GitHub Personal Access Token (PAT)</label>
           <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-          <small style="color:var(--text-muted); font-size:0.7rem;">Token with 'repo' scope. Stored locally on this browser.</small>
+          <small style="color:var(--text-muted); font-size:0.7rem;">Needs 'repo' scope. Once entered, all saves live sync seamlessly in background.</small>
         </div>
         <div class="form-group">
-          <label>AES-256 Military Encryption Key</label>
+          <label>AES-256 Military Passphrase</label>
           <input type="password" id="vaultKey" placeholder="Passphrase to encrypt cloud JSON">
-          <small style="color:var(--text-muted); font-size:0.7rem;">AES-GCM (PBKDF2 100k rounds) client-side cipher before dispatch.</small>
+          <small style="color:var(--text-muted); font-size:0.7rem;">Payload is automatically encrypted and decrypted in background.</small>
         </div>
-        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-          <button class="btn btn-primary" style="flex:1;" onclick="pushToGitHub()">☁️ Push Live (Encrypt)</button>
-          <button class="btn" style="flex:1;" onclick="pullFromGitHub()">🔄 Pull Remote (Decrypt)</button>
-        </div>
+        <button class="btn btn-primary" onclick="saveCredentials()">💾 Save & Apply Background Sync</button>
       </div>
     </div>
   </div>
 
   <script>
-    // Hardcoded Master Passcode & Target Repository
     const MASTER_KEY = "Irctc@144";
     const GITHUB_OWNER = "TechIsInMyDNA";
     const GITHUB_REPO = "Irctc-My-Calculator";
     const GITHUB_FILE = "irctc_encrypted_data.json";
 
-    // Application State
+    // Application Multi-VIP State
+    let currentVipId = "vip_default";
     let currentTab = "OUTGOING";
-    let travelStore = {
-      OUTGOING: [],
-      INCOMING: [],
-      NHI_JANE_WALE: []
+    let clientAppStore = {
+      vips: [
+        { id: "vip_default", name: "Default Main Client" }
+      ],
+      data: {
+        "vip_default": {
+          OUTGOING: [],
+          INCOMING: [],
+          NHI_JANE_WALE: []
+        }
+      }
     };
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const cached = localStorage.getItem("IRCTC_PLANNER_CACHE");
+    window.addEventListener("DOMContentLoaded", async () => {
+      const cached = localStorage.getItem("IRCTC_VIP_PLANNER_CACHE");
       if (cached) {
         try {
-          travelStore = JSON.parse(cached);
+          clientAppStore = JSON.parse(cached);
         } catch (e) {
           console.error("Local data cache corrupted", e);
         }
       }
       document.getElementById("ghToken").value = localStorage.getItem("IRCTC_GH_TOKEN") || "";
       document.getElementById("vaultKey").value = localStorage.getItem("IRCTC_VAULT_KEY") || "";
+
+      // Ensure active VIP exists
+      if (!clientAppStore.vips || clientAppStore.vips.length === 0) {
+        clientAppStore.vips = [{ id: "vip_default", name: "Default Main Client" }];
+        clientAppStore.data = { "vip_default": { OUTGOING: [], INCOMING: [], NHI_JANE_WALE: [] } };
+      }
+      currentVipId = clientAppStore.vips[0].id;
+
+      refreshVipDropdown();
       renderTable();
+
+      // Automatic pull from cloud on startup
+      if (localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
+        await liveSyncPull();
+      }
     });
 
     function saveLocally() {
-      localStorage.setItem("IRCTC_PLANNER_CACHE", JSON.stringify(travelStore));
+      localStorage.setItem("IRCTC_VIP_PLANNER_CACHE", JSON.stringify(clientAppStore));
       renderTable();
     }
 
+    // VIP Management
+    function refreshVipDropdown() {
+      const select = document.getElementById("vipSelect");
+      select.innerHTML = "";
+      clientAppStore.vips.forEach(vip => {
+        const opt = document.createElement("option");
+        opt.value = vip.id;
+        opt.innerText = vip.name;
+        if (vip.id === currentVipId) opt.selected = true;
+        select.appendChild(opt);
+      });
+      const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
+      document.getElementById("currentVipDisplay").innerText = activeObj ? activeObj.name : "None";
+    }
+
+    function onVipChange() {
+      currentVipId = document.getElementById("vipSelect").value;
+      const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
+      document.getElementById("currentVipDisplay").innerText = activeObj ? activeObj.name : "None";
+      renderTable();
+    }
+
+    function openNewVipModal() {
+      document.getElementById("newVipName").value = "";
+      document.getElementById("vipModal").classList.add("active");
+    }
+
+    function closeVipModal() {
+      document.getElementById("vipModal").classList.remove("active");
+    }
+
+    async function handleCreateVip(e) {
+      e.preventDefault();
+      const name = document.getElementById("newVipName").value.trim();
+      if (!name) return;
+
+      const newId = "vip_" + Date.now();
+      clientAppStore.vips.push({ id: newId, name: name });
+      clientAppStore.data[newId] = {
+        OUTGOING: [],
+        INCOMING: [],
+        NHI_JANE_WALE: []
+      };
+
+      currentVipId = newId;
+      refreshVipDropdown();
+      saveLocally();
+      closeVipModal();
+      await liveSyncPush();
+    }
+
+    async function deleteCurrentVip() {
+      if (clientAppStore.vips.length <= 1) {
+        alert("Cannot delete the only remaining client.");
+        return;
+      }
+      const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
+      if (confirm(`Delete VIP Client "${activeObj.name}" and all journey tickets?`)) {
+        clientAppStore.vips = clientAppStore.vips.filter(v => v.id !== currentVipId);
+        delete clientAppStore.data[currentVipId];
+        currentVipId = clientAppStore.vips[0].id;
+        refreshVipDropdown();
+        saveLocally();
+        await liveSyncPush();
+      }
+    }
+
+    // Tab Navigation
     function switchTab(tabKey) {
       currentTab = tabKey;
       document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -666,7 +810,11 @@
     }
 
     function renderTable() {
-      const rows = travelStore[currentTab] || [];
+      if (!clientAppStore.data[currentVipId]) {
+        clientAppStore.data[currentVipId] = { OUTGOING: [], INCOMING: [], NHI_JANE_WALE: [] };
+      }
+
+      const rows = clientAppStore.data[currentVipId][currentTab] || [];
       const tbody = document.getElementById("tableBody");
       tbody.innerHTML = "";
 
@@ -724,38 +872,6 @@
       document.getElementById("statNet").innerText = `₹${netFinal.toFixed(2)}`;
     }
 
-    // Passcode Interceptor Logic
-    function openMasterPasscodeModal() {
-      document.getElementById("inputMasterKey").value = "";
-      document.getElementById("passcodeError").style.display = "none";
-      document.getElementById("masterAuthModal").classList.add("active");
-      setTimeout(() => document.getElementById("inputMasterKey").focus(), 100);
-    }
-
-    function closeMasterPasscodeModal() {
-      document.getElementById("masterAuthModal").classList.remove("active");
-    }
-
-    function verifyMasterPasscode(e) {
-      e.preventDefault();
-      const entered = document.getElementById("inputMasterKey").value;
-      if (entered === MASTER_KEY) {
-        closeMasterPasscodeModal();
-        openSecurityModal();
-      } else {
-        document.getElementById("passcodeError").style.display = "block";
-        document.getElementById("inputMasterKey").value = "";
-      }
-    }
-
-    function openSecurityModal() {
-      document.getElementById("securityModal").classList.add("active");
-    }
-
-    function closeSecurityModal() {
-      document.getElementById("securityModal").classList.remove("active");
-    }
-
     // Modal Operations
     function openRecordModal() {
       document.getElementById("recordForm").reset();
@@ -770,7 +886,7 @@
       document.getElementById("recordModal").classList.remove("active");
     }
 
-    function saveRecord(e) {
+    async function saveRecord(e) {
       e.preventDefault();
       const targetCategory = document.getElementById("fCategory").value;
       const editId = document.getElementById("editRowId").value;
@@ -798,23 +914,26 @@
       };
 
       if (editId) {
-        Object.keys(travelStore).forEach(k => {
-          travelStore[k] = travelStore[k].filter(r => r.id !== editId);
+        Object.keys(clientAppStore.data[currentVipId]).forEach(k => {
+          clientAppStore.data[currentVipId][k] = clientAppStore.data[currentVipId][k].filter(r => r.id !== editId);
         });
       }
 
-      travelStore[targetCategory].push(record);
+      clientAppStore.data[currentVipId][targetCategory].push(record);
       saveLocally();
       closeRecordModal();
       switchTab(targetCategory);
+
+      // Instant live background sync
+      await liveSyncPush();
     }
 
     function editRecord(id) {
       let targetRow = null;
       let foundCategory = null;
 
-      for (const cat of Object.keys(travelStore)) {
-        const item = travelStore[cat].find(r => r.id === id);
+      for (const cat of Object.keys(clientAppStore.data[currentVipId])) {
+        const item = clientAppStore.data[currentVipId][cat].find(r => r.id === id);
         if (item) {
           targetRow = item;
           foundCategory = cat;
@@ -850,14 +969,56 @@
       document.getElementById("recordModal").classList.add("active");
     }
 
-    function deleteRecord(id) {
+    async function deleteRecord(id) {
       if (confirm("Delete this entry permanently?")) {
-        travelStore[currentTab] = travelStore[currentTab].filter(r => r.id !== id);
+        clientAppStore.data[currentVipId][currentTab] = clientAppStore.data[currentVipId][currentTab].filter(r => r.id !== id);
         saveLocally();
+        await liveSyncPush();
       }
     }
 
-    // AES-GCM 256-bit PBKDF2 Engine
+    // Irctc@144 Password Interceptor
+    function openMasterPasscodeModal() {
+      document.getElementById("inputMasterKey").value = "";
+      document.getElementById("passcodeError").style.display = "none";
+      document.getElementById("masterAuthModal").classList.add("active");
+      setTimeout(() => document.getElementById("inputMasterKey").focus(), 100);
+    }
+
+    function closeMasterPasscodeModal() {
+      document.getElementById("masterAuthModal").classList.remove("active");
+    }
+
+    function verifyMasterPasscode(e) {
+      e.preventDefault();
+      const entered = document.getElementById("inputMasterKey").value;
+      if (entered === MASTER_KEY) {
+        closeMasterPasscodeModal();
+        openSecurityModal();
+      } else {
+        document.getElementById("passcodeError").style.display = "block";
+        document.getElementById("inputMasterKey").value = "";
+      }
+    }
+
+    function openSecurityModal() {
+      document.getElementById("securityModal").classList.add("active");
+    }
+
+    function closeSecurityModal() {
+      document.getElementById("securityModal").classList.remove("active");
+    }
+
+    async function saveCredentials() {
+      const token = document.getElementById("ghToken").value.trim();
+      const vaultKey = document.getElementById("vaultKey").value.trim();
+      localStorage.setItem("IRCTC_GH_TOKEN", token);
+      localStorage.setItem("IRCTC_VAULT_KEY", vaultKey);
+      closeSecurityModal();
+      await liveSyncPull();
+    }
+
+    // Cryptography: Web Crypto API (AES-GCM 256-bit PBKDF2)
     async function deriveKey(passphrase, salt) {
       const enc = new TextEncoder();
       const keyMaterial = await crypto.subtle.importKey(
@@ -917,23 +1078,20 @@
       return JSON.parse(new TextDecoder().decode(decrypted));
     }
 
-    // GitHub Sync API
-    async function pushToGitHub() {
-      const token = document.getElementById("ghToken").value.trim();
-      const vaultKey = document.getElementById("vaultKey").value.trim();
+    // Background Live GitHub Push Engine
+    async function liveSyncPush() {
+      const token = localStorage.getItem("IRCTC_GH_TOKEN");
+      const vaultKey = localStorage.getItem("IRCTC_VAULT_KEY");
 
       if (!token || !vaultKey) {
-        alert("Both GitHub PAT and AES-256 Vault Passphrase are required to sync.");
+        setSyncStatus("idle", "Local Mode");
         return;
       }
 
-      localStorage.setItem("IRCTC_GH_TOKEN", token);
-      localStorage.setItem("IRCTC_VAULT_KEY", vaultKey);
-
-      setSyncStatus("busy", "Encrypting & pushing...");
+      setSyncStatus("busy", "Live Encrypting & Syncing...");
 
       try {
-        const encryptedData = await encryptPayload(travelStore, vaultKey);
+        const encryptedData = await encryptPayload(clientAppStore, vaultKey);
         const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
         let sha = null;
@@ -950,7 +1108,7 @@
         }
 
         const bodyPayload = {
-          message: `Vault Sync: ${new Date().toLocaleString()}`,
+          message: `Live Sync VIP Update: ${new Date().toLocaleString()}`,
           content: btoa(unescape(encodeURIComponent(encryptedData))),
           ...(sha && { sha })
         };
@@ -965,32 +1123,23 @@
           body: JSON.stringify(bodyPayload)
         });
 
-        if (!putRes.ok) {
-          throw new Error(`GitHub API Error: ${putRes.status}`);
-        }
+        if (!putRes.ok) throw new Error(`HTTP ${putRes.status}`);
 
-        setSyncStatus("synced", "Pushed & Encrypted");
-        alert("Data successfully encrypted and pushed to TechIsInMyDNA/Irctc-My-Calculator!");
-        closeSecurityModal();
+        setSyncStatus("synced", "All Changes Synced");
       } catch (err) {
-        setSyncStatus("error", "Push failed");
-        alert(`Error: ${err.message}`);
+        console.error("Live sync failed", err);
+        setSyncStatus("error", "Sync Pending / Offline");
       }
     }
 
-    async function pullFromGitHub() {
-      const token = document.getElementById("ghToken").value.trim();
-      const vaultKey = document.getElementById("vaultKey").value.trim();
+    // Background Live GitHub Pull Engine
+    async function liveSyncPull() {
+      const token = localStorage.getItem("IRCTC_GH_TOKEN");
+      const vaultKey = localStorage.getItem("IRCTC_VAULT_KEY");
 
-      if (!token || !vaultKey) {
-        alert("Both GitHub PAT and AES-256 Vault Passphrase are required.");
-        return;
-      }
+      if (!token || !vaultKey) return;
 
-      localStorage.setItem("IRCTC_GH_TOKEN", token);
-      localStorage.setItem("IRCTC_VAULT_KEY", vaultKey);
-
-      setSyncStatus("busy", "Pulling & decrypting...");
+      setSyncStatus("busy", "Checking Remote...");
 
       try {
         const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
@@ -1001,22 +1150,25 @@
           }
         });
 
-        if (!res.ok) {
-          throw new Error("Encrypted vault file not found on repository main branch.");
+        if (res.ok) {
+          const data = await res.json();
+          const encryptedString = decodeURIComponent(escape(atob(data.content)));
+          const decryptedStore = await decryptPayload(encryptedString, vaultKey);
+
+          if (decryptedStore && decryptedStore.vips) {
+            clientAppStore = decryptedStore;
+            saveLocally();
+            if (!clientAppStore.vips.find(v => v.id === currentVipId)) {
+              currentVipId = clientAppStore.vips[0].id;
+            }
+            refreshVipDropdown();
+            renderTable();
+          }
         }
-
-        const data = await res.json();
-        const encryptedString = decodeURIComponent(escape(atob(data.content)));
-        const decryptedStore = await decryptPayload(encryptedString, vaultKey);
-
-        travelStore = decryptedStore;
-        saveLocally();
-        setSyncStatus("synced", "Decrypted & Synced");
-        alert("Vault successfully decrypted from GitHub!");
-        closeSecurityModal();
+        setSyncStatus("synced", "All Changes Synced");
       } catch (err) {
-        setSyncStatus("error", "Pull/Decryption failed");
-        alert(`Failed to decrypt or fetch: ${err.message}. Ensure passphrase matches.`);
+        console.error("Live pull failed", err);
+        setSyncStatus("error", "Sync Pending");
       }
     }
 
@@ -1027,6 +1179,7 @@
       txt.innerText = label;
 
       if (type === "synced") dot.classList.add("synced");
+      else if (type === "busy") dot.classList.add("busy");
       else if (type === "error") dot.classList.add("error");
     }
   </script>
