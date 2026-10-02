@@ -129,7 +129,6 @@
       color: #fff;
     }
 
-    /* VIP Selector Panel */
     .vip-selection-bar {
       background: #0f1523;
       border-bottom: 1px solid var(--border);
@@ -409,9 +408,9 @@
     <div class="header-actions">
       <div class="sync-status">
         <span class="status-dot" id="syncDot"></span>
-        <span id="syncText">Live Cloud Sync</span>
+        <span id="syncText">Syncing...</span>
       </div>
-      <button class="btn" onclick="openMasterPasscodeModal()">⚙️ Settings</button>
+      <button class="btn" onclick="openMasterPasscodeModal()">⚙️️ Settings</button>
       <button class="btn btn-primary" onclick="openRecordModal()">➕ New Entry</button>
     </div>
   </header>
@@ -436,7 +435,7 @@
       <button class="tab-btn" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
     </div>
 
-    <!-- Smart Built-in Live Split Calculator Bar -->
+    <!-- Live Split Calculator Bar -->
     <div class="summary-grid">
       <div class="summary-card">
         <span>VIP Tab Tickets</span>
@@ -456,7 +455,7 @@
       </div>
     </div>
 
-    <!-- Data Table -->
+    <!-- Table -->
     <div class="table-responsive">
       <table id="mainDataTable">
         <thead>
@@ -488,7 +487,7 @@
     </div>
   </main>
 
-  <!-- Create VIP Person Modal -->
+  <!-- Create VIP Modal -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box" style="max-width: 440px;">
       <div class="modal-header">
@@ -619,7 +618,7 @@
     </div>
   </div>
 
-  <!-- Master Passcode Modal (Irctc@144) -->
+  <!-- Master Passcode Modal -->
   <div class="modal-overlay" id="masterAuthModal">
     <div class="modal-box" style="max-width:400px; text-align:center;">
       <div class="modal-header" style="justify-content:center; border:none; margin-bottom:0.5rem;">
@@ -656,14 +655,14 @@
         <div class="form-group">
           <label>GitHub Personal Access Token (PAT)</label>
           <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-          <small style="color:var(--text-muted); font-size:0.7rem;">Needs 'repo' scope. Once entered, all saves live sync seamlessly in background.</small>
+          <small style="color:var(--text-muted); font-size:0.7rem;">Needs 'repo' scope.</small>
         </div>
         <div class="form-group">
           <label>AES-256 Military Passphrase</label>
           <input type="password" id="vaultKey" placeholder="Passphrase to encrypt cloud JSON">
-          <small style="color:var(--text-muted); font-size:0.7rem;">Payload is automatically encrypted and decrypted in background.</small>
+          <small style="color:var(--text-muted); font-size:0.7rem;">Data gets encrypted locally before push.</small>
         </div>
-        <button class="btn btn-primary" onclick="saveCredentials()">💾 Save & Apply Background Sync</button>
+        <button class="btn btn-primary" onclick="saveCredentials()">💾 Save & Connect Cloud</button>
       </div>
     </div>
   </div>
@@ -674,9 +673,11 @@
     const GITHUB_REPO = "Irctc-My-Calculator";
     const GITHUB_FILE = "irctc_encrypted_data.json";
 
-    // Application Multi-VIP State
     let currentVipId = "vip_default";
     let currentTab = "OUTGOING";
+    let isSyncing = false;
+    let lastKnownRemoteSha = null;
+
     let clientAppStore = {
       vips: [
         { id: "vip_default", name: "Default Main Client" }
@@ -687,7 +688,8 @@
           INCOMING: [],
           NHI_JANE_WALE: []
         }
-      }
+      },
+      lastModified: Date.now()
     };
 
     window.addEventListener("DOMContentLoaded", async () => {
@@ -696,13 +698,12 @@
         try {
           clientAppStore = JSON.parse(cached);
         } catch (e) {
-          console.error("Local data cache corrupted", e);
+          console.error("Cache parsing error", e);
         }
       }
       document.getElementById("ghToken").value = localStorage.getItem("IRCTC_GH_TOKEN") || "";
       document.getElementById("vaultKey").value = localStorage.getItem("IRCTC_VAULT_KEY") || "";
 
-      // Ensure active VIP exists
       if (!clientAppStore.vips || clientAppStore.vips.length === 0) {
         clientAppStore.vips = [{ id: "vip_default", name: "Default Main Client" }];
         clientAppStore.data = { "vip_default": { OUTGOING: [], INCOMING: [], NHI_JANE_WALE: [] } };
@@ -712,18 +713,25 @@
       refreshVipDropdown();
       renderTable();
 
-      // Automatic pull from cloud on startup
+      // Initial Live Pull from Cloud
       if (localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
-        await liveSyncPull();
+        await liveSyncPull(true);
       }
+
+      // Live Auto-Sync Polling Har 5 seconds me
+      setInterval(() => {
+        if (!isSyncing && localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
+          liveSyncPull(false);
+        }
+      }, 5000);
     });
 
     function saveLocally() {
+      clientAppStore.lastModified = Date.now();
       localStorage.setItem("IRCTC_VIP_PLANNER_CACHE", JSON.stringify(clientAppStore));
       renderTable();
     }
 
-    // VIP Management
     function refreshVipDropdown() {
       const select = document.getElementById("vipSelect");
       select.innerHTML = "";
@@ -776,11 +784,11 @@
 
     async function deleteCurrentVip() {
       if (clientAppStore.vips.length <= 1) {
-        alert("Cannot delete the only remaining client.");
+        alert("At least ek client hona zaroori hai. Aakhri person delete nahi ho sakta.");
         return;
       }
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
-      if (confirm(`Delete VIP Client "${activeObj.name}" and all journey tickets?`)) {
+      if (confirm(`Delete VIP Client "${activeObj.name}"? Yeh turant GitHub par sync ho jayega.`)) {
         clientAppStore.vips = clientAppStore.vips.filter(v => v.id !== currentVipId);
         delete clientAppStore.data[currentVipId];
         currentVipId = clientAppStore.vips[0].id;
@@ -790,7 +798,6 @@
       }
     }
 
-    // Tab Navigation
     function switchTab(tabKey) {
       currentTab = tabKey;
       document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -799,7 +806,6 @@
       renderTable();
     }
 
-    // Split Calculator Engine
     function calculateSplitPreview() {
       const fare = parseFloat(document.getElementById("fFare").value) || 0;
       const refund = parseFloat(document.getElementById("fRefund").value) || 0;
@@ -872,7 +878,6 @@
       document.getElementById("statNet").innerText = `₹${netFinal.toFixed(2)}`;
     }
 
-    // Modal Operations
     function openRecordModal() {
       document.getElementById("recordForm").reset();
       document.getElementById("editRowId").value = "";
@@ -923,8 +928,6 @@
       saveLocally();
       closeRecordModal();
       switchTab(targetCategory);
-
-      // Instant live background sync
       await liveSyncPush();
     }
 
@@ -977,7 +980,6 @@
       }
     }
 
-    // Irctc@144 Password Interceptor
     function openMasterPasscodeModal() {
       document.getElementById("inputMasterKey").value = "";
       document.getElementById("passcodeError").style.display = "none";
@@ -1015,10 +1017,10 @@
       localStorage.setItem("IRCTC_GH_TOKEN", token);
       localStorage.setItem("IRCTC_VAULT_KEY", vaultKey);
       closeSecurityModal();
-      await liveSyncPull();
+      await liveSyncPull(true);
     }
 
-    // Cryptography: Web Crypto API (AES-GCM 256-bit PBKDF2)
+    // Cryptography Engine: AES-GCM 256-bit PBKDF2
     async function deriveKey(passphrase, salt) {
       const enc = new TextEncoder();
       const keyMaterial = await crypto.subtle.importKey(
@@ -1078,7 +1080,24 @@
       return JSON.parse(new TextDecoder().decode(decrypted));
     }
 
-    // Background Live GitHub Push Engine
+    // Helper: Fresh Remote SHA fetcher (Cache-Busting)
+    async function fetchFreshSha(token) {
+      const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?_nocache=${Date.now()}`;
+      const res = await fetch(url, {
+        headers: {
+          "Authorization": `token ${token}`,
+          "Accept": "application/vnd.github.v3+json"
+        },
+        cache: "no-store"
+      });
+      if (res.ok) {
+        const meta = await res.json();
+        return meta.sha;
+      }
+      return null;
+    }
+
+    // Live Instant GitHub Push
     async function liveSyncPush() {
       const token = localStorage.getItem("IRCTC_GH_TOKEN");
       const vaultKey = localStorage.getItem("IRCTC_VAULT_KEY");
@@ -1088,29 +1107,20 @@
         return;
       }
 
-      setSyncStatus("busy", "Live Encrypting & Syncing...");
+      isSyncing = true;
+      setSyncStatus("busy", "Live Syncing...");
 
       try {
         const encryptedData = await encryptPayload(clientAppStore, vaultKey);
         const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
-        let sha = null;
-        const checkRes = await fetch(url, {
-          headers: {
-            "Authorization": `token ${token}`,
-            "Accept": "application/vnd.github.v3+json"
-          }
-        });
-
-        if (checkRes.ok) {
-          const fileMeta = await checkRes.json();
-          sha = fileMeta.sha;
-        }
+        // Hamesha fresh sha fetch karein race conditions aur conflicts se bachne ke liye
+        const latestSha = await fetchFreshSha(token);
 
         const bodyPayload = {
-          message: `Live Sync VIP Update: ${new Date().toLocaleString()}`,
+          message: `Live Sync VIP Delete/Update: ${new Date().toISOString()}`,
           content: btoa(unescape(encodeURIComponent(encryptedData))),
-          ...(sha && { sha })
+          ...(latestSha && { sha: latestSha })
         };
 
         const putRes = await fetch(url, {
@@ -1123,52 +1133,74 @@
           body: JSON.stringify(bodyPayload)
         });
 
-        if (!putRes.ok) throw new Error(`HTTP ${putRes.status}`);
+        if (!putRes.ok) {
+          throw new Error(`GitHub Sync Error HTTP ${putRes.status}`);
+        }
 
-        setSyncStatus("synced", "All Changes Synced");
+        const resData = await putRes.json();
+        lastKnownRemoteSha = resData.content ? resData.content.sha : latestSha;
+        setSyncStatus("synced", "Real-Time Synced");
       } catch (err) {
-        console.error("Live sync failed", err);
-        setSyncStatus("error", "Sync Pending / Offline");
+        console.error("Live push failed", err);
+        setSyncStatus("error", "Sync Error");
+      } finally {
+        isSyncing = false;
       }
     }
 
-    // Background Live GitHub Pull Engine
-    async function liveSyncPull() {
+    // Live GitHub Pull with Cache-Buster & Sha Checking
+    async function liveSyncPull(isManualOrInit = false) {
       const token = localStorage.getItem("IRCTC_GH_TOKEN");
       const vaultKey = localStorage.getItem("IRCTC_VAULT_KEY");
 
-      if (!token || !vaultKey) return;
-
-      setSyncStatus("busy", "Checking Remote...");
+      if (!token || !vaultKey || isSyncing) return;
 
       try {
-        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?_nocache=${Date.now()}`;
         const res = await fetch(url, {
           headers: {
             "Authorization": `token ${token}`,
             "Accept": "application/vnd.github.v3+json"
-          }
+          },
+          cache: "no-store"
         });
 
         if (res.ok) {
           const data = await res.json();
-          const encryptedString = decodeURIComponent(escape(atob(data.content)));
-          const decryptedStore = await decryptPayload(encryptedString, vaultKey);
-
-          if (decryptedStore && decryptedStore.vips) {
-            clientAppStore = decryptedStore;
-            saveLocally();
-            if (!clientAppStore.vips.find(v => v.id === currentVipId)) {
-              currentVipId = clientAppStore.vips[0].id;
-            }
-            refreshVipDropdown();
-            renderTable();
+          // Agar file SHA change nahi hui hai, to duplicate decrypt skip karein
+          if (!isManualOrInit && data.sha === lastKnownRemoteSha) {
+            setSyncStatus("synced", "Real-Time Synced");
+            return;
           }
+
+          lastKnownRemoteSha = data.sha;
+          const encryptedString = decodeURIComponent(escape(atob(data.content)));
+          const remoteStore = await decryptPayload(encryptedString, vaultKey);
+
+          if (remoteStore && remoteStore.vips) {
+            // Check karein remote data newer hai ya nahi
+            const localMod = clientAppStore.lastModified || 0;
+            const remoteMod = remoteStore.lastModified || 0;
+
+            if (remoteMod >= localMod || isManualOrInit) {
+              clientAppStore = remoteStore;
+              localStorage.setItem("IRCTC_VIP_PLANNER_CACHE", JSON.stringify(clientAppStore));
+              
+              if (!clientAppStore.vips.find(v => v.id === currentVipId)) {
+                currentVipId = clientAppStore.vips[0].id;
+              }
+              refreshVipDropdown();
+              renderTable();
+            }
+          }
+          setSyncStatus("synced", "Real-Time Synced");
         }
-        setSyncStatus("synced", "All Changes Synced");
       } catch (err) {
-        console.error("Live pull failed", err);
-        setSyncStatus("error", "Sync Pending");
+        // Background polling errors do not interrupt UI
+        if (isManualOrInit) {
+          console.warn("Pull error", err);
+          setSyncStatus("error", "Sync Pending");
+        }
       }
     }
 
