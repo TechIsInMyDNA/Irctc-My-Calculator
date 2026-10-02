@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Irctc My Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --surface: #121722;
+      --surface-card: #171f2e;
+      --surface-card-hover: #1f2a3e;
+      --border: #26334d;
+      --border-focus: #3b82f6;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-amber: #f59e0b;
+      --accent-cyan: #06b6d4;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #fff;
+    }
+
+    .brand-sub {
+      font-size: 0.7rem;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--surface-card);
+      color: var(--text-main);
+    }
+
+    .btn:hover {
+      background: var(--surface-card-hover);
+      border-color: var(--border-focus);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    .btn-green {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+    .btn-danger:hover {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    .main-container {
+      padding: 1rem 1.25rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.25rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .summary-card span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .summary-card strong {
+      font-size: 1.35rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #0d121a;
+      padding: 0.85rem 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.3px;
+    }
+
+    td {
+      padding: 0.75rem 0.75rem;
+      border-bottom: 1px solid rgba(38, 51, 77, 0.4);
+      color: var(--text-main);
+    }
+
+    tr:hover td {
+      background-color: var(--surface-card);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-cnf {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+    }
+
+    .badge-wl {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--accent-amber);
+      border: 1px solid var(--accent-amber);
+    }
+
+    .calc-tag {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+      font-size: 0.78rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      place-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: grid;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 840px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-group label {
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
+    }
+
+    .sync-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+    }
+
+    .status-dot.synced {
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .status-dot.error {
+      background: var(--accent-red);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🚆</div>
+      <div>
+        <div class="brand-title">Irctc My Calculator</div>
+        <div class="brand-sub">TechIsInMyDNA/Irctc-My-Calculator</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="sync-status">
+        <span class="status-dot" id="syncDot"></span>
+        <span id="syncText">Local Only</span>
+      </div>
+      <button class="btn" onclick="openMasterPasscodeModal()">⚙️ Settings & Sync</button>
+      <button class="btn btn-primary" onclick="openRecordModal()">➕ New Entry</button>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('OUTGOING')">OUTGOING PLAN</button>
+      <button class="tab-btn" onclick="switchTab('INCOMING')">INCOMING PLAN</button>
+      <button class="tab-btn" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
+    </div>
+
+    <!-- Smart Split Calculator Bar -->
+    <div class="summary-grid">
+      <div class="summary-card">
+        <span>Active Tab Records</span>
+        <strong id="statCount">0</strong>
+      </div>
+      <div class="summary-card">
+        <span>Total Fare Billed</span>
+        <strong id="statFare" style="color: var(--accent-cyan);">₹0.00</strong>
+      </div>
+      <div class="summary-card">
+        <span>Total Refund Processed</span>
+        <strong id="statRefund" style="color: var(--accent-amber);">₹0.00</strong>
+      </div>
+      <div class="summary-card">
+        <span>Net Final Cost (Hisaab)</span>
+        <strong id="statNet" style="color: var(--accent-green);">₹0.00</strong>
+      </div>
+    </div>
+
+    <!-- Sheet Data Table -->
+    <div class="table-responsive">
+      <table id="mainDataTable">
+        <thead>
+          <tr>
+            <th>ACTIONS</th>
+            <th>SR NO</th>
+            <th>DATE OF TRAVEL</th>
+            <th>TRAIN NO/NAME</th>
+            <th>FROM</th>
+            <th>TO</th>
+            <th>PASSENGER NAME</th>
+            <th>AGE</th>
+            <th>GENDER</th>
+            <th>TKT CONFIRMED?</th>
+            <th>COACH / SEAT</th>
+            <th>QUOTA</th>
+            <th>PNR</th>
+            <th>TOTAL FARE</th>
+            <th>REFUND AMT</th>
+            <th>NET PER SEAT</th>
+            <th>REMARKS</th>
+            <th>REMARKS1</th>
+            <th>ID</th>
+            <th>BANK</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Record Modal -->
+  <div class="modal-overlay" id="recordModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="recordModalTitle">Create Travel Record</h3>
+        <button class="btn btn-danger" onclick="closeRecordModal()">✕</button>
+      </div>
+      <form id="recordForm" onsubmit="saveRecord(event)">
+        <input type="hidden" id="editRowId">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Journey Category</label>
+            <select id="fCategory">
+              <option value="OUTGOING">OUTGOING</option>
+              <option value="INCOMING">INCOMING</option>
+              <option value="NHI_JANE_WALE">NHI JANE WALE LOG</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date of Travel</label>
+            <input type="date" id="fDate">
+          </div>
+          <div class="form-group">
+            <label>Train No / Name</label>
+            <input type="text" id="fTrain" placeholder="e.g. 12834 HWH ADI EXP" required>
+          </div>
+          <div class="form-group">
+            <label>From Station</label>
+            <input type="text" id="fFrom" placeholder="e.g. G (Gondia)" required>
+          </div>
+          <div class="form-group">
+            <label>To Station</label>
+            <input type="text" id="fTo" placeholder="e.g. NGP / SURAT" required>
+          </div>
+          <div class="form-group">
+            <label>Name of Passenger(s)</label>
+            <input type="text" id="fPassenger" placeholder="Separate multiple names by commas" required>
+          </div>
+          <div class="form-group">
+            <label>Age</label>
+            <input type="text" id="fAge" placeholder="e.g. 26">
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="fGender">
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>TKT Confirmed?</label>
+            <select id="fConfirmed">
+              <option value="YES">YES</option>
+              <option value="NO (WL/RAC)">NO (WL/RAC)</option>
+              <option value="CANCELLED">CANCELLED</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Coach / Seat Please</label>
+            <input type="text" id="fSeat" placeholder="e.g. B4 - 34, 35">
+          </div>
+          <div class="form-group">
+            <label>Quota</label>
+            <input type="text" id="fQuota" placeholder="GN / TQ / PT" value="GN">
+          </div>
+          <div class="form-group">
+            <label>PNR</label>
+            <input type="text" id="fPnr" placeholder="10 Digit IRCTC PNR" maxlength="10">
+          </div>
+          <div class="form-group">
+            <label>Total Fare (₹)</label>
+            <input type="number" step="0.01" id="fFare" placeholder="0.00" oninput="calculateSplitPreview()">
+          </div>
+          <div class="form-group">
+            <label>Refund Amt, If Any (₹)</label>
+            <input type="number" step="0.01" id="fRefund" placeholder="0.00" oninput="calculateSplitPreview()">
+          </div>
+          <div class="form-group">
+            <label>Individual Count (For Split)</label>
+            <input type="number" id="fSeatCount" value="1" min="1" oninput="calculateSplitPreview()">
+          </div>
+          <div class="form-group">
+            <label>Net Cost Per Person (Auto)</label>
+            <input type="text" id="fNetPerSeat" readonly placeholder="₹0.00" style="background:#000; color:var(--accent-green); font-weight:700;">
+          </div>
+          <div class="form-group">
+            <label>ID Details</label>
+            <input type="text" id="fId" placeholder="IRCTC User ID / ID proof">
+          </div>
+          <div class="form-group">
+            <label>Bank / Payment Source</label>
+            <input type="text" id="fBank" placeholder="e.g. HDFC / SBI / UPI">
+          </div>
+          <div class="form-group">
+            <label>Remarks</label>
+            <input type="text" id="fRemarks" placeholder="Note">
+          </div>
+          <div class="form-group">
+            <label>Remarks 1</label>
+            <input type="text" id="fRemarks1" placeholder="Alternative Note">
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+          <button type="button" class="btn btn-danger" onclick="closeRecordModal()">Cancel</button>
+          <button type="submit" class="btn btn-green">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Master Passcode Modal: Irctc@144 -->
+  <div class="modal-overlay" id="masterAuthModal">
+    <div class="modal-box" style="max-width:400px; text-align:center;">
+      <div class="modal-header" style="justify-content:center; border:none; margin-bottom:0.5rem;">
+        <h3>🔐 Security Authorization</h3>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1.25rem;">
+        Enter Master Passcode to unlock GitHub Token and Cloud Sync Configuration.
+      </p>
+      <form onsubmit="verifyMasterPasscode(event)">
+        <div class="form-group" style="margin-bottom:1.25rem;">
+          <input type="password" id="inputMasterKey" placeholder="Enter Security Key..." autofocus style="text-align:center; font-size:1.1rem; letter-spacing:2px;" required>
+          <span id="passcodeError" style="color:var(--accent-red); font-size:0.75rem; display:none; margin-top:0.4rem;">Invalid Master Key! Access Denied.</span>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn btn-danger" style="flex:1;" onclick="closeMasterPasscodeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex:1;">Unlock Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Unlocked Security & Token Sync Modal -->
+  <div class="modal-overlay" id="securityModal">
+    <div class="modal-box" style="max-width:560px;">
+      <div class="modal-header">
+        <h3>🔒 Vault Security & Cloud Sync</h3>
+        <button class="btn btn-danger" onclick="closeSecurityModal()">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:1rem;">
+        <div class="form-group">
+          <label>Target Repository</label>
+          <input type="text" value="TechIsInMyDNA/Irctc-My-Calculator" readonly style="color:var(--accent-cyan); font-family:monospace;">
+        </div>
+        <div class="form-group">
+          <label>GitHub Personal Access Token (PAT)</label>
+          <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <small style="color:var(--text-muted); font-size:0.7rem;">Token with 'repo' scope. Stored locally on this browser.</small>
+        </div>
+        <div class="form-group">
+          <label>AES-256 Military Encryption Key</label>
+          <input type="password" id="vaultKey" placeholder="Passphrase to encrypt cloud JSON">
+          <small style="color:var(--text-muted); font-size:0.7rem;">AES-GCM (PBKDF2 100k rounds) client-side cipher before dispatch.</small>
+        </div>
+        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+          <button class="btn btn-primary" style="flex:1;" onclick="pushToGitHub()">☁️ Push Live (Encrypt)</button>
+          <button class="btn" style="flex:1;" onclick="pullFromGitHub()">🔄 Pull Remote (Decrypt)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Hardcoded Master Passcode & Target Repository
+    const MASTER_KEY = "Irctc@144";
+    const GITHUB_OWNER = "TechIsInMyDNA";
+    const GITHUB_REPO = "Irctc-My-Calculator";
+    const GITHUB_FILE = "irctc_encrypted_data.json";
+
+    // Application State
+    let currentTab = "OUTGOING";
+    let travelStore = {
+      OUTGOING: [],
+      INCOMING: [],
+      NHI_JANE_WALE: []
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const cached = localStorage.getItem("IRCTC_PLANNER_CACHE");
+      if (cached) {
+        try {
+          travelStore = JSON.parse(cached);
+        } catch (e) {
+          console.error("Local data cache corrupted", e);
+        }
+      }
+      document.getElementById("ghToken").value = localStorage.getItem("IRCTC_GH_TOKEN") || "";
+      document.getElementById("vaultKey").value = localStorage.getItem("IRCTC_VAULT_KEY") || "";
+      renderTable();
+    });
+
+    function saveLocally() {
+      localStorage.setItem("IRCTC_PLANNER_CACHE", JSON.stringify(travelStore));
+      renderTable();
+    }
+
+    function switchTab(tabKey) {
+      currentTab = tabKey;
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("onclick").includes(tabKey));
+      });
+      renderTable();
+    }
+
+    // Split Calculator Engine
+    function calculateSplitPreview() {
+      const fare = parseFloat(document.getElementById("fFare").value) || 0;
+      const refund = parseFloat(document.getElementById("fRefund").value) || 0;
+      const count = parseInt(document.getElementById("fSeatCount").value) || 1;
+      const netTotal = Math.max(0, fare - refund);
+      const perSeat = (netTotal / count).toFixed(2);
+      document.getElementById("fNetPerSeat").value = `₹${perSeat} (${count} Seat${count > 1 ? 's' : ''})`;
+    }
+
+    function renderTable() {
+      const rows = travelStore[currentTab] || [];
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+
+      let totalFareSum = 0;
+      let totalRefundSum = 0;
+
+      rows.forEach((row, index) => {
+        const fare = parseFloat(row.fare) || 0;
+        const refund = parseFloat(row.refund) || 0;
+        const count = parseInt(row.seatCount) || 1;
+        const netCost = fare - refund;
+        const perSeat = (netCost / count).toFixed(2);
+
+        totalFareSum += fare;
+        totalRefundSum += refund;
+
+        const isCnf = (row.confirmed || "").toUpperCase().includes("YES");
+        const statusBadge = isCnf 
+          ? `<span class="badge badge-cnf">CNF</span>` 
+          : `<span class="badge badge-wl">${row.confirmed || 'WL/RAC'}</span>`;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <button class="btn" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="editRecord('${row.id}')">✏️</button>
+            <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="deleteRecord('${row.id}')">🗑️</button>
+          </td>
+          <td><strong>${index + 1}</strong></td>
+          <td>${row.date || '-'}</td>
+          <td style="font-weight:700; color:#fff;">${row.train || '-'}</td>
+          <td>${row.from || '-'}</td>
+          <td>${row.to || '-'}</td>
+          <td style="color:var(--accent-cyan); font-weight:600;">${row.passenger || '-'}</td>
+          <td>${row.age || '-'}</td>
+          <td>${row.gender || '-'}</td>
+          <td>${statusBadge}</td>
+          <td><strong style="color:var(--accent-amber);">${row.seat || '-'}</strong></td>
+          <td>${row.quota || '-'}</td>
+          <td style="font-family:monospace;">${row.pnr || '-'}</td>
+          <td style="font-family:monospace;">₹${fare.toFixed(2)}</td>
+          <td style="font-family:monospace; color:var(--accent-red);">₹${refund.toFixed(2)}</td>
+          <td class="calc-tag">₹${perSeat} <small>(${count}p)</small></td>
+          <td>${row.remarks || '-'}</td>
+          <td>${row.remarks1 || '-'}</td>
+          <td>${row.idProof || '-'}</td>
+          <td>${row.bank || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const netFinal = totalFareSum - totalRefundSum;
+      document.getElementById("statCount").innerText = rows.length;
+      document.getElementById("statFare").innerText = `₹${totalFareSum.toFixed(2)}`;
+      document.getElementById("statRefund").innerText = `₹${totalRefundSum.toFixed(2)}`;
+      document.getElementById("statNet").innerText = `₹${netFinal.toFixed(2)}`;
+    }
+
+    // Passcode Interceptor Logic
+    function openMasterPasscodeModal() {
+      document.getElementById("inputMasterKey").value = "";
+      document.getElementById("passcodeError").style.display = "none";
+      document.getElementById("masterAuthModal").classList.add("active");
+      setTimeout(() => document.getElementById("inputMasterKey").focus(), 100);
+    }
+
+    function closeMasterPasscodeModal() {
+      document.getElementById("masterAuthModal").classList.remove("active");
+    }
+
+    function verifyMasterPasscode(e) {
+      e.preventDefault();
+      const entered = document.getElementById("inputMasterKey").value;
+      if (entered === MASTER_KEY) {
+        closeMasterPasscodeModal();
+        openSecurityModal();
+      } else {
+        document.getElementById("passcodeError").style.display = "block";
+        document.getElementById("inputMasterKey").value = "";
+      }
+    }
+
+    function openSecurityModal() {
+      document.getElementById("securityModal").classList.add("active");
+    }
+
+    function closeSecurityModal() {
+      document.getElementById("securityModal").classList.remove("active");
+    }
+
+    // Modal Operations
+    function openRecordModal() {
+      document.getElementById("recordForm").reset();
+      document.getElementById("editRowId").value = "";
+      document.getElementById("fCategory").value = currentTab;
+      document.getElementById("recordModalTitle").innerText = "Create Travel Record";
+      calculateSplitPreview();
+      document.getElementById("recordModal").classList.add("active");
+    }
+
+    function closeRecordModal() {
+      document.getElementById("recordModal").classList.remove("active");
+    }
+
+    function saveRecord(e) {
+      e.preventDefault();
+      const targetCategory = document.getElementById("fCategory").value;
+      const editId = document.getElementById("editRowId").value;
+
+      const record = {
+        id: editId || 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        date: document.getElementById("fDate").value,
+        train: document.getElementById("fTrain").value.trim(),
+        from: document.getElementById("fFrom").value.trim(),
+        to: document.getElementById("fTo").value.trim(),
+        passenger: document.getElementById("fPassenger").value.trim(),
+        age: document.getElementById("fAge").value.trim(),
+        gender: document.getElementById("fGender").value,
+        confirmed: document.getElementById("fConfirmed").value,
+        seat: document.getElementById("fSeat").value.trim(),
+        quota: document.getElementById("fQuota").value.trim(),
+        pnr: document.getElementById("fPnr").value.trim(),
+        fare: parseFloat(document.getElementById("fFare").value) || 0,
+        refund: parseFloat(document.getElementById("fRefund").value) || 0,
+        seatCount: parseInt(document.getElementById("fSeatCount").value) || 1,
+        remarks: document.getElementById("fRemarks").value.trim(),
+        remarks1: document.getElementById("fRemarks1").value.trim(),
+        idProof: document.getElementById("fId").value.trim(),
+        bank: document.getElementById("fBank").value.trim()
+      };
+
+      if (editId) {
+        Object.keys(travelStore).forEach(k => {
+          travelStore[k] = travelStore[k].filter(r => r.id !== editId);
+        });
+      }
+
+      travelStore[targetCategory].push(record);
+      saveLocally();
+      closeRecordModal();
+      switchTab(targetCategory);
+    }
+
+    function editRecord(id) {
+      let targetRow = null;
+      let foundCategory = null;
+
+      for (const cat of Object.keys(travelStore)) {
+        const item = travelStore[cat].find(r => r.id === id);
+        if (item) {
+          targetRow = item;
+          foundCategory = cat;
+          break;
+        }
+      }
+
+      if (!targetRow) return;
+
+      document.getElementById("editRowId").value = targetRow.id;
+      document.getElementById("fCategory").value = foundCategory;
+      document.getElementById("fDate").value = targetRow.date || "";
+      document.getElementById("fTrain").value = targetRow.train || "";
+      document.getElementById("fFrom").value = targetRow.from || "";
+      document.getElementById("fTo").value = targetRow.to || "";
+      document.getElementById("fPassenger").value = targetRow.passenger || "";
+      document.getElementById("fAge").value = targetRow.age || "";
+      document.getElementById("fGender").value = targetRow.gender || "M";
+      document.getElementById("fConfirmed").value = targetRow.confirmed || "YES";
+      document.getElementById("fSeat").value = targetRow.seat || "";
+      document.getElementById("fQuota").value = targetRow.quota || "GN";
+      document.getElementById("fPnr").value = targetRow.pnr || "";
+      document.getElementById("fFare").value = targetRow.fare || 0;
+      document.getElementById("fRefund").value = targetRow.refund || 0;
+      document.getElementById("fSeatCount").value = targetRow.seatCount || 1;
+      document.getElementById("fRemarks").value = targetRow.remarks || "";
+      document.getElementById("fRemarks1").value = targetRow.remarks1 || "";
+      document.getElementById("fId").value = targetRow.idProof || "";
+      document.getElementById("fBank").value = targetRow.bank || "";
+
+      calculateSplitPreview();
+      document.getElementById("recordModalTitle").innerText = "Edit Travel Record";
+      document.getElementById("recordModal").classList.add("active");
+    }
+
+    function deleteRecord(id) {
+      if (confirm("Delete this entry permanently?")) {
+        travelStore[currentTab] = travelStore[currentTab].filter(r => r.id !== id);
+        saveLocally();
+      }
+    }
+
+    // AES-GCM 256-bit PBKDF2 Engine
+    async function deriveKey(passphrase, salt) {
+      const enc = new TextEncoder();
+      const keyMaterial = await crypto.subtle.importKey(
+        "raw",
+        enc.encode(passphrase),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
+      return crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: salt,
+          iterations: 100000,
+          hash: "SHA-256"
+        },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    async function encryptPayload(dataObj, passphrase) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveKey(passphrase, salt);
+      const encodedData = new TextEncoder().encode(JSON.stringify(dataObj));
+
+      const ciphertext = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv: iv },
+        key,
+        encodedData
+      );
+
+      return JSON.stringify({
+        salt: Array.from(salt),
+        iv: Array.from(iv),
+        payload: Array.from(new Uint8Array(ciphertext)),
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    async function decryptPayload(encryptedJsonString, passphrase) {
+      const data = JSON.parse(encryptedJsonString);
+      const salt = new Uint8Array(data.salt);
+      const iv = new Uint8Array(data.iv);
+      const payload = new Uint8Array(data.payload);
+
+      const key = await deriveKey(passphrase, salt);
+      const decrypted = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: iv },
+        key,
+        payload
+      );
+
+      return JSON.parse(new TextDecoder().decode(decrypted));
+    }
+
+    // GitHub Sync API
+    async function pushToGitHub() {
+      const token = document.getElementById("ghToken").value.trim();
+      const vaultKey = document.getElementById("vaultKey").value.trim();
+
+      if (!token || !vaultKey) {
+        alert("Both GitHub PAT and AES-256 Vault Passphrase are required to sync.");
+        return;
+      }
+
+      localStorage.setItem("IRCTC_GH_TOKEN", token);
+      localStorage.setItem("IRCTC_VAULT_KEY", vaultKey);
+
+      setSyncStatus("busy", "Encrypting & pushing...");
+
+      try {
+        const encryptedData = await encryptPayload(travelStore, vaultKey);
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+
+        let sha = null;
+        const checkRes = await fetch(url, {
+          headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/vnd.github.v3+json"
+          }
+        });
+
+        if (checkRes.ok) {
+          const fileMeta = await checkRes.json();
+          sha = fileMeta.sha;
+        }
+
+        const bodyPayload = {
+          message: `Vault Sync: ${new Date().toLocaleString()}`,
+          content: btoa(unescape(encodeURIComponent(encryptedData))),
+          ...(sha && { sha })
+        };
+
+        const putRes = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/vnd.github.v3+json"
+          },
+          body: JSON.stringify(bodyPayload)
+        });
+
+        if (!putRes.ok) {
+          throw new Error(`GitHub API Error: ${putRes.status}`);
+        }
+
+        setSyncStatus("synced", "Pushed & Encrypted");
+        alert("Data successfully encrypted and pushed to TechIsInMyDNA/Irctc-My-Calculator!");
+        closeSecurityModal();
+      } catch (err) {
+        setSyncStatus("error", "Push failed");
+        alert(`Error: ${err.message}`);
+      }
+    }
+
+    async function pullFromGitHub() {
+      const token = document.getElementById("ghToken").value.trim();
+      const vaultKey = document.getElementById("vaultKey").value.trim();
+
+      if (!token || !vaultKey) {
+        alert("Both GitHub PAT and AES-256 Vault Passphrase are required.");
+        return;
+      }
+
+      localStorage.setItem("IRCTC_GH_TOKEN", token);
+      localStorage.setItem("IRCTC_VAULT_KEY", vaultKey);
+
+      setSyncStatus("busy", "Pulling & decrypting...");
+
+      try {
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+        const res = await fetch(url, {
+          headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/vnd.github.v3+json"
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Encrypted vault file not found on repository main branch.");
+        }
+
+        const data = await res.json();
+        const encryptedString = decodeURIComponent(escape(atob(data.content)));
+        const decryptedStore = await decryptPayload(encryptedString, vaultKey);
+
+        travelStore = decryptedStore;
+        saveLocally();
+        setSyncStatus("synced", "Decrypted & Synced");
+        alert("Vault successfully decrypted from GitHub!");
+        closeSecurityModal();
+      } catch (err) {
+        setSyncStatus("error", "Pull/Decryption failed");
+        alert(`Failed to decrypt or fetch: ${err.message}. Ensure passphrase matches.`);
+      }
+    }
+
+    function setSyncStatus(type, label) {
+      const dot = document.getElementById("syncDot");
+      const txt = document.getElementById("syncText");
+      dot.className = "status-dot";
+      txt.innerText = label;
+
+      if (type === "synced") dot.classList.add("synced");
+      else if (type === "error") dot.classList.add("error");
+    }
+  </script>
+</body>
+</html>
