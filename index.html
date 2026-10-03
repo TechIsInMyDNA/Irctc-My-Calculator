@@ -21,6 +21,7 @@
       --accent-amber: #f59e0b;
       --accent-cyan: #06b6d4;
       --accent-purple: #8b5cf6;
+      --accent-whatsapp: #25d366;
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --radius: 10px;
@@ -119,6 +120,8 @@
     .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
     .btn-green { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
     .btn-purple { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
+    .btn-whatsapp { background: rgba(37, 211, 102, 0.15); border-color: var(--accent-whatsapp); color: var(--accent-whatsapp); }
+    .btn-whatsapp:hover { background: var(--accent-whatsapp); color: #fff; }
     
     .btn-danger {
       background: rgba(239, 68, 68, 0.15);
@@ -158,7 +161,7 @@
       font-size: 0.9rem;
       outline: none;
       cursor: pointer;
-      min-width: 200px;
+      min-width: 180px;
     }
 
     .main-container {
@@ -386,7 +389,6 @@
       box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
     }
 
-    /* Improved Modular Passenger Card Styling */
     .passenger-wrapper {
       grid-column: 1 / -1;
       background: #0d121a;
@@ -505,11 +507,12 @@
     <div class="vip-selector-group">
       <span style="font-size:0.8rem; font-weight:700; color:var(--accent-purple); font-family:monospace;">ACTIVE VIP PERSON:</span>
       <select id="vipSelect" class="vip-dropdown" onchange="onVipChange()"></select>
-      <button class="btn btn-purple" onclick="openNewVipModal()">➕ Add Person / VIP</button>
+      <button class="btn btn-purple" onclick="openNewVipModal()">➕ Add Person</button>
+      <button class="btn" onclick="openEditVipModal()" title="Edit VIP Person">✏️ Edit</button>
       <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑️</button>
     </div>
     <div id="vipInfoBadge" style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">
-      Active Scope: <span id="currentVipDisplay" style="color:#fff; font-weight:700;">-</span>
+      Mobile: <span id="currentVipMobile" style="color:var(--accent-cyan); font-weight:700;">-</span>
     </div>
   </div>
 
@@ -568,21 +571,26 @@
     </div>
   </main>
 
-  <!-- Create VIP Modal -->
+  <!-- Create/Edit VIP Modal -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box" style="max-width: 440px;">
       <div class="modal-header">
-        <h3>👑 Create New VIP Person / Client</h3>
+        <h3 id="vipModalTitle">👑 Create New VIP Person / Client</h3>
         <button class="btn btn-danger" onclick="closeVipModal()">✕</button>
       </div>
-      <form onsubmit="handleCreateVip(event)">
-        <div class="form-group" style="margin-bottom:1.25rem;">
+      <form onsubmit="handleSaveVip(event)">
+        <input type="hidden" id="editVipId">
+        <div class="form-group" style="margin-bottom:1rem;">
           <label>VIP Person / Client Name</label>
-          <input type="text" id="newVipName" placeholder="e.g. Ramesh Bhai Tour / Sharma Family" required>
+          <input type="text" id="newVipName" placeholder="e.g. Ramesh Bhai Tour" required>
+        </div>
+        <div class="form-group" style="margin-bottom:1.25rem;">
+          <label>Mobile Number</label>
+          <input type="text" id="newVipMobile" placeholder="e.g. 9876543210">
         </div>
         <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
           <button type="button" class="btn btn-danger" onclick="closeVipModal()">Cancel</button>
-          <button type="submit" class="btn btn-green">Create & Switch</button>
+          <button type="submit" class="btn btn-green">Save & Sync</button>
         </div>
       </form>
     </div>
@@ -637,9 +645,7 @@
               <button type="button" class="btn btn-purple" onclick="addPassengerCard()">➕ Add Passenger</button>
             </div>
             
-            <div id="passengerContainer" style="display:flex; flex-direction:column; gap:0.75rem;">
-              <!-- Passenger cards dynamically injected -->
-            </div>
+            <div id="passengerContainer" style="display:flex; flex-direction:column; gap:0.75rem;"></div>
           </div>
 
           <div class="form-group">
@@ -675,9 +681,12 @@
             <input type="text" id="fRemarks1" placeholder="Alternative Note">
           </div>
         </div>
-        <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
-          <button type="button" class="btn btn-danger" onclick="closeRecordModal()">Cancel</button>
-          <button type="submit" class="btn btn-green">Save & Live Sync</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem;">
+          <button type="button" class="btn btn-whatsapp" id="modalWhatsAppBtn" onclick="shareRecordViaWhatsAppDirect(document.getElementById('editRowId').value)">💬 Share on WhatsApp</button>
+          <div style="display:flex; gap:0.75rem;">
+            <button type="button" class="btn btn-danger" onclick="closeRecordModal()">Cancel</button>
+            <button type="submit" class="btn btn-green">Save & Live Sync</button>
+          </div>
         </div>
       </form>
     </div>
@@ -745,7 +754,7 @@
 
     let clientAppStore = {
       vips: [
-        { id: "vip_default", name: "Default Main Client" }
+        { id: "vip_default", name: "Default Main Client", mobile: "" }
       ],
       data: {
         "vip_default": {
@@ -770,7 +779,7 @@
       document.getElementById("vaultKey").value = localStorage.getItem("IRCTC_VAULT_KEY") || "";
 
       if (!clientAppStore.vips || clientAppStore.vips.length === 0) {
-        clientAppStore.vips = [{ id: "vip_default", name: "Default Main Client" }];
+        clientAppStore.vips = [{ id: "vip_default", name: "Default Main Client", mobile: "" }];
         clientAppStore.data = { "vip_default": { OUTGOING: [], INCOMING: [], NHI_JANE_WALE: [] } };
       }
       currentVipId = clientAppStore.vips[0].id;
@@ -778,12 +787,10 @@
       refreshVipDropdown();
       renderTable();
 
-      // Initial Live Pull from Cloud
       if (localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
         await liveSyncPull(true);
       }
 
-      // Auto-Sync Polling Every 5 Seconds
       setInterval(() => {
         if (!isSyncing && localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
           liveSyncPull(false);
@@ -808,18 +815,31 @@
         select.appendChild(opt);
       });
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
-      document.getElementById("currentVipDisplay").innerText = activeObj ? activeObj.name : "None";
+      document.getElementById("currentVipMobile").innerText = activeObj && activeObj.mobile ? activeObj.mobile : "Not Set";
     }
 
     function onVipChange() {
       currentVipId = document.getElementById("vipSelect").value;
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
-      document.getElementById("currentVipDisplay").innerText = activeObj ? activeObj.name : "None";
+      document.getElementById("currentVipMobile").innerText = activeObj && activeObj.mobile ? activeObj.mobile : "Not Set";
       renderTable();
     }
 
     function openNewVipModal() {
+      document.getElementById("editVipId").value = "";
       document.getElementById("newVipName").value = "";
+      document.getElementById("newVipMobile").value = "";
+      document.getElementById("vipModalTitle").innerText = "👑 Create New VIP Person / Client";
+      document.getElementById("vipModal").classList.add("active");
+    }
+
+    function openEditVipModal() {
+      const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
+      if (!activeObj) return;
+      document.getElementById("editVipId").value = activeObj.id;
+      document.getElementById("newVipName").value = activeObj.name;
+      document.getElementById("newVipMobile").value = activeObj.mobile || "";
+      document.getElementById("vipModalTitle").innerText = "✏️ Edit VIP Person / Client";
       document.getElementById("vipModal").classList.add("active");
     }
 
@@ -827,20 +847,30 @@
       document.getElementById("vipModal").classList.remove("active");
     }
 
-    async function handleCreateVip(e) {
+    async function handleSaveVip(e) {
       e.preventDefault();
+      const editId = document.getElementById("editVipId").value;
       const name = document.getElementById("newVipName").value.trim();
+      const mobile = document.getElementById("newVipMobile").value.trim();
       if (!name) return;
 
-      const newId = "vip_" + Date.now();
-      clientAppStore.vips.push({ id: newId, name: name });
-      clientAppStore.data[newId] = {
-        OUTGOING: [],
-        INCOMING: [],
-        NHI_JANE_WALE: []
-      };
+      if (editId) {
+        const vipObj = clientAppStore.vips.find(v => v.id === editId);
+        if (vipObj) {
+          vipObj.name = name;
+          vipObj.mobile = mobile;
+        }
+      } else {
+        const newId = "vip_" + Date.now();
+        clientAppStore.vips.push({ id: newId, name: name, mobile: mobile });
+        clientAppStore.data[newId] = {
+          OUTGOING: [],
+          INCOMING: [],
+          NHI_JANE_WALE: []
+        };
+        currentVipId = newId;
+      }
 
-      currentVipId = newId;
       refreshVipDropdown();
       saveLocally();
       closeVipModal();
@@ -853,7 +883,7 @@
         return;
       }
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
-      if (confirm(`Delete VIP Client "${activeObj.name}"? Yeh cloud par bhi sync hoga.`)) {
+      if (confirm(`Delete VIP Client "${activeObj.name}"?`)) {
         clientAppStore.vips = clientAppStore.vips.filter(v => v.id !== currentVipId);
         delete clientAppStore.data[currentVipId];
         currentVipId = clientAppStore.vips[0].id;
@@ -871,7 +901,6 @@
       renderTable();
     }
 
-    // Modular Passenger Card Creator with Individual Attributes
     function addPassengerCard(data = {}) {
       const container = document.getElementById("passengerContainer");
       const card = document.createElement("div");
@@ -934,7 +963,6 @@
       const container = document.getElementById("passengerContainer");
       if (container.querySelectorAll(".passenger-card").length > 1) {
         btn.closest(".passenger-card").remove();
-        // Renumber labels
         container.querySelectorAll(".passenger-card").forEach((card, idx) => {
           card.querySelector(".passenger-tag").innerText = `Passenger #${idx + 1}`;
         });
@@ -1000,7 +1028,6 @@
         const fare = parseFloat(row.fare) || 0;
         const refund = parseFloat(row.refund) || 0;
 
-        // Backward compatibility layer
         let paxList = [];
         if (Array.isArray(row.passengers) && row.passengers.length > 0) {
           paxList = row.passengers;
@@ -1022,7 +1049,6 @@
         totalFareSum += fare;
         totalRefundSum += refund;
 
-        // Render Individual Passenger Details
         let paxHtml = paxList.map(p => {
           const isCnf = (p.confirmed || "").toUpperCase().includes("YES");
           const cnfBadge = isCnf 
@@ -1044,8 +1070,9 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>
-            <button class="btn" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="editRecord('${row.id}')">✏️</button>
-            <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="deleteRecord('${row.id}')">🗑️</button>
+            <button class="btn" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="editRecord('${row.id}')" title="Edit">✏️</button>
+            <button class="btn btn-whatsapp" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="shareRecordViaWhatsApp('${row.id}')" title="WhatsApp Share">💬</button>
+            <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="deleteRecord('${row.id}')" title="Delete">🗑️</button>
           </td>
           <td><strong>${index + 1}</strong></td>
           <td>${row.date || '-'}</td>
@@ -1159,13 +1186,11 @@
       document.getElementById("fTo").value = targetRow.to || "";
       document.getElementById("fPnr").value = targetRow.pnr || "";
 
-      // Load Individual Passenger Cards
       const pContainer = document.getElementById("passengerContainer");
       pContainer.innerHTML = "";
       if (Array.isArray(targetRow.passengers) && targetRow.passengers.length > 0) {
         targetRow.passengers.forEach(p => addPassengerCard(p));
       } else if (targetRow.passenger) {
-        // Fallback for previous legacy format
         const names = targetRow.passenger.split(",");
         names.forEach(n => addPassengerCard({
           name: n.trim(),
@@ -1199,7 +1224,82 @@
       }
     }
 
-    // Clean, Sober Excel / CSV Export Engine matching template format
+    // WhatsApp Share Engine (Excludes ID and Bank Details as requested)
+    function shareRecordViaWhatsApp(id) {
+      let targetRow = null;
+      for (const cat of Object.keys(clientAppStore.data[currentVipId])) {
+        const item = clientAppStore.data[currentVipId][cat].find(r => r.id === id);
+        if (item) {
+          targetRow = item;
+          break;
+        }
+      }
+      if (!targetRow) return;
+      sendWhatsAppMessage(targetRow);
+    }
+
+    function shareRecordViaWhatsAppDirect(id) {
+      if (!id) {
+        // If creating new, construct temporary object from form
+        const passengersList = getPassengersFromModal();
+        const tempRow = {
+          date: document.getElementById("fDate").value,
+          train: document.getElementById("fTrain").value.trim(),
+          from: document.getElementById("fFrom").value.trim(),
+          to: document.getElementById("fTo").value.trim(),
+          passengers: passengersList,
+          pnr: document.getElementById("fPnr").value.trim(),
+          fare: parseFloat(document.getElementById("fFare").value) || 0,
+          refund: parseFloat(document.getElementById("fRefund").value) || 0,
+          remarks: document.getElementById("fRemarks").value.trim(),
+          remarks1: document.getElementById("fRemarks1").value.trim()
+        };
+        sendWhatsAppMessage(tempRow);
+      } else {
+        shareRecordViaWhatsApp(id);
+      }
+    }
+
+    function sendWhatsAppMessage(r) {
+      const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
+      const vipName = activeObj ? activeObj.name : "VIP Client";
+
+      let paxLines = "";
+      let paxList = r.passengers || [];
+      paxList.forEach((p, idx) => {
+        paxLines += `👤 *${idx + 1}. ${p.name}* (${p.age || 'N/A'}y, ${p.gender || 'M'})\n   Status: *${p.confirmed || 'YES'}* | Seat: *${p.seat || 'N/A'}* | Quota: *${p.quota || 'GN'}*\n`;
+      });
+
+      const fare = parseFloat(r.fare || 0);
+      const refund = parseFloat(r.refund || 0);
+      const net = fare - refund;
+
+      let msg = `🚆 *IRCTC JOURNEY DETAILS* 🚆\n` +
+                `━━━━━━━━━━━━━━━━━━━\n` +
+                `👤 *Client / VIP:* ${vipName}\n` +
+                `📅 *Date:* ${r.date || 'N/A'}\n` +
+                `🚂 *Train:* ${r.train || 'N/A'}\n` +
+                `📍 *Route:* ${r.from || ''} ➔ ${r.to || ''}\n` +
+                `🎫 *PNR:* \`${r.pnr || 'N/A'}\`\n` +
+                `━━━━━━━━━━━━━━━━━━━\n` +
+                `👥 *Passengers (${paxList.length} Pax):*\n${paxLines}` +
+                `━━━━━━━━━━━━━━━━━━━\n` +
+                `💵 *Total Fare:* ₹${fare.toFixed(2)}\n`;
+
+      if (refund > 0) {
+        msg += `💸 *Refund:* ₹${refund.toFixed(2)}\n` +
+               `✅ *Net Amount:* ₹${net.toFixed(2)}\n`;
+      }
+
+      if (r.remarks) msg += `📝 *Remarks:* ${r.remarks}\n`;
+      if (r.remarks1) msg += `📌 *Note:* ${r.remarks1}\n`;
+
+      msg += `━━━━━━━━━━━━━━━━━━━\n*Shree Ganesh Medicals & Services*`;
+
+      const encoded = encodeURIComponent(msg);
+      window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
+    }
+
     function exportToExcel() {
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
       const vipName = activeObj ? activeObj.name : "VIP";
@@ -1239,7 +1339,6 @@
           }];
         }
 
-        // Export neat row for each passenger, sharing common journey billing
         paxList.forEach((p, pIndex) => {
           csvRows.push([
             serialCounter++,
@@ -1256,7 +1355,7 @@
             r.pnr || "",
             r.remarks || "",
             r.remarks1 || "",
-            pIndex === 0 ? parseFloat(r.fare || 0).toFixed(2) : "", // Fare only on first pax row for clean totals
+            pIndex === 0 ? parseFloat(r.fare || 0).toFixed(2) : "",
             pIndex === 0 ? parseFloat(r.refund || 0).toFixed(2) : "",
             r.idProof || "",
             r.bank || ""
@@ -1274,7 +1373,6 @@
       document.body.removeChild(link);
     }
 
-    // Direct Full Backup & Restore Engine
     function downloadBackup() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clientAppStore, null, 2));
       const downloadAnchor = document.createElement("a");
@@ -1314,7 +1412,6 @@
       event.target.value = "";
     }
 
-    // Passcode Interceptor & Settings
     function openMasterPasscodeModal() {
       document.getElementById("inputMasterKey").value = "";
       document.getElementById("passcodeError").style.display = "none";
@@ -1355,7 +1452,6 @@
       await liveSyncPull(true);
     }
 
-    // Cryptography Engine: AES-GCM 256-bit PBKDF2
     async function deriveKey(passphrase, salt) {
       const enc = new TextEncoder();
       const keyMaterial = await crypto.subtle.importKey(
@@ -1431,7 +1527,6 @@
       return null;
     }
 
-    // Live Instant GitHub Push
     async function liveSyncPush() {
       const token = localStorage.getItem("IRCTC_GH_TOKEN");
       const vaultKey = localStorage.getItem("IRCTC_VAULT_KEY");
@@ -1481,7 +1576,6 @@
       }
     }
 
-    // Live GitHub Pull with Cache-Buster
     async function liveSyncPull(isManualOrInit = false) {
       const token = localStorage.getItem("IRCTC_GH_TOKEN");
       const vaultKey = localStorage.getItem("IRCTC_VAULT_KEY");
