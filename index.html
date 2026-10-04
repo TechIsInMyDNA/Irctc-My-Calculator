@@ -47,7 +47,7 @@
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 0.75rem 1.25rem;
+      padding: 0.85rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -71,27 +71,27 @@
       display: grid;
       place-items: center;
       font-weight: 800;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: #fff;
       box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
     }
 
     .brand-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
       letter-spacing: -0.3px;
       color: #fff;
     }
 
     .brand-sub {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       color: var(--accent-cyan);
       font-family: 'JetBrains Mono', monospace;
     }
 
     .header-actions {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.5rem;
       align-items: center;
       flex-wrap: wrap;
     }
@@ -99,10 +99,10 @@
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
-      padding: 0.45rem 0.75rem;
+      gap: 0.4rem;
+      padding: 0.5rem 0.85rem;
       border-radius: var(--radius);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 600;
       border: 1px solid var(--border);
       cursor: pointer;
@@ -135,91 +135,21 @@
       color: #fff;
     }
 
-    .global-search-bar {
-      background: #0d121c;
-      border-bottom: 1px solid var(--border);
-      padding: 0.65rem 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      position: relative;
-    }
-
-    .search-input-wrap {
-      flex: 1;
-      position: relative;
-    }
-
-    .search-input-wrap input {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.55rem 0.85rem 0.55rem 2.2rem;
-      color: #fff;
-      font-size: 0.85rem;
-      outline: none;
-      transition: border 0.2s;
-    }
-
-    .search-input-wrap input:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 10px rgba(6, 182, 212, 0.25);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .global-search-dropdown {
-      position: absolute;
-      top: 100%;
-      left: 1.25rem;
-      right: 1.25rem;
-      background: #111827;
-      border: 1px solid var(--border-focus);
-      border-radius: 8px;
-      max-height: 380px;
-      overflow-y: auto;
-      z-index: 100;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      display: none;
-    }
-
-    .global-search-item {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .global-search-item:hover {
-      background: #1e293b;
-    }
-
     .vip-selection-bar {
       background: #0f1523;
       border-bottom: 1px solid var(--border);
-      padding: 0.65rem 1.25rem;
+      padding: 0.75rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: 0.75rem;
     }
 
     .vip-selector-group {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       flex-wrap: wrap;
     }
 
@@ -227,18 +157,18 @@
       background: var(--surface-card);
       color: #fff;
       border: 1px solid var(--accent-purple);
-      padding: 0.45rem 0.8rem;
+      padding: 0.5rem 0.85rem;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       outline: none;
       cursor: pointer;
-      min-width: 170px;
+      min-width: 180px;
     }
 
     .main-container {
-      padding: 0.85rem 1.25rem;
-      max-width: 1800px;
+      padding: 1rem 1.25rem;
+      max-width: 1750px;
       margin: 0 auto;
       width: 100%;
       flex: 1;
@@ -248,13 +178,13 @@
       display: flex;
       gap: 0.5rem;
       border-bottom: 2px solid var(--border);
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
       overflow-x: auto;
     }
 
     .tab-btn {
-      padding: 0.65rem 1.15rem;
-      font-size: 0.85rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.88rem;
       font-weight: 700;
       background: transparent;
       border: none;
@@ -270,61 +200,25 @@
       border-bottom-color: var(--accent-cyan);
     }
 
-    .filter-controls-bar {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0.65rem 0.85rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-
-    .filter-inputs-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      flex: 1;
-    }
-
-    .filter-inputs-group input, .filter-inputs-group select {
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.4rem 0.65rem;
-      color: #fff;
-      font-size: 0.8rem;
-      outline: none;
-    }
-
-    .view-toggle-btns {
-      display: flex;
-      gap: 0.25rem;
-    }
-
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
     }
 
     .summary-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 0.85rem 1rem;
+      padding: 1rem;
       border-radius: var(--radius);
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.35rem;
     }
 
     .summary-card span {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
@@ -332,121 +226,68 @@
     }
 
     .summary-card strong {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .journey-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 0.85rem;
-    }
-
-    .journey-card {
+    .table-responsive {
+      overflow-x: auto;
       background: var(--surface);
-      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      position: relative;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
 
-    .journey-card:hover {
-      border-color: var(--border-focus);
-      background: #141c2b;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+      white-space: nowrap;
     }
 
-    .journey-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding-bottom: 0.5rem;
-    }
-
-    .journey-route-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: rgba(6, 182, 212, 0.12);
+    th {
+      background: #0d121a;
+      padding: 0.85rem 0.75rem;
+      font-weight: 700;
       color: var(--accent-cyan);
-      border: 1px solid var(--accent-cyan);
-      border-radius: 6px;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    .journey-time-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: rgba(245, 158, 11, 0.12);
-      color: var(--accent-amber);
-      border: 1px solid var(--accent-amber);
-      border-radius: 4px;
-      padding: 0.15rem 0.4rem;
-      font-size: 0.7rem;
+      border-bottom: 1px solid var(--border);
       font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      margin-top: 0.3rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.3px;
     }
 
-    .journey-passenger-box {
-      background: #0d121c;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 6px;
-      padding: 0.6rem;
+    td {
+      padding: 0.75rem 0.75rem;
+      border-bottom: 1px solid rgba(38, 51, 77, 0.4);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    tr:hover td { background-color: var(--surface-card); }
+
+    .passenger-chip-container {
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
     }
 
     .passenger-chip {
-      background: rgba(18, 23, 34, 0.9);
+      background: rgba(18, 23, 34, 0.7);
       border: 1px solid var(--border);
-      padding: 0.35rem 0.55rem;
+      padding: 0.35rem 0.6rem;
       border-radius: 6px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-    }
-
-    .journey-financial-footer {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 0.5rem;
-      background: #090d15;
-      padding: 0.6rem;
-      border-radius: 6px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .fin-item span {
-      display: block;
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .fin-item strong {
-      font-size: 0.88rem;
-      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
     }
 
     .badge {
       display: inline-block;
       padding: 0.15rem 0.45rem;
       border-radius: 4px;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
     }
@@ -469,44 +310,14 @@
       border: 1px solid var(--accent-purple);
       padding: 0.1rem 0.35rem;
       border-radius: 4px;
-      font-size: 0.65rem;
+      font-size: 0.68rem;
     }
 
-    .table-responsive {
-      overflow-x: auto;
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      display: none;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    th {
-      background: #0d121a;
-      padding: 0.75rem 0.65rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-      border-bottom: 1px solid var(--border);
+    .calc-tag {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
+      color: var(--accent-cyan);
+      font-size: 0.78rem;
     }
-
-    td {
-      padding: 0.65rem 0.65rem;
-      border-bottom: 1px solid rgba(38, 51, 77, 0.4);
-      color: var(--text-main);
-      vertical-align: middle;
-    }
-
-    tr:hover td { background-color: var(--surface-card); }
 
     .modal-overlay {
       position: fixed;
@@ -516,7 +327,7 @@
       display: none;
       place-items: center;
       z-index: 1000;
-      padding: 0.75rem;
+      padding: 1rem;
     }
 
     .modal-overlay.active { display: grid; }
@@ -529,7 +340,7 @@
       max-width: 980px;
       max-height: 94vh;
       overflow-y: auto;
-      padding: 1.25rem;
+      padding: 1.5rem;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     }
 
@@ -537,28 +348,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 0.65rem;
+      padding-bottom: 0.75rem;
     }
 
-    .modal-header h3 { font-size: 1.1rem; font-weight: 700; color: #fff; }
+    .modal-header h3 { font-size: 1.15rem; font-weight: 700; color: #fff; }
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
-      position: relative;
+      gap: 0.35rem;
     }
 
     .form-group label {
-      font-size: 0.7rem;
+      font-size: 0.73rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -569,9 +379,9 @@
       background: var(--bg-dark);
       border: 1px solid var(--border);
       color: var(--text-main);
-      padding: 0.5rem 0.7rem;
+      padding: 0.55rem 0.75rem;
       border-radius: 6px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       outline: none;
       transition: border 0.2s;
     }
@@ -581,33 +391,27 @@
       box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
     }
 
-    .auto-hint-tag {
-      font-size: 0.65rem;
-      color: var(--accent-cyan);
-      font-family: 'JetBrains Mono', monospace;
-      margin-top: 2px;
-    }
-
     .passenger-wrapper {
       grid-column: 1 / -1;
-      background: #0d121c;
+      background: #0d121a;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 0.85rem 1rem;
-      margin-top: 0.35rem;
+      padding: 1rem 1.25rem;
+      margin-top: 0.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
     .passenger-card {
       background: #151c29;
       border: 1px solid #283750;
       border-radius: 8px;
-      padding: 0.75rem 0.85rem;
+      padding: 0.85rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.75rem;
+      position: relative;
       box-shadow: 0 2px 10px rgba(0,0,0,0.25);
     }
 
@@ -616,11 +420,11 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding-bottom: 0.35rem;
+      padding-bottom: 0.4rem;
     }
 
     .passenger-tag {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--accent-purple);
       font-family: 'JetBrains Mono', monospace;
@@ -629,23 +433,20 @@
     .passenger-card-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1.2fr 1.5fr 1.5fr 1.2fr;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     @media (max-width: 768px) {
       .passenger-card-grid {
         grid-template-columns: 1fr 1fr;
       }
-      .journey-cards-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
     .sync-status {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      font-size: 0.72rem;
+      gap: 0.45rem;
+      font-size: 0.75rem;
       font-family: 'JetBrains Mono', monospace;
       color: var(--text-muted);
     }
@@ -694,7 +495,7 @@
         <span class="status-dot" id="syncDot"></span>
         <span id="syncText">Syncing...</span>
       </div>
-      <button class="btn btn-green" onclick="exportToExcel()">📊 Export</button>
+      <button class="btn btn-green" onclick="exportToExcel()">📊 Export Excel</button>
       <button class="btn" onclick="downloadBackup()">💾 Backup</button>
       <button class="btn" onclick="document.getElementById('restoreFileInput').click()">📥 Restore</button>
       <input type="file" id="restoreFileInput" style="display:none;" accept=".json" onchange="restoreBackupFile(event)">
@@ -703,24 +504,15 @@
     </div>
   </header>
 
-  <!-- Global Partial Search Bar -->
-  <div class="global-search-bar">
-    <div class="search-input-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="globalSearchInput" placeholder="Global Search: Naam, PNR, ya Train number se dhoondhein kisi bhi client ka..." oninput="handleGlobalSearch(this.value)">
-    </div>
-    <div id="globalSearchDropdown" class="global-search-dropdown"></div>
-  </div>
-
-  <!-- VIP Customer Selector Bar -->
+  <!-- VIP Customer Selector Bar with Hisaab / Khata Button -->
   <div class="vip-selection-bar">
     <div class="vip-selector-group">
-      <span style="font-size:0.75rem; font-weight:700; color:var(--accent-purple); font-family:monospace;">VIP PERSON:</span>
+      <span style="font-size:0.8rem; font-weight:700; color:var(--accent-purple); font-family:monospace;">ACTIVE VIP PERSON:</span>
       <select id="vipSelect" class="vip-dropdown" onchange="onVipChange()"></select>
       <button class="btn btn-amber" onclick="openHisaabModal()">💰 Hisaab (Khata)</button>
-      <button class="btn btn-purple" onclick="openNewVipModal()">➕ Add</button>
+      <button class="btn btn-purple" onclick="openNewVipModal()">➕ Add Person</button>
       <button class="btn" onclick="openEditVipModal()" title="Edit VIP Person">✏️ Edit</button>
-      <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑</button>
+      <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑️</button>
     </div>
     <div id="vipInfoBadge" style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">
       Mobile: <span id="currentVipMobile" style="color:var(--accent-cyan); font-weight:700;">-</span>
@@ -729,9 +521,9 @@
 
   <main class="main-container">
     <div class="tab-bar">
-      <button class="tab-btn active" id="tabBtnOutgoing" onclick="switchTab('OUTGOING')">OUTGOING PLAN (FORWARD)</button>
-      <button class="tab-btn" id="tabBtnIncoming" onclick="switchTab('INCOMING')">INCOMING PLAN (RETURN)</button>
-      <button class="tab-btn" id="tabBtnNhi" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
+      <button class="tab-btn active" onclick="switchTab('OUTGOING')">OUTGOING PLAN</button>
+      <button class="tab-btn" onclick="switchTab('INCOMING')">INCOMING PLAN</button>
+      <button class="tab-btn" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
     </div>
 
     <!-- Live Calculator Summary Bar -->
@@ -754,43 +546,17 @@
       </div>
     </div>
 
-    <!-- In-Tab Filter Controls Bar -->
-    <div class="filter-controls-bar">
-      <div class="filter-inputs-group">
-        <input type="text" id="tabSearchInput" placeholder="🔎 Filter is tab me (Naam / PNR / Coach)..." oninput="applyTabFilters()">
-        <select id="filterConfirmed" onchange="applyTabFilters()">
-          <option value="ALL">All Status</option>
-          <option value="CNF">Confirmed (CNF)</option>
-          <option value="WL">Waiting (WL / RAC)</option>
-          <option value="CANCELLED">Cancelled</option>
-        </select>
-        <select id="filterQuota" onchange="applyTabFilters()">
-          <option value="ALL">All Quota</option>
-          <option value="GN">General (GN)</option>
-          <option value="SENIOR">Senior Citizen / LB</option>
-          <option value="TQ">Tatkal (TQ)</option>
-        </select>
-        <button class="btn" style="padding:0.35rem 0.6rem; font-size:0.75rem;" onclick="resetTabFilters()">Reset</button>
-      </div>
-      <div class="view-toggle-btns">
-        <button class="btn btn-purple" id="btnViewCards" onclick="setViewMode('cards')">🗂️ Cards View</button>
-        <button class="btn" id="btnViewTable" onclick="setViewMode('table')">📋 Table View</button>
-      </div>
-    </div>
-
-    <!-- Card View (Zero-Scroll Responsive Layout) -->
-    <div class="journey-cards-grid" id="journeyCardsGrid"></div>
-
-    <!-- Classic Table View -->
-    <div class="table-responsive" id="classicTableView">
+    <!-- Data Table -->
+    <div class="table-responsive">
       <table id="mainDataTable">
         <thead>
           <tr>
             <th>ACTIONS</th>
             <th>SR NO</th>
-            <th>DATE</th>
-            <th>TRAIN</th>
-            <th>FROM (TIME) ➔ TO (TIME)</th>
+            <th>DATE OF TRAVEL</th>
+            <th>TRAIN NO/NAME</th>
+            <th>FROM</th>
+            <th>TO</th>
             <th>PASSENGER DETAILS & SEATS</th>
             <th>TOTAL PAX</th>
             <th>PNR</th>
@@ -841,7 +607,8 @@
         <button class="btn btn-danger" onclick="closeHisaabModal()">✕</button>
       </div>
       
-      <div class="summary-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom:1rem;">
+      <!-- Hisaab Overview Cards -->
+      <div class="summary-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom:1.25rem;">
         <div class="summary-card">
           <span>Total Net Billed</span>
           <strong id="hisaabTotalBilled" style="color:var(--accent-cyan);">₹0.00</strong>
@@ -856,9 +623,10 @@
         </div>
       </div>
 
-      <div style="background:#0d121c; border:1px solid var(--border); border-radius:8px; padding:0.85rem; margin-bottom:1rem;">
-        <strong style="color:var(--accent-amber); font-size:0.8rem; font-family:'JetBrains Mono', monospace; display:block; margin-bottom:0.65rem;">➕ RECORD PAYMENT RECEIVED (KAB AAYA, KAISE AAYA)</strong>
-        <form id="paymentForm" onsubmit="addPaymentRecord(event)" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:0.5rem; align-items:flex-end;">
+      <!-- Add New Payment Entry Form -->
+      <div style="background:#0d121a; border:1px solid var(--border); border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
+        <strong style="color:var(--accent-amber); font-size:0.82rem; font-family:'JetBrains Mono', monospace; display:block; margin-bottom:0.75rem;">➕ RECORD PAYMENT RECEIVED (KAB AAYA, KAISE AAYA)</strong>
+        <form id="paymentForm" onsubmit="addPaymentRecord(event)" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:0.6rem; align-items:flex-end;">
           <div class="form-group">
             <label>Date Received</label>
             <input type="date" id="payDate" required>
@@ -872,30 +640,31 @@
             <select id="payMode">
               <option value="UPI / GPay">UPI / GPay</option>
               <option value="Cash">Cash</option>
-              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Bank Transfer (NEFT/IMPS)">Bank Transfer</option>
               <option value="Cheque">Cheque</option>
               <option value="Other">Other</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Note / Ref</label>
-            <input type="text" id="payNote" placeholder="e.g. UTR / Cash">
+            <label>Note / Ref No</label>
+            <input type="text" id="payNote" placeholder="e.g. UTR / Received by Self">
           </div>
           <div>
-            <button type="submit" class="btn btn-green" style="width:100%; height:36px; justify-content:center;">➕ Add</button>
+            <button type="submit" class="btn btn-green" style="width:100%; height:38px; justify-content:center;">➕ Add</button>
           </div>
         </form>
       </div>
 
-      <strong style="color:var(--accent-cyan); font-size:0.75rem; font-family:'JetBrains Mono', monospace; display:block; margin-bottom:0.4rem;">PAYMENT TRANSACTIONS HISTORY</strong>
-      <div class="table-responsive" style="max-height: 200px; margin-bottom: 1rem; display:block;">
+      <!-- Payments Table -->
+      <strong style="color:var(--accent-cyan); font-size:0.8rem; font-family:'JetBrains Mono', monospace; display:block; margin-bottom:0.5rem;">PAYMENT TRANSACTIONS HISTORY</strong>
+      <div class="table-responsive" style="max-height: 220px; margin-bottom: 1.25rem;">
         <table>
           <thead>
             <tr>
               <th>DATE</th>
               <th>AMOUNT RECEIVED</th>
               <th>PAYMENT MODE</th>
-              <th>NOTE / REF</th>
+              <th>NOTE / REFERENCE</th>
               <th>ACTION</th>
             </tr>
           </thead>
@@ -904,13 +673,13 @@
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button class="btn btn-whatsapp" onclick="shareHisaabViaWhatsApp()">💬 WhatsApp Statement</button>
+        <button class="btn btn-whatsapp" onclick="shareHisaabViaWhatsApp()">💬 WhatsApp Hisaab Statement</button>
         <button class="btn btn-danger" onclick="closeHisaabModal()">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Record Modal with Smart Train Name & Time Auto-Fill -->
+  <!-- Record Modal with Clean Passenger Cards -->
   <div class="modal-overlay" id="recordModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -921,10 +690,10 @@
         <input type="hidden" id="editRowId">
         <div class="form-grid">
           <div class="form-group">
-            <label>Category</label>
+            <label>Journey Category</label>
             <select id="fCategory">
-              <option value="OUTGOING">OUTGOING PLAN (FORWARD)</option>
-              <option value="INCOMING">INCOMING PLAN (RETURN)</option>
+              <option value="OUTGOING">OUTGOING</option>
+              <option value="INCOMING">INCOMING</option>
               <option value="NHI_JANE_WALE">NHI JANE WALE LOG</option>
             </select>
           </div>
@@ -932,55 +701,34 @@
             <label>Date of Travel</label>
             <input type="date" id="fDate">
           </div>
-          
-          <!-- Auto-Fill Train & Timings Section -->
           <div class="form-group">
-            <label>Train Number (Auto-Fill)</label>
-            <input type="text" id="fTrainNo" placeholder="e.g. 17007, 13288, 12834" oninput="handleTrainLookup()" list="trainSuggestions" required>
-            <datalist id="trainSuggestions"></datalist>
-            <span class="auto-hint-tag" id="trainAutoStatus">Type train number for auto-fill</span>
+            <label>Train No / Name</label>
+            <input type="text" id="fTrain" placeholder="e.g. 12834 HWH ADI EXP" required>
           </div>
-
-          <div class="form-group">
-            <label>Train Name (Auto-Populated)</label>
-            <input type="text" id="fTrain" placeholder="e.g. 17007 CHZ DBG EXPRESS" required>
-          </div>
-
           <div class="form-group">
             <label>From Station</label>
-            <input type="text" id="fFrom" placeholder="e.g. RAIPUR (R) / GONDIA (G)" oninput="handleStationTimeUpdate()" required>
+            <input type="text" id="fFrom" placeholder="e.g. G (Gondia)" required>
           </div>
-
-          <div class="form-group">
-            <label>From Departure Time (Kitni Baje)</label>
-            <input type="text" id="fFromTime" placeholder="e.g. 15:45 (Auto-filled / Edit)">
-          </div>
-
           <div class="form-group">
             <label>To Station</label>
-            <input type="text" id="fTo" placeholder="e.g. KIUL (KIUL) / JSME" oninput="handleStationTimeUpdate()" required>
+            <input type="text" id="fTo" placeholder="e.g. NGP / SURAT" required>
           </div>
-
-          <div class="form-group">
-            <label>To Arrival Time (Kitni Baje)</label>
-            <input type="text" id="fToTime" placeholder="e.g. 09:30 (Auto-filled / Edit)">
-          </div>
-
           <div class="form-group">
             <label>PNR</label>
-            <input type="text" id="fPnr" placeholder="10 Digit PNR" maxlength="10">
+            <input type="text" id="fPnr" placeholder="10 Digit IRCTC PNR" maxlength="10">
           </div>
 
           <!-- Dynamic Individual Passenger Cards -->
           <div class="passenger-wrapper">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
-                <strong style="color:var(--accent-cyan); font-size:0.82rem; font-family:'JetBrains Mono', monospace;">PASSENGERS & INDIVIDUAL BERTH DETAILS</strong>
+                <strong style="color:var(--accent-cyan); font-size:0.85rem; font-family:'JetBrains Mono', monospace;">PASSENGERS & INDIVIDUAL BERTH DETAILS</strong>
+                <p style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Har passenger ka status, seat aur quota alag configure karein.</p>
               </div>
-              <button type="button" class="btn btn-purple" style="padding:0.35rem 0.65rem;" onclick="addPassengerCard()">➕ Add Pax</button>
+              <button type="button" class="btn btn-purple" onclick="addPassengerCard()">➕ Add Passenger</button>
             </div>
             
-            <div id="passengerContainer" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+            <div id="passengerContainer" style="display:flex; flex-direction:column; gap:0.75rem;"></div>
           </div>
 
           <div class="form-group">
@@ -988,11 +736,11 @@
             <input type="number" step="0.01" id="fFare" placeholder="0.00" oninput="calculateSplitPreview()">
           </div>
           <div class="form-group">
-            <label>Refund Amt (₹)</label>
+            <label>Refund Amt, If Any (₹)</label>
             <input type="number" step="0.01" id="fRefund" placeholder="0.00" oninput="calculateSplitPreview()">
           </div>
           <div class="form-group">
-            <label>Total Headcount</label>
+            <label>Total Passengers (Headcount)</label>
             <input type="number" id="fSeatCount" value="1" min="1" readonly style="background:#0d121c; color:var(--accent-purple); font-weight:700;">
           </div>
           <div class="form-group">
@@ -1000,25 +748,25 @@
             <input type="text" id="fNetPerSeat" readonly placeholder="₹0.00" style="background:#000; color:var(--accent-green); font-weight:700;">
           </div>
           <div class="form-group">
-            <label>ID Proof</label>
-            <input type="text" id="fId" placeholder="User ID / ID proof">
+            <label>ID Details</label>
+            <input type="text" id="fId" placeholder="IRCTC User ID / ID proof">
           </div>
           <div class="form-group">
             <label>Bank / Payment Source</label>
-            <input type="text" id="fBank" placeholder="e.g. HDFC / AU / UPI">
+            <input type="text" id="fBank" placeholder="e.g. HDFC / SBI / UPI">
           </div>
           <div class="form-group">
             <label>Remarks</label>
-            <input type="text" id="fRemarks" placeholder="Note (e.g. 2A)">
+            <input type="text" id="fRemarks" placeholder="Note">
           </div>
           <div class="form-group">
             <label>Remarks 1</label>
             <input type="text" id="fRemarks1" placeholder="Alternative Note">
           </div>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.25rem;">
-          <button type="button" class="btn btn-whatsapp" id="modalWhatsAppBtn" onclick="shareRecordViaWhatsAppDirect(document.getElementById('editRowId').value)">💬 WhatsApp Share</button>
-          <div style="display:flex; gap:0.6rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem;">
+          <button type="button" class="btn btn-whatsapp" id="modalWhatsAppBtn" onclick="shareRecordViaWhatsAppDirect(document.getElementById('editRowId').value)">💬 Share on WhatsApp</button>
+          <div style="display:flex; gap:0.75rem;">
             <button type="button" class="btn btn-danger" onclick="closeRecordModal()">Cancel</button>
             <button type="submit" class="btn btn-green">Save & Live Sync</button>
           </div>
@@ -1082,143 +830,8 @@
     const GITHUB_REPO = "Irctc-My-Calculator";
     const GITHUB_FILE = "irctc_encrypted_data.json";
 
-    /* Smart Inbuilt Train Master Schedule & Timings Database */
-    const INDIAN_TRAINS_DB = {
-      "17007": {
-        name: "17007 CHZ DBG EXPRESS (Bikaner/Secunderabad to Darbhanga)",
-        from: "RAIPUR",
-        to: "KIUL",
-        fromTime: "15:20",
-        toTime: "09:35",
-        halts: {
-          "GONDIA": "12:55",
-          "RAJ NANDGAON": "14:15",
-          "RAIPUR": "15:20",
-          "BILASPUR": "17:10",
-          "JASIDIH": "08:15",
-          "KIUL": "09:35"
-        }
-      },
-      "13288": {
-        name: "13288 SOUTH BIHAR EXP (Danapur to Durg)",
-        from: "KIUL",
-        to: "RAIPUR",
-        fromTime: "22:15",
-        toTime: "18:40",
-        halts: {
-          "KIUL": "22:15",
-          "JHAJHA": "23:20",
-          "JASIDIH": "00:05",
-          "ASANSOL": "01:50",
-          "TATA": "05:15",
-          "ROURKELA": "08:45",
-          "BILASPUR": "15:30",
-          "RAIPUR": "18:40",
-          "DURG": "19:40"
-        }
-      },
-      "12834": {
-        name: "12834 HWH ADI EXP (Howrah to Ahmedabad)",
-        from: "HOWRAH",
-        to: "AHMEDABAD",
-        fromTime: "23:05",
-        toTime: "12:05",
-        halts: {
-          "HOWRAH": "23:05",
-          "TATA": "03:15",
-          "ROURKELA": "06:10",
-          "BILASPUR": "11:45",
-          "RAIPUR": "13:35",
-          "DURG": "14:35",
-          "GONDIA": "16:40",
-          "NAGPUR": "19:00",
-          "SURAT": "07:55",
-          "AHMEDABAD": "12:05"
-        }
-      },
-      "12833": {
-        name: "12833 ADI HWH EXP (Ahmedabad to Howrah)",
-        from: "AHMEDABAD",
-        to: "HOWRAH",
-        fromTime: "00:25",
-        toTime: "13:35",
-        halts: {
-          "AHMEDABAD": "00:25",
-          "SURAT": "04:25",
-          "NAGPUR": "18:00",
-          "GONDIA": "19:50",
-          "DURG": "22:10",
-          "RAIPUR": "23:05",
-          "BILASPUR": "01:05",
-          "HOWRAH": "13:35"
-        }
-      },
-      "12859": {
-        name: "12859 GITANJALI EXP (CSMT to Howrah)",
-        from: "MUMBAI CSMT",
-        to: "HOWRAH",
-        fromTime: "06:00",
-        toTime: "12:30",
-        halts: {
-          "MUMBAI CSMT": "06:00",
-          "KALYAN": "06:52",
-          "NAGPUR": "18:55",
-          "GONDIA": "20:48",
-          "DURG": "22:50",
-          "RAIPUR": "23:30",
-          "HOWRAH": "12:30"
-        }
-      },
-      "12860": {
-        name: "12860 GITANJALI EXP (Howrah to CSMT)",
-        from: "HOWRAH",
-        to: "MUMBAI CSMT",
-        fromTime: "13:50",
-        toTime: "21:20",
-        halts: {
-          "HOWRAH": "13:50",
-          "RAIPUR": "02:45",
-          "DURG": "03:45",
-          "GONDIA": "05:40",
-          "NAGPUR": "07:40",
-          "MUMBAI CSMT": "21:20"
-        }
-      },
-      "12130": {
-        name: "12130 AZAD HIND EXP (Howrah to Pune)",
-        from: "HOWRAH",
-        to: "PUNE",
-        fromTime: "21:55",
-        toTime: "07:05",
-        halts: {
-          "HOWRAH": "21:55",
-          "RAIPUR": "10:50",
-          "DURG": "11:55",
-          "GONDIA": "13:52",
-          "NAGPUR": "15:55",
-          "PUNE": "07:05"
-        }
-      },
-      "12809": {
-        name: "12809 HOWRAH MAIL (CSMT to Howrah)",
-        from: "MUMBAI CSMT",
-        to: "HOWRAH",
-        fromTime: "21:10",
-        toTime: "06:05",
-        halts: {
-          "MUMBAI CSMT": "21:10",
-          "NAGPUR": "11:10",
-          "GONDIA": "13:00",
-          "DURG": "15:05",
-          "RAIPUR": "15:45",
-          "HOWRAH": "06:05"
-        }
-      }
-    };
-
     let currentVipId = "vip_default";
     let currentTab = "OUTGOING";
-    let currentViewMode = "cards";
     let isSyncing = false;
     let lastKnownRemoteSha = null;
 
@@ -1240,15 +853,12 @@
     };
 
     window.addEventListener("DOMContentLoaded", async () => {
-      // Setup datalist for train numbers
-      populateTrainSuggestions();
-
       const cached = localStorage.getItem("IRCTC_VIP_PLANNER_CACHE");
       if (cached) {
         try {
           clientAppStore = JSON.parse(cached);
         } catch (e) {
-          console.error("Cache error", e);
+          console.error("Cache parsing error", e);
         }
       }
       document.getElementById("ghToken").value = localStorage.getItem("IRCTC_GH_TOKEN") || "";
@@ -1264,7 +874,7 @@
       currentVipId = clientAppStore.vips[0].id;
 
       refreshVipDropdown();
-      renderAllViews();
+      renderTable();
 
       if (localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
         await liveSyncPull(true);
@@ -1277,76 +887,10 @@
       }, 5000);
     });
 
-    function populateTrainSuggestions() {
-      const dl = document.getElementById("trainSuggestions");
-      dl.innerHTML = "";
-      Object.keys(INDIAN_TRAINS_DB).forEach(num => {
-        const opt = document.createElement("option");
-        opt.value = num;
-        opt.innerText = INDIAN_TRAINS_DB[num].name;
-        dl.appendChild(opt);
-      });
-    }
-
-    /* Smart Train Auto-Fill Handler */
-    function handleTrainLookup() {
-      const rawInput = document.getElementById("fTrainNo").value.trim();
-      const statusTag = document.getElementById("trainAutoStatus");
-      
-      // Match 5-digit number or partial
-      const matchKey = Object.keys(INDIAN_TRAINS_DB).find(num => rawInput.includes(num));
-
-      if (matchKey) {
-        const trainData = INDIAN_TRAINS_DB[matchKey];
-        document.getElementById("fTrain").value = trainData.name;
-        statusTag.innerText = `✨ Auto-detected: ${trainData.name}`;
-        statusTag.style.color = "var(--accent-green)";
-
-        // If from and to are empty, auto-fill standard route
-        if (!document.getElementById("fFrom").value) {
-          document.getElementById("fFrom").value = trainData.from;
-          document.getElementById("fFromTime").value = trainData.fromTime;
-        }
-        if (!document.getElementById("fTo").value) {
-          document.getElementById("fTo").value = trainData.to;
-          document.getElementById("fToTime").value = trainData.toTime;
-        }
-      } else {
-        statusTag.innerText = "Enter valid 5-digit Train Number";
-        statusTag.style.color = "var(--text-muted)";
-      }
-    }
-
-    /* Smart Station Halts & Timings Auto-Fill Handler */
-    function handleStationTimeUpdate() {
-      const rawTrain = document.getElementById("fTrainNo").value.trim();
-      const fromStn = document.getElementById("fFrom").value.trim().toUpperCase();
-      const toStn = document.getElementById("fTo").value.trim().toUpperCase();
-
-      const matchKey = Object.keys(INDIAN_TRAINS_DB).find(num => rawTrain.includes(num));
-      if (!matchKey) return;
-
-      const halts = INDIAN_TRAINS_DB[matchKey].halts || {};
-      
-      // Search matching halt for From Station
-      Object.keys(halts).forEach(stn => {
-        if (fromStn && (fromStn.includes(stn) || stn.includes(fromStn))) {
-          document.getElementById("fFromTime").value = halts[stn];
-        }
-      });
-
-      // Search matching halt for To Station
-      Object.keys(halts).forEach(stn => {
-        if (toStn && (toStn.includes(stn) || stn.includes(toStn))) {
-          document.getElementById("fToTime").value = halts[stn];
-        }
-      });
-    }
-
     function saveLocally() {
       clientAppStore.lastModified = Date.now();
       localStorage.setItem("IRCTC_VIP_PLANNER_CACHE", JSON.stringify(clientAppStore));
-      renderAllViews();
+      renderTable();
     }
 
     function refreshVipDropdown() {
@@ -1367,318 +911,7 @@
       currentVipId = document.getElementById("vipSelect").value;
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
       document.getElementById("currentVipMobile").innerText = activeObj && activeObj.mobile ? activeObj.mobile : "Not Set";
-      renderAllViews();
-    }
-
-    function setViewMode(mode) {
-      currentViewMode = mode;
-      document.getElementById("btnViewCards").className = mode === 'cards' ? "btn btn-purple" : "btn";
-      document.getElementById("btnViewTable").className = mode === 'table' ? "btn btn-purple" : "btn";
-      document.getElementById("journeyCardsGrid").style.display = mode === 'cards' ? "grid" : "none";
-      document.getElementById("classicTableView").style.display = mode === 'table' ? "block" : "none";
-      renderAllViews();
-    }
-
-    function handleGlobalSearch(query) {
-      const dropdown = document.getElementById("globalSearchDropdown");
-      const cleanQ = query.trim().toLowerCase();
-      if (!cleanQ) {
-        dropdown.style.display = "none";
-        dropdown.innerHTML = "";
-        return;
-      }
-
-      const results = [];
-      clientAppStore.vips.forEach(vip => {
-        const vipData = clientAppStore.data[vip.id] || {};
-        ['OUTGOING', 'INCOMING', 'NHI_JANE_WALE'].forEach(sheetKey => {
-          const rows = vipData[sheetKey] || [];
-          rows.forEach(r => {
-            let matchPax = null;
-            const paxList = r.passengers || (r.passenger ? [{ name: r.passenger }] : []);
-            for (const p of paxList) {
-              if (p.name && p.name.toLowerCase().includes(cleanQ)) {
-                matchPax = p;
-                break;
-              }
-            }
-
-            const matchTrain = (r.train || "").toLowerCase().includes(cleanQ);
-            const matchPnr = (r.pnr || "").toLowerCase().includes(cleanQ);
-            const matchRoute = `${r.from || ''} ${r.to || ''}`.toLowerCase().includes(cleanQ);
-
-            if (matchPax || matchTrain || matchPnr || matchRoute) {
-              results.push({
-                vip: vip,
-                sheet: sheetKey,
-                record: r,
-                matchedPax: matchPax
-              });
-            }
-          });
-        });
-      });
-
-      if (results.length === 0) {
-        dropdown.innerHTML = `<div style="padding:1rem; text-align:center; color:var(--text-muted); font-size:0.8rem;">Koi ticket ya passenger nahi mila "${query}" se.</div>`;
-        dropdown.style.display = "block";
-        return;
-      }
-
-      dropdown.innerHTML = results.slice(0, 15).map(res => {
-        const pName = res.matchedPax ? res.matchedPax.name : (res.record.passengers && res.record.passengers[0] ? res.record.passengers[0].name : 'Passenger');
-        return `
-          <div class="global-search-item" onclick="jumpToSearchResult('${res.vip.id}', '${res.sheet}', '${res.record.id}')">
-            <div>
-              <div style="font-weight:700; color:#fff; font-size:0.88rem;">👤 ${escapeHtml(pName)} <span style="font-size:0.75rem; color:var(--accent-purple); font-weight:600;">(VIP: ${escapeHtml(res.vip.name)})</span></div>
-              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
-                🚂 ${escapeHtml(res.record.train || 'Train')} | 🎫 PNR: <span style="color:var(--accent-cyan); font-family:monospace;">${escapeHtml(res.record.pnr || 'N/A')}</span> | 📅 ${res.record.date || ''} (${res.sheet})
-              </div>
-            </div>
-            <button class="btn btn-primary" style="font-size:0.75rem; padding:0.3rem 0.6rem;">Open & View ➔</button>
-          </div>
-        `;
-      }).join('');
-      dropdown.style.display = "block";
-    }
-
-    function jumpToSearchResult(vipId, sheetKey, recordId) {
-      document.getElementById("globalSearchDropdown").style.display = "none";
-      document.getElementById("globalSearchInput").value = "";
-      currentVipId = vipId;
-      refreshVipDropdown();
-      switchTab(sheetKey);
-      setTimeout(() => {
-        editRecord(recordId);
-      }, 150);
-    }
-
-    document.addEventListener("click", (e) => {
-      const dropdown = document.getElementById("globalSearchDropdown");
-      const searchBox = document.getElementById("globalSearchInput");
-      if (!dropdown.contains(e.target) && e.target !== searchBox) {
-        dropdown.style.display = "none";
-      }
-    });
-
-    function applyTabFilters() {
-      renderAllViews();
-    }
-
-    function resetTabFilters() {
-      document.getElementById("tabSearchInput").value = "";
-      document.getElementById("filterConfirmed").value = "ALL";
-      document.getElementById("filterQuota").value = "ALL";
-      renderAllViews();
-    }
-
-    function filterRecords(rows) {
-      const q = (document.getElementById("tabSearchInput").value || "").trim().toLowerCase();
-      const statusFilter = document.getElementById("filterConfirmed").value;
-      const quotaFilter = document.getElementById("filterQuota").value;
-
-      return rows.filter(r => {
-        const paxList = r.passengers || (r.passenger ? [{ name: r.passenger, confirmed: r.confirmed, quota: r.quota }] : []);
-        
-        if (statusFilter !== "ALL") {
-          const matchStatus = paxList.some(p => {
-            const conf = (p.confirmed || "").toUpperCase();
-            if (statusFilter === "CNF") return conf.includes("YES") || conf.includes("CNF");
-            if (statusFilter === "WL") return conf.includes("WL") || conf.includes("RAC") || conf.includes("NO");
-            if (statusFilter === "CANCELLED") return conf.includes("CANCEL");
-            return false;
-          });
-          if (!matchStatus) return false;
-        }
-
-        if (quotaFilter !== "ALL") {
-          const matchQuota = paxList.some(p => (p.quota || "").toUpperCase().includes(quotaFilter));
-          if (!matchQuota) return false;
-        }
-
-        if (q) {
-          const inPax = paxList.some(p => 
-            (p.name || "").toLowerCase().includes(q) || 
-            (p.seat || "").toLowerCase().includes(q) || 
-            (p.quota || "").toLowerCase().includes(q)
-          );
-          const inTrain = (r.train || "").toLowerCase().includes(q);
-          const inPnr = (r.pnr || "").toLowerCase().includes(q);
-          const inFromTo = `${r.from || ''} ${r.to || ''}`.toLowerCase().includes(q);
-          const inRemarks = `${r.remarks || ''} ${r.remarks1 || ''}`.toLowerCase().includes(q);
-
-          if (!inPax && !inTrain && !inPnr && !inFromTo && !inRemarks) return false;
-        }
-
-        return true;
-      });
-    }
-
-    function renderAllViews() {
-      if (!clientAppStore.data[currentVipId]) {
-        clientAppStore.data[currentVipId] = { OUTGOING: [], INCOMING: [], NHI_JANE_WALE: [] };
-      }
-
-      const allRows = clientAppStore.data[currentVipId][currentTab] || [];
-      const filteredRows = filterRecords(allRows);
-
-      let totalFareSum = 0;
-      let totalRefundSum = 0;
-
-      allRows.forEach(r => {
-        totalFareSum += parseFloat(r.fare || 0);
-        totalRefundSum += parseFloat(r.refund || 0);
-      });
-
-      const netFinal = totalFareSum - totalRefundSum;
-      document.getElementById("statCount").innerText = `${filteredRows.length} / ${allRows.length}`;
-      document.getElementById("statFare").innerText = `₹${totalFareSum.toFixed(2)}`;
-      document.getElementById("statRefund").innerText = `₹${totalRefundSum.toFixed(2)}`;
-      document.getElementById("statNet").innerText = `₹${netFinal.toFixed(2)}`;
-
-      renderCardsView(filteredRows);
-      renderTableView(filteredRows);
-    }
-
-    function renderCardsView(rows) {
-      const container = document.getElementById("journeyCardsGrid");
-      container.innerHTML = "";
-
-      if (rows.length === 0) {
-        container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-muted); background:var(--surface); border-radius:var(--radius); border:1px solid var(--border);">Koi ticket entry match nahi hui.</div>`;
-        return;
-      }
-
-      rows.forEach((row) => {
-        const fare = parseFloat(row.fare) || 0;
-        const refund = parseFloat(row.refund) || 0;
-        let paxList = row.passengers || (row.passenger ? [{ name: row.passenger, age: row.age, gender: row.gender, confirmed: row.confirmed, seat: row.seat, quota: row.quota }] : []);
-        const count = paxList.length > 0 ? paxList.length : (parseInt(row.seatCount) || 1);
-        const netCost = fare - refund;
-        const perSeat = (netCost / count).toFixed(2);
-
-        let paxItemsHtml = paxList.map(p => {
-          const isCnf = (p.confirmed || "").toUpperCase().includes("YES");
-          const cnfBadge = isCnf ? `<span class="badge badge-cnf">CNF</span>` : `<span class="badge badge-wl">${p.confirmed || 'WL'}</span>`;
-          return `
-            <div class="passenger-chip">
-              <div>
-                <strong style="color:var(--accent-cyan);">${escapeHtml(p.name)}</strong>
-                ${p.age ? `<small style="color:var(--text-muted);"> (${p.age}y, ${p.gender || 'M'})</small>` : ''}
-              </div>
-              <div style="display:flex; align-items:center; gap:0.35rem;">
-                ${cnfBadge}
-                <span style="color:var(--accent-amber); font-weight:700; font-family:monospace;">${escapeHtml(p.seat || '-')}</span>
-                <span style="color:var(--text-muted); font-size:0.68rem;">[${escapeHtml(p.quota || 'GN')}]</span>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        const timeString = (row.fromTime || row.toTime) 
-          ? `⏰ Dep: ${row.fromTime || 'N/A'} | Arr: ${row.toTime || 'N/A'}`
-          : '';
-
-        const card = document.createElement("div");
-        card.className = "journey-card";
-        card.innerHTML = `
-          <div class="journey-card-header">
-            <div>
-              <div class="journey-route-badge">📍 ${escapeHtml(row.from || 'FROM')} ➔ ${escapeHtml(row.to || 'TO')}</div>
-              <div style="font-weight:800; font-size:0.95rem; color:#fff; margin-top:0.35rem;">${escapeHtml(row.train || 'TRAIN')}</div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-family:monospace; margin-top:2px;">
-                📅 ${row.date || 'Date N/A'} | PNR: <strong style="color:var(--accent-cyan);">${row.pnr || 'N/A'}</strong>
-              </div>
-              ${timeString ? `<div class="journey-time-tag">${timeString}</div>` : ''}
-            </div>
-            <div style="display:flex; gap:0.3rem;">
-              <button class="btn" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="editRecord('${row.id}')" title="Edit">✏️</button>
-              <button class="btn btn-whatsapp" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="shareRecordViaWhatsApp('${row.id}')" title="WhatsApp Share">💬</button>
-              <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="deleteRecord('${row.id}')" title="Delete">🗑</button>
-            </div>
-          </div>
-
-          <div class="journey-passenger-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.2rem;">
-              <span style="font-size:0.7rem; color:var(--accent-purple); font-weight:700; font-family:monospace;">PASSENGERS (${count} PAX)</span>
-              ${row.remarks ? `<span style="font-size:0.68rem; color:var(--accent-cyan);">Note: ${escapeHtml(row.remarks)}</span>` : ''}
-            </div>
-            ${paxItemsHtml}
-          </div>
-
-          <div class="journey-financial-footer">
-            <div class="fin-item">
-              <span>Total Fare</span>
-              <strong style="color:var(--accent-cyan);">₹${fare.toFixed(2)}</strong>
-            </div>
-            <div class="fin-item">
-              <span>Refund</span>
-              <strong style="color:var(--accent-red);">₹${refund.toFixed(2)}</strong>
-            </div>
-            <div class="fin-item">
-              <span>Net / Seat</span>
-              <strong style="color:var(--accent-green);">₹${perSeat}</strong>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderTableView(rows) {
-      const tbody = document.getElementById("tableBody");
-      tbody.innerHTML = "";
-
-      rows.forEach((row, index) => {
-        const fare = parseFloat(row.fare) || 0;
-        const refund = parseFloat(row.refund) || 0;
-        let paxList = row.passengers || (row.passenger ? [{ name: row.passenger, age: row.age, gender: row.gender, confirmed: row.confirmed, seat: row.seat, quota: row.quota }] : []);
-        const count = paxList.length > 0 ? paxList.length : (parseInt(row.seatCount) || 1);
-        const netCost = fare - refund;
-        const perSeat = (netCost / count).toFixed(2);
-
-        let paxHtml = paxList.map(p => {
-          const isCnf = (p.confirmed || "").toUpperCase().includes("YES");
-          const cnfBadge = isCnf ? `<span class="badge badge-cnf">CNF</span>` : `<span class="badge badge-wl">${p.confirmed || 'WL'}</span>`;
-          return `
-            <div style="margin-bottom:2px;">
-              <strong style="color:var(--accent-cyan); font-size:0.75rem;">${escapeHtml(p.name)}</strong>
-              <small style="color:var(--text-muted);">(${p.age || '-'}y)</small>
-              ${cnfBadge}
-              <span style="color:var(--accent-amber); font-weight:700; font-family:monospace;">${escapeHtml(p.seat || '-')}</span>
-            </div>
-          `;
-        }).join('');
-
-        const timeDetails = `
-          <div>${escapeHtml(row.from || '-')} <small style="color:var(--accent-amber);">(${row.fromTime || 'Dep N/A'})</small></div>
-          <div style="color:var(--text-muted); font-size:0.7rem;">➔ ${escapeHtml(row.to || '-')} <small style="color:var(--accent-green);">(${row.toTime || 'Arr N/A'})</small></div>
-        `;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>
-            <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="editRecord('${row.id}')">✏️</button>
-            <button class="btn btn-whatsapp" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="shareRecordViaWhatsApp('${row.id}')">💬</button>
-            <button class="btn btn-danger" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="deleteRecord('${row.id}')">🗑️</button>
-          </td>
-          <td><strong>${index + 1}</strong></td>
-          <td>${row.date || '-'}</td>
-          <td style="font-weight:700; color:#fff;">${escapeHtml(row.train || '-')}</td>
-          <td>${timeDetails}</td>
-          <td>${paxHtml || '-'}</td>
-          <td><strong style="color:var(--accent-purple); font-family:monospace;">${count} Pax</strong></td>
-          <td style="font-family:monospace;">${row.pnr || '-'}</td>
-          <td style="font-family:monospace;">₹${fare.toFixed(2)}</td>
-          <td style="font-family:monospace; color:var(--accent-red);">₹${refund.toFixed(2)}</td>
-          <td class="calc-tag">₹${perSeat} <small>/seat</small></td>
-          <td>${row.remarks || '-'}</td>
-          <td>${row.remarks1 || '-'}</td>
-          <td>${row.idProof || '-'}</td>
-          <td>${row.bank || '-'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+      renderTable();
     }
 
     function openNewVipModal() {
@@ -1695,7 +928,7 @@
       document.getElementById("editVipId").value = activeObj.id;
       document.getElementById("newVipName").value = activeObj.name;
       document.getElementById("newVipMobile").value = activeObj.mobile || "";
-      document.getElementById("vipModalTitle").innerText = "✏ Edit VIP Person / Client";
+      document.getElementById("vipModalTitle").innerText = "✏️ Edit VIP Person / Client";
       document.getElementById("vipModal").classList.add("active");
     }
 
@@ -1752,6 +985,7 @@
       }
     }
 
+    // Hisaab / Settlement Management Engine
     function calculateClientTotalBilled(vipId) {
       const vipData = clientAppStore.data[vipId] || {};
       let totalBilled = 0;
@@ -1807,7 +1041,7 @@
       const tbody = document.getElementById("paymentHistoryBody");
       tbody.innerHTML = "";
       if (payments.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Koi payment entry nahi mili.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Koi payment record nahi mila. Niche se add karein.</td></tr>`;
       } else {
         payments.forEach(p => {
           const tr = document.createElement("tr");
@@ -1833,7 +1067,7 @@
       const note = document.getElementById("payNote").value.trim();
 
       if (amount <= 0) {
-        alert("Valid amount daalein.");
+        alert("Kripya valid payment amount daalein.");
         return;
       }
 
@@ -1909,10 +1143,10 @@
 
     function switchTab(tabKey) {
       currentTab = tabKey;
-      document.querySelectorAll(".tab-bar .tab-btn").forEach(btn => {
+      document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.classList.toggle("active", btn.getAttribute("onclick").includes(tabKey));
       });
-      renderAllViews();
+      renderTable();
     }
 
     function addPassengerCard(data = {}) {
@@ -1931,7 +1165,7 @@
       card.innerHTML = `
         <div class="passenger-card-top">
           <span class="passenger-tag">Passenger #${pIndex}</span>
-          <button type="button" class="btn btn-danger" style="padding:0.2rem 0.45rem; font-size:0.68rem;" onclick="removePassengerCard(this)">🗑️ Remove</button>
+          <button type="button" class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="removePassengerCard(this)">🗑️ Remove</button>
         </div>
         <div class="passenger-card-grid">
           <div class="form-group">
@@ -2026,13 +1260,103 @@
       document.getElementById("fNetPerSeat").value = `₹${perSeat} (${count} Pax)`;
     }
 
+    function renderTable() {
+      if (!clientAppStore.data[currentVipId]) {
+        clientAppStore.data[currentVipId] = { OUTGOING: [], INCOMING: [], NHI_JANE_WALE: [] };
+      }
+
+      const rows = clientAppStore.data[currentVipId][currentTab] || [];
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+
+      let totalFareSum = 0;
+      let totalRefundSum = 0;
+
+      rows.forEach((row, index) => {
+        const fare = parseFloat(row.fare) || 0;
+        const refund = parseFloat(row.refund) || 0;
+
+        let paxList = [];
+        if (Array.isArray(row.passengers) && row.passengers.length > 0) {
+          paxList = row.passengers;
+        } else if (row.passenger) {
+          paxList = [{ 
+            name: row.passenger, 
+            age: row.age || "", 
+            gender: row.gender || "M",
+            confirmed: row.confirmed || "YES",
+            seat: row.seat || "-",
+            quota: row.quota || "GN"
+          }];
+        }
+
+        const count = paxList.length > 0 ? paxList.length : (parseInt(row.seatCount) || 1);
+        const netCost = fare - refund;
+        const perSeat = (netCost / count).toFixed(2);
+
+        totalFareSum += fare;
+        totalRefundSum += refund;
+
+        let paxHtml = paxList.map(p => {
+          const isCnf = (p.confirmed || "").toUpperCase().includes("YES");
+          const cnfBadge = isCnf 
+            ? `<span class="badge badge-cnf">CNF</span>` 
+            : `<span class="badge badge-wl">${p.confirmed || 'WL'}</span>`;
+
+          return `
+            <div class="passenger-chip">
+              <strong style="color:var(--accent-cyan); font-size:0.8rem;">${escapeHtml(p.name)}</strong>
+              ${p.age ? `<small style="color:var(--text-muted); font-size:0.7rem;">(${p.age}y)</small>` : ''}
+              <span class="badge-gender">${p.gender || 'M'}</span>
+              ${cnfBadge}
+              <span style="color:var(--accent-amber); font-weight:700; font-family:monospace;">${p.seat || '-'}</span>
+              <span style="color:var(--text-muted); font-size:0.7rem;">[${p.quota || 'GN'}]</span>
+            </div>
+          `;
+        }).join('');
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <button class="btn" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="editRecord('${row.id}')" title="Edit">✏️</button>
+            <button class="btn btn-whatsapp" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="shareRecordViaWhatsApp('${row.id}')" title="WhatsApp Share">💬</button>
+            <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="deleteRecord('${row.id}')" title="Delete">🗑️</button>
+          </td>
+          <td><strong>${index + 1}</strong></td>
+          <td>${row.date || '-'}</td>
+          <td style="font-weight:700; color:#fff;">${row.train || '-'}</td>
+          <td>${row.from || '-'}</td>
+          <td>${row.to || '-'}</td>
+          <td>
+            <div class="passenger-chip-container">
+              ${paxHtml || '-'}
+            </div>
+          </td>
+          <td><strong style="color:var(--accent-purple); font-family:monospace;">${count} Pax</strong></td>
+          <td style="font-family:monospace;">${row.pnr || '-'}</td>
+          <td style="font-family:monospace;">₹${fare.toFixed(2)}</td>
+          <td style="font-family:monospace; color:var(--accent-red);">₹${refund.toFixed(2)}</td>
+          <td class="calc-tag">₹${perSeat} <small>/seat</small></td>
+          <td>${row.remarks || '-'}</td>
+          <td>${row.remarks1 || '-'}</td>
+          <td>${row.idProof || '-'}</td>
+          <td>${row.bank || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const netFinal = totalFareSum - totalRefundSum;
+      document.getElementById("statCount").innerText = rows.length;
+      document.getElementById("statFare").innerText = `₹${totalFareSum.toFixed(2)}`;
+      document.getElementById("statRefund").innerText = `₹${totalRefundSum.toFixed(2)}`;
+      document.getElementById("statNet").innerText = `₹${netFinal.toFixed(2)}`;
+    }
+
     function openRecordModal() {
       document.getElementById("recordForm").reset();
       document.getElementById("editRowId").value = "";
       document.getElementById("fCategory").value = currentTab;
       document.getElementById("recordModalTitle").innerText = "Create Travel Record";
-      document.getElementById("trainAutoStatus").innerText = "Type train number for auto-fill";
-      document.getElementById("trainAutoStatus").style.color = "var(--text-muted)";
       
       const pContainer = document.getElementById("passengerContainer");
       pContainer.innerHTML = "";
@@ -2060,12 +1384,9 @@
       const record = {
         id: editId || 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
         date: document.getElementById("fDate").value,
-        trainNo: document.getElementById("fTrainNo").value.trim(),
         train: document.getElementById("fTrain").value.trim(),
         from: document.getElementById("fFrom").value.trim(),
-        fromTime: document.getElementById("fFromTime").value.trim(),
         to: document.getElementById("fTo").value.trim(),
-        toTime: document.getElementById("fToTime").value.trim(),
         passengers: passengersList,
         pnr: document.getElementById("fPnr").value.trim(),
         fare: parseFloat(document.getElementById("fFare").value) || 0,
@@ -2108,12 +1429,9 @@
       document.getElementById("editRowId").value = targetRow.id;
       document.getElementById("fCategory").value = foundCategory;
       document.getElementById("fDate").value = targetRow.date || "";
-      document.getElementById("fTrainNo").value = targetRow.trainNo || (targetRow.train ? (targetRow.train.match(/\d+/) || [""])[0] : "");
       document.getElementById("fTrain").value = targetRow.train || "";
       document.getElementById("fFrom").value = targetRow.from || "";
-      document.getElementById("fFromTime").value = targetRow.fromTime || "";
       document.getElementById("fTo").value = targetRow.to || "";
-      document.getElementById("fToTime").value = targetRow.toTime || "";
       document.getElementById("fPnr").value = targetRow.pnr || "";
 
       const pContainer = document.getElementById("passengerContainer");
@@ -2154,6 +1472,7 @@
       }
     }
 
+    // WhatsApp Direct Passenger Journey Share
     function shareRecordViaWhatsApp(id) {
       let targetRow = null;
       for (const cat of Object.keys(clientAppStore.data[currentVipId])) {
@@ -2174,9 +1493,7 @@
           date: document.getElementById("fDate").value,
           train: document.getElementById("fTrain").value.trim(),
           from: document.getElementById("fFrom").value.trim(),
-          fromTime: document.getElementById("fFromTime").value.trim(),
           to: document.getElementById("fTo").value.trim(),
-          toTime: document.getElementById("fToTime").value.trim(),
           passengers: passengersList,
           pnr: document.getElementById("fPnr").value.trim(),
           fare: parseFloat(document.getElementById("fFare").value) || 0,
@@ -2202,14 +1519,7 @@
 
       const fare = parseFloat(r.fare || 0);
       const refund = parseFloat(r.refund || 0);
-      const net = Math.max(0, fare - refund);
-      const count = paxList.length > 0 ? paxList.length : 1;
-      const perSeat = (net / count).toFixed(2);
-
-      let timingInfo = "";
-      if (r.fromTime || r.toTime) {
-        timingInfo = `⏱️ *Timings:* Dep: ${r.fromTime || 'N/A'} ➔ Arr: ${r.toTime || 'N/A'}\n`;
-      }
+      const net = fare - refund;
 
       let msg = `🚆 *IRCTC JOURNEY DETAILS* 🚆\n` +
                 `━━━━━━━━━━━━━━━━━━━\n` +
@@ -2217,7 +1527,6 @@
                 `📅 *Date:* ${r.date || 'N/A'}\n` +
                 `🚂 *Train:* ${r.train || 'N/A'}\n` +
                 `📍 *Route:* ${r.from || ''} ➔ ${r.to || ''}\n` +
-                `${timingInfo}` +
                 `🎫 *PNR:* \`${r.pnr || 'N/A'}\`\n` +
                 `━━━━━━━━━━━━━━━━━━━\n` +
                 `👥 *Passengers (${paxList.length} Pax):*\n${paxLines}` +
@@ -2225,11 +1534,9 @@
                 `💵 *Total Fare:* ₹${fare.toFixed(2)}\n`;
 
       if (refund > 0) {
-        msg += `💸 *Refund:* ₹${refund.toFixed(2)}\n`;
+        msg += `💸 *Refund:* ₹${refund.toFixed(2)}\n` +
+               `✅ *Net Amount:* ₹${net.toFixed(2)}\n`;
       }
-
-      msg += `✅ *Net Total Amount:* ₹${net.toFixed(2)}\n` +
-             `💺 *Net Per Seat:* ₹${perSeat} (${count} Pax)\n`;
 
       if (r.remarks) msg += `📝 *Remarks:* ${r.remarks}\n`;
       if (r.remarks1) msg += `📌 *Note:* ${r.remarks1}\n`;
@@ -2251,7 +1558,7 @@
       }
 
       const headers = [
-        "SR NO:-", "DATE OF TRAVEL:-", "TRAIN NO/NAME:-", "FROM (DEP):-", "TO (ARR):-",
+        "SR NO:-", "DATE OF TRAVEL:-", "TRAIN NO/NAME:-", "FROM:-", "TO:-",
         "NAME OF PASSENGER:-", "AGE:-", "GENDER:-", "TKT CONFIRMED?:-",
         "IF YES, COACH/SEAT PLEASE:-", "QUOTA:-", "PNR:-", "REMARKS:-",
         "REMARKS1:-", "TOTAL FARE:-", "REFUND AMT,IF ANY:-", "ID:-", "BANK:-"
@@ -2265,25 +1572,27 @@
       let serialCounter = 1;
 
       rows.forEach((r) => {
-        let paxList = r.passengers || [{
-          name: r.passenger || "-",
-          age: r.age || "",
-          gender: r.gender || "M",
-          confirmed: r.confirmed || "YES",
-          seat: r.seat || "",
-          quota: r.quota || "GN"
-        }];
-
-        const fromWithTime = `${r.from || ''} ${r.fromTime ? '('+r.fromTime+')' : ''}`.trim();
-        const toWithTime = `${r.to || ''} ${r.toTime ? '('+r.toTime+')' : ''}`.trim();
+        let paxList = [];
+        if (Array.isArray(r.passengers) && r.passengers.length > 0) {
+          paxList = r.passengers;
+        } else {
+          paxList = [{
+            name: r.passenger || "-",
+            age: r.age || "",
+            gender: r.gender || "M",
+            confirmed: r.confirmed || "YES",
+            seat: r.seat || "",
+            quota: r.quota || "GN"
+          }];
+        }
 
         paxList.forEach((p, pIndex) => {
           csvRows.push([
             serialCounter++,
             r.date || "",
             r.train || "",
-            fromWithTime,
-            toWithTime,
+            r.from || "",
+            r.to || "",
             p.name || "",
             p.age || "",
             p.gender || "",
@@ -2330,20 +1639,20 @@
         try {
           const parsed = JSON.parse(e.target.result);
           if (parsed && parsed.vips && parsed.data) {
-            if (confirm("Restore karne se memory replace ho jayegi. Continue karein?")) {
+            if (confirm("Restore karne se current memory update ho jayegi. Continue karein?")) {
               clientAppStore = parsed;
               saveLocally();
               currentVipId = clientAppStore.vips[0].id;
               refreshVipDropdown();
-              renderAllViews();
+              renderTable();
               await liveSyncPush();
-              alert("Backup restore complete!");
+              alert("Backup successfully restore ho gaya!");
             }
           } else {
             alert("Invalid backup file structure!");
           }
         } catch (err) {
-          alert("Backup restore error: " + err.message);
+          alert("Backup restore karne me error: " + err.message);
         }
       };
       reader.readAsText(file);
@@ -2553,7 +1862,7 @@
                 currentVipId = clientAppStore.vips[0].id;
               }
               refreshVipDropdown();
-              renderAllViews();
+              renderTable();
             }
           }
           setSyncStatus("synced", "Real-Time Synced");
