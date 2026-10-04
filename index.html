@@ -65,8 +65,8 @@
 
     .brand-icon {
       background: linear-gradient(135deg, #2563eb, #8b5cf6);
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 8px;
       display: grid;
       place-items: center;
@@ -135,7 +135,6 @@
       color: #fff;
     }
 
-    /* Global Search Strip */
     .global-search-bar {
       background: #0d121c;
       border-bottom: 1px solid var(--border);
@@ -177,7 +176,6 @@
       color: var(--text-muted);
     }
 
-    /* Global Search Auto-Dropdown Results */
     .global-search-dropdown {
       position: absolute;
       top: 100%;
@@ -272,7 +270,6 @@
       border-bottom-color: var(--accent-cyan);
     }
 
-    /* Filters Bar inside Tab */
     .filter-controls-bar {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -339,7 +336,6 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Modern Responsive Ticket Cards (Scroll-free layout for mobile/desktop) */
     .journey-cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -383,6 +379,21 @@
       padding: 0.25rem 0.5rem;
       font-size: 0.75rem;
       font-weight: 700;
+    }
+
+    .journey-time-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent-amber);
+      border: 1px solid var(--accent-amber);
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      margin-top: 0.3rem;
     }
 
     .journey-passenger-box {
@@ -461,7 +472,6 @@
       font-size: 0.65rem;
     }
 
-    /* Classic Table Container */
     .table-responsive {
       overflow-x: auto;
       background: var(--surface);
@@ -544,6 +554,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
+      position: relative;
     }
 
     .form-group label {
@@ -570,9 +581,16 @@
       box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
     }
 
+    .auto-hint-tag {
+      font-size: 0.65rem;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+
     .passenger-wrapper {
       grid-column: 1 / -1;
-      background: #0d121a;
+      background: #0d121c;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 0.85rem 1rem;
@@ -685,11 +703,11 @@
     </div>
   </header>
 
-  <!-- Global Partial Search Bar (Search Passenger / PNR / Train Across ALL Clients) -->
+  <!-- Global Partial Search Bar -->
   <div class="global-search-bar">
     <div class="search-input-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="globalSearchInput" placeholder="Global Partial Search: Naam, PNR, ya Train number se dhoondhein kisi bhi client ka..." oninput="handleGlobalSearch(this.value)">
+      <input type="text" id="globalSearchInput" placeholder="Global Search: Naam, PNR, ya Train number se dhoondhein kisi bhi client ka..." oninput="handleGlobalSearch(this.value)">
     </div>
     <div id="globalSearchDropdown" class="global-search-dropdown"></div>
   </div>
@@ -702,7 +720,7 @@
       <button class="btn btn-amber" onclick="openHisaabModal()">💰 Hisaab (Khata)</button>
       <button class="btn btn-purple" onclick="openNewVipModal()">➕ Add</button>
       <button class="btn" onclick="openEditVipModal()" title="Edit VIP Person">✏️ Edit</button>
-      <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑️️</button>
+      <button class="btn btn-danger" style="padding:0.4rem 0.6rem;" onclick="deleteCurrentVip()" title="Delete VIP Client">🗑</button>
     </div>
     <div id="vipInfoBadge" style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">
       Mobile: <span id="currentVipMobile" style="color:var(--accent-cyan); font-weight:700;">-</span>
@@ -711,9 +729,9 @@
 
   <main class="main-container">
     <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('OUTGOING')">OUTGOING PLAN</button>
-      <button class="tab-btn" onclick="switchTab('INCOMING')">INCOMING PLAN</button>
-      <button class="tab-btn" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
+      <button class="tab-btn active" id="tabBtnOutgoing" onclick="switchTab('OUTGOING')">OUTGOING PLAN (FORWARD)</button>
+      <button class="tab-btn" id="tabBtnIncoming" onclick="switchTab('INCOMING')">INCOMING PLAN (RETURN)</button>
+      <button class="tab-btn" id="tabBtnNhi" onclick="switchTab('NHI_JANE_WALE')">NHI JANE WALE LOG</button>
     </div>
 
     <!-- Live Calculator Summary Bar -->
@@ -736,7 +754,7 @@
       </div>
     </div>
 
-    <!-- Advanced In-Tab Filters & Dual View Toggle -->
+    <!-- In-Tab Filter Controls Bar -->
     <div class="filter-controls-bar">
       <div class="filter-inputs-group">
         <input type="text" id="tabSearchInput" placeholder="🔎 Filter is tab me (Naam / PNR / Coach)..." oninput="applyTabFilters()">
@@ -760,10 +778,10 @@
       </div>
     </div>
 
-    <!-- Card View (Default, Zero-Scroll Mobile & Desktop Responsive) -->
+    <!-- Card View (Zero-Scroll Responsive Layout) -->
     <div class="journey-cards-grid" id="journeyCardsGrid"></div>
 
-    <!-- Classic Table View (Toggleable) -->
+    <!-- Classic Table View -->
     <div class="table-responsive" id="classicTableView">
       <table id="mainDataTable">
         <thead>
@@ -772,7 +790,7 @@
             <th>SR NO</th>
             <th>DATE</th>
             <th>TRAIN</th>
-            <th>FROM ➔ TO</th>
+            <th>FROM (TIME) ➔ TO (TIME)</th>
             <th>PASSENGER DETAILS & SEATS</th>
             <th>TOTAL PAX</th>
             <th>PNR</th>
@@ -892,7 +910,7 @@
     </div>
   </div>
 
-  <!-- Record Modal with Compact Responsive Flow -->
+  <!-- Record Modal with Smart Train Name & Time Auto-Fill -->
   <div class="modal-overlay" id="recordModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -905,8 +923,8 @@
           <div class="form-group">
             <label>Category</label>
             <select id="fCategory">
-              <option value="OUTGOING">OUTGOING</option>
-              <option value="INCOMING">INCOMING</option>
+              <option value="OUTGOING">OUTGOING PLAN (FORWARD)</option>
+              <option value="INCOMING">INCOMING PLAN (RETURN)</option>
               <option value="NHI_JANE_WALE">NHI JANE WALE LOG</option>
             </select>
           </div>
@@ -914,18 +932,40 @@
             <label>Date of Travel</label>
             <input type="date" id="fDate">
           </div>
+          
+          <!-- Auto-Fill Train & Timings Section -->
           <div class="form-group">
-            <label>Train No / Name</label>
-            <input type="text" id="fTrain" placeholder="e.g. 12834 HWH ADI EXP" required>
+            <label>Train Number (Auto-Fill)</label>
+            <input type="text" id="fTrainNo" placeholder="e.g. 17007, 13288, 12834" oninput="handleTrainLookup()" list="trainSuggestions" required>
+            <datalist id="trainSuggestions"></datalist>
+            <span class="auto-hint-tag" id="trainAutoStatus">Type train number for auto-fill</span>
           </div>
+
           <div class="form-group">
-            <label>From</label>
-            <input type="text" id="fFrom" placeholder="e.g. G (Gondia)" required>
+            <label>Train Name (Auto-Populated)</label>
+            <input type="text" id="fTrain" placeholder="e.g. 17007 CHZ DBG EXPRESS" required>
           </div>
+
           <div class="form-group">
-            <label>To</label>
-            <input type="text" id="fTo" placeholder="e.g. NGP / KIUL" required>
+            <label>From Station</label>
+            <input type="text" id="fFrom" placeholder="e.g. RAIPUR (R) / GONDIA (G)" oninput="handleStationTimeUpdate()" required>
           </div>
+
+          <div class="form-group">
+            <label>From Departure Time (Kitni Baje)</label>
+            <input type="text" id="fFromTime" placeholder="e.g. 15:45 (Auto-filled / Edit)">
+          </div>
+
+          <div class="form-group">
+            <label>To Station</label>
+            <input type="text" id="fTo" placeholder="e.g. KIUL (KIUL) / JSME" oninput="handleStationTimeUpdate()" required>
+          </div>
+
+          <div class="form-group">
+            <label>To Arrival Time (Kitni Baje)</label>
+            <input type="text" id="fToTime" placeholder="e.g. 09:30 (Auto-filled / Edit)">
+          </div>
+
           <div class="form-group">
             <label>PNR</label>
             <input type="text" id="fPnr" placeholder="10 Digit PNR" maxlength="10">
@@ -1042,9 +1082,143 @@
     const GITHUB_REPO = "Irctc-My-Calculator";
     const GITHUB_FILE = "irctc_encrypted_data.json";
 
+    /* Smart Inbuilt Train Master Schedule & Timings Database */
+    const INDIAN_TRAINS_DB = {
+      "17007": {
+        name: "17007 CHZ DBG EXPRESS (Bikaner/Secunderabad to Darbhanga)",
+        from: "RAIPUR",
+        to: "KIUL",
+        fromTime: "15:20",
+        toTime: "09:35",
+        halts: {
+          "GONDIA": "12:55",
+          "RAJ NANDGAON": "14:15",
+          "RAIPUR": "15:20",
+          "BILASPUR": "17:10",
+          "JASIDIH": "08:15",
+          "KIUL": "09:35"
+        }
+      },
+      "13288": {
+        name: "13288 SOUTH BIHAR EXP (Danapur to Durg)",
+        from: "KIUL",
+        to: "RAIPUR",
+        fromTime: "22:15",
+        toTime: "18:40",
+        halts: {
+          "KIUL": "22:15",
+          "JHAJHA": "23:20",
+          "JASIDIH": "00:05",
+          "ASANSOL": "01:50",
+          "TATA": "05:15",
+          "ROURKELA": "08:45",
+          "BILASPUR": "15:30",
+          "RAIPUR": "18:40",
+          "DURG": "19:40"
+        }
+      },
+      "12834": {
+        name: "12834 HWH ADI EXP (Howrah to Ahmedabad)",
+        from: "HOWRAH",
+        to: "AHMEDABAD",
+        fromTime: "23:05",
+        toTime: "12:05",
+        halts: {
+          "HOWRAH": "23:05",
+          "TATA": "03:15",
+          "ROURKELA": "06:10",
+          "BILASPUR": "11:45",
+          "RAIPUR": "13:35",
+          "DURG": "14:35",
+          "GONDIA": "16:40",
+          "NAGPUR": "19:00",
+          "SURAT": "07:55",
+          "AHMEDABAD": "12:05"
+        }
+      },
+      "12833": {
+        name: "12833 ADI HWH EXP (Ahmedabad to Howrah)",
+        from: "AHMEDABAD",
+        to: "HOWRAH",
+        fromTime: "00:25",
+        toTime: "13:35",
+        halts: {
+          "AHMEDABAD": "00:25",
+          "SURAT": "04:25",
+          "NAGPUR": "18:00",
+          "GONDIA": "19:50",
+          "DURG": "22:10",
+          "RAIPUR": "23:05",
+          "BILASPUR": "01:05",
+          "HOWRAH": "13:35"
+        }
+      },
+      "12859": {
+        name: "12859 GITANJALI EXP (CSMT to Howrah)",
+        from: "MUMBAI CSMT",
+        to: "HOWRAH",
+        fromTime: "06:00",
+        toTime: "12:30",
+        halts: {
+          "MUMBAI CSMT": "06:00",
+          "KALYAN": "06:52",
+          "NAGPUR": "18:55",
+          "GONDIA": "20:48",
+          "DURG": "22:50",
+          "RAIPUR": "23:30",
+          "HOWRAH": "12:30"
+        }
+      },
+      "12860": {
+        name: "12860 GITANJALI EXP (Howrah to CSMT)",
+        from: "HOWRAH",
+        to: "MUMBAI CSMT",
+        fromTime: "13:50",
+        toTime: "21:20",
+        halts: {
+          "HOWRAH": "13:50",
+          "RAIPUR": "02:45",
+          "DURG": "03:45",
+          "GONDIA": "05:40",
+          "NAGPUR": "07:40",
+          "MUMBAI CSMT": "21:20"
+        }
+      },
+      "12130": {
+        name: "12130 AZAD HIND EXP (Howrah to Pune)",
+        from: "HOWRAH",
+        to: "PUNE",
+        fromTime: "21:55",
+        toTime: "07:05",
+        halts: {
+          "HOWRAH": "21:55",
+          "RAIPUR": "10:50",
+          "DURG": "11:55",
+          "GONDIA": "13:52",
+          "NAGPUR": "15:55",
+          "PUNE": "07:05"
+        }
+      },
+      "12809": {
+        name: "12809 HOWRAH MAIL (CSMT to Howrah)",
+        from: "MUMBAI CSMT",
+        to: "HOWRAH",
+        fromTime: "21:10",
+        toTime: "06:05",
+        halts: {
+          "MUMBAI CSMT": "21:10",
+          "NAGPUR": "11:10",
+          "GONDIA": "13:00",
+          "DURG": "15:05",
+          "RAIPUR": "15:45",
+          "HOWRAH": "06:05"
+        }
+      }
+    };
+
     let currentVipId = "vip_default";
     let currentTab = "OUTGOING";
-    let currentViewMode = "cards"; // 'cards' or 'table'
+    let currentViewMode = "cards";
     let isSyncing = false;
     let lastKnownRemoteSha = null;
 
@@ -1066,12 +1240,15 @@
     };
 
     window.addEventListener("DOMContentLoaded", async () => {
+      // Setup datalist for train numbers
+      populateTrainSuggestions();
+
       const cached = localStorage.getItem("IRCTC_VIP_PLANNER_CACHE");
       if (cached) {
         try {
           clientAppStore = JSON.parse(cached);
         } catch (e) {
-          console.error("Cache parsing error", e);
+          console.error("Cache error", e);
         }
       }
       document.getElementById("ghToken").value = localStorage.getItem("IRCTC_GH_TOKEN") || "";
@@ -1099,6 +1276,72 @@
         }
       }, 5000);
     });
+
+    function populateTrainSuggestions() {
+      const dl = document.getElementById("trainSuggestions");
+      dl.innerHTML = "";
+      Object.keys(INDIAN_TRAINS_DB).forEach(num => {
+        const opt = document.createElement("option");
+        opt.value = num;
+        opt.innerText = INDIAN_TRAINS_DB[num].name;
+        dl.appendChild(opt);
+      });
+    }
+
+    /* Smart Train Auto-Fill Handler */
+    function handleTrainLookup() {
+      const rawInput = document.getElementById("fTrainNo").value.trim();
+      const statusTag = document.getElementById("trainAutoStatus");
+      
+      // Match 5-digit number or partial
+      const matchKey = Object.keys(INDIAN_TRAINS_DB).find(num => rawInput.includes(num));
+
+      if (matchKey) {
+        const trainData = INDIAN_TRAINS_DB[matchKey];
+        document.getElementById("fTrain").value = trainData.name;
+        statusTag.innerText = `✨ Auto-detected: ${trainData.name}`;
+        statusTag.style.color = "var(--accent-green)";
+
+        // If from and to are empty, auto-fill standard route
+        if (!document.getElementById("fFrom").value) {
+          document.getElementById("fFrom").value = trainData.from;
+          document.getElementById("fFromTime").value = trainData.fromTime;
+        }
+        if (!document.getElementById("fTo").value) {
+          document.getElementById("fTo").value = trainData.to;
+          document.getElementById("fToTime").value = trainData.toTime;
+        }
+      } else {
+        statusTag.innerText = "Enter valid 5-digit Train Number";
+        statusTag.style.color = "var(--text-muted)";
+      }
+    }
+
+    /* Smart Station Halts & Timings Auto-Fill Handler */
+    function handleStationTimeUpdate() {
+      const rawTrain = document.getElementById("fTrainNo").value.trim();
+      const fromStn = document.getElementById("fFrom").value.trim().toUpperCase();
+      const toStn = document.getElementById("fTo").value.trim().toUpperCase();
+
+      const matchKey = Object.keys(INDIAN_TRAINS_DB).find(num => rawTrain.includes(num));
+      if (!matchKey) return;
+
+      const halts = INDIAN_TRAINS_DB[matchKey].halts || {};
+      
+      // Search matching halt for From Station
+      Object.keys(halts).forEach(stn => {
+        if (fromStn && (fromStn.includes(stn) || stn.includes(fromStn))) {
+          document.getElementById("fFromTime").value = halts[stn];
+        }
+      });
+
+      // Search matching halt for To Station
+      Object.keys(halts).forEach(stn => {
+        if (toStn && (toStn.includes(stn) || stn.includes(toStn))) {
+          document.getElementById("fToTime").value = halts[stn];
+        }
+      });
+    }
 
     function saveLocally() {
       clientAppStore.lastModified = Date.now();
@@ -1136,7 +1379,6 @@
       renderAllViews();
     }
 
-    /* Global Partial Search Across All Clients */
     function handleGlobalSearch(query) {
       const dropdown = document.getElementById("globalSearchDropdown");
       const cleanQ = query.trim().toLowerCase();
@@ -1211,7 +1453,6 @@
       }, 150);
     }
 
-    // Close global dropdown when clicking outside
     document.addEventListener("click", (e) => {
       const dropdown = document.getElementById("globalSearchDropdown");
       const searchBox = document.getElementById("globalSearchInput");
@@ -1220,7 +1461,6 @@
       }
     });
 
-    // In-Tab Filters Handler
     function applyTabFilters() {
       renderAllViews();
     }
@@ -1240,7 +1480,6 @@
       return rows.filter(r => {
         const paxList = r.passengers || (r.passenger ? [{ name: r.passenger, confirmed: r.confirmed, quota: r.quota }] : []);
         
-        // Status filter
         if (statusFilter !== "ALL") {
           const matchStatus = paxList.some(p => {
             const conf = (p.confirmed || "").toUpperCase();
@@ -1252,13 +1491,11 @@
           if (!matchStatus) return false;
         }
 
-        // Quota filter
         if (quotaFilter !== "ALL") {
           const matchQuota = paxList.some(p => (p.quota || "").toUpperCase().includes(quotaFilter));
           if (!matchQuota) return false;
         }
 
-        // Partial Search query
         if (q) {
           const inPax = paxList.some(p => 
             (p.name || "").toLowerCase().includes(q) || 
@@ -1288,7 +1525,6 @@
       let totalFareSum = 0;
       let totalRefundSum = 0;
 
-      // Stats calculate on all current tab rows
       allRows.forEach(r => {
         totalFareSum += parseFloat(r.fare || 0);
         totalRefundSum += parseFloat(r.refund || 0);
@@ -1304,7 +1540,6 @@
       renderTableView(filteredRows);
     }
 
-    /* Render Responsive Zero-Scroll Card View */
     function renderCardsView(rows) {
       const container = document.getElementById("journeyCardsGrid");
       container.innerHTML = "";
@@ -1314,7 +1549,7 @@
         return;
       }
 
-      rows.forEach((row, index) => {
+      rows.forEach((row) => {
         const fare = parseFloat(row.fare) || 0;
         const refund = parseFloat(row.refund) || 0;
         let paxList = row.passengers || (row.passenger ? [{ name: row.passenger, age: row.age, gender: row.gender, confirmed: row.confirmed, seat: row.seat, quota: row.quota }] : []);
@@ -1340,6 +1575,10 @@
           `;
         }).join('');
 
+        const timeString = (row.fromTime || row.toTime) 
+          ? `⏰ Dep: ${row.fromTime || 'N/A'} | Arr: ${row.toTime || 'N/A'}`
+          : '';
+
         const card = document.createElement("div");
         card.className = "journey-card";
         card.innerHTML = `
@@ -1350,11 +1589,12 @@
               <div style="font-size:0.75rem; color:var(--text-muted); font-family:monospace; margin-top:2px;">
                 📅 ${row.date || 'Date N/A'} | PNR: <strong style="color:var(--accent-cyan);">${row.pnr || 'N/A'}</strong>
               </div>
+              ${timeString ? `<div class="journey-time-tag">${timeString}</div>` : ''}
             </div>
             <div style="display:flex; gap:0.3rem;">
               <button class="btn" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="editRecord('${row.id}')" title="Edit">✏️</button>
               <button class="btn btn-whatsapp" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="shareRecordViaWhatsApp('${row.id}')" title="WhatsApp Share">💬</button>
-              <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="deleteRecord('${row.id}')" title="Delete">🗑️️</button>
+              <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="deleteRecord('${row.id}')" title="Delete">🗑</button>
             </div>
           </div>
 
@@ -1385,7 +1625,6 @@
       });
     }
 
-    /* Render Classic Table View */
     function renderTableView(rows) {
       const tbody = document.getElementById("tableBody");
       tbody.innerHTML = "";
@@ -1411,6 +1650,11 @@
           `;
         }).join('');
 
+        const timeDetails = `
+          <div>${escapeHtml(row.from || '-')} <small style="color:var(--accent-amber);">(${row.fromTime || 'Dep N/A'})</small></div>
+          <div style="color:var(--text-muted); font-size:0.7rem;">➔ ${escapeHtml(row.to || '-')} <small style="color:var(--accent-green);">(${row.toTime || 'Arr N/A'})</small></div>
+        `;
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>
@@ -1421,7 +1665,7 @@
           <td><strong>${index + 1}</strong></td>
           <td>${row.date || '-'}</td>
           <td style="font-weight:700; color:#fff;">${escapeHtml(row.train || '-')}</td>
-          <td>${escapeHtml(row.from || '-')} ➔ ${escapeHtml(row.to || '-')}</td>
+          <td>${timeDetails}</td>
           <td>${paxHtml || '-'}</td>
           <td><strong style="color:var(--accent-purple); font-family:monospace;">${count} Pax</strong></td>
           <td style="font-family:monospace;">${row.pnr || '-'}</td>
@@ -1437,7 +1681,6 @@
       });
     }
 
-    // Modal Operations
     function openNewVipModal() {
       document.getElementById("editVipId").value = "";
       document.getElementById("newVipName").value = "";
@@ -1452,7 +1695,7 @@
       document.getElementById("editVipId").value = activeObj.id;
       document.getElementById("newVipName").value = activeObj.name;
       document.getElementById("newVipMobile").value = activeObj.mobile || "";
-      document.getElementById("vipModalTitle").innerText = "✏️️ Edit VIP Person / Client";
+      document.getElementById("vipModalTitle").innerText = "✏ Edit VIP Person / Client";
       document.getElementById("vipModal").classList.add("active");
     }
 
@@ -1509,7 +1752,6 @@
       }
     }
 
-    // Hisaab Management
     function calculateClientTotalBilled(vipId) {
       const vipData = clientAppStore.data[vipId] || {};
       let totalBilled = 0;
@@ -1667,13 +1909,12 @@
 
     function switchTab(tabKey) {
       currentTab = tabKey;
-      document.querySelectorAll(".tab-btn").forEach(btn => {
+      document.querySelectorAll(".tab-bar .tab-btn").forEach(btn => {
         btn.classList.toggle("active", btn.getAttribute("onclick").includes(tabKey));
       });
       renderAllViews();
     }
 
-    // Dynamic Passenger Cards inside Entry Modal
     function addPassengerCard(data = {}) {
       const container = document.getElementById("passengerContainer");
       const card = document.createElement("div");
@@ -1790,6 +2031,8 @@
       document.getElementById("editRowId").value = "";
       document.getElementById("fCategory").value = currentTab;
       document.getElementById("recordModalTitle").innerText = "Create Travel Record";
+      document.getElementById("trainAutoStatus").innerText = "Type train number for auto-fill";
+      document.getElementById("trainAutoStatus").style.color = "var(--text-muted)";
       
       const pContainer = document.getElementById("passengerContainer");
       pContainer.innerHTML = "";
@@ -1817,9 +2060,12 @@
       const record = {
         id: editId || 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
         date: document.getElementById("fDate").value,
+        trainNo: document.getElementById("fTrainNo").value.trim(),
         train: document.getElementById("fTrain").value.trim(),
         from: document.getElementById("fFrom").value.trim(),
+        fromTime: document.getElementById("fFromTime").value.trim(),
         to: document.getElementById("fTo").value.trim(),
+        toTime: document.getElementById("fToTime").value.trim(),
         passengers: passengersList,
         pnr: document.getElementById("fPnr").value.trim(),
         fare: parseFloat(document.getElementById("fFare").value) || 0,
@@ -1862,9 +2108,12 @@
       document.getElementById("editRowId").value = targetRow.id;
       document.getElementById("fCategory").value = foundCategory;
       document.getElementById("fDate").value = targetRow.date || "";
+      document.getElementById("fTrainNo").value = targetRow.trainNo || (targetRow.train ? (targetRow.train.match(/\d+/) || [""])[0] : "");
       document.getElementById("fTrain").value = targetRow.train || "";
       document.getElementById("fFrom").value = targetRow.from || "";
+      document.getElementById("fFromTime").value = targetRow.fromTime || "";
       document.getElementById("fTo").value = targetRow.to || "";
+      document.getElementById("fToTime").value = targetRow.toTime || "";
       document.getElementById("fPnr").value = targetRow.pnr || "";
 
       const pContainer = document.getElementById("passengerContainer");
@@ -1905,7 +2154,6 @@
       }
     }
 
-    /* WhatsApp Share Engine with Net Cost Per Seat Included */
     function shareRecordViaWhatsApp(id) {
       let targetRow = null;
       for (const cat of Object.keys(clientAppStore.data[currentVipId])) {
@@ -1926,7 +2174,9 @@
           date: document.getElementById("fDate").value,
           train: document.getElementById("fTrain").value.trim(),
           from: document.getElementById("fFrom").value.trim(),
+          fromTime: document.getElementById("fFromTime").value.trim(),
           to: document.getElementById("fTo").value.trim(),
+          toTime: document.getElementById("fToTime").value.trim(),
           passengers: passengersList,
           pnr: document.getElementById("fPnr").value.trim(),
           fare: parseFloat(document.getElementById("fFare").value) || 0,
@@ -1956,12 +2206,18 @@
       const count = paxList.length > 0 ? paxList.length : 1;
       const perSeat = (net / count).toFixed(2);
 
+      let timingInfo = "";
+      if (r.fromTime || r.toTime) {
+        timingInfo = `⏱️ *Timings:* Dep: ${r.fromTime || 'N/A'} ➔ Arr: ${r.toTime || 'N/A'}\n`;
+      }
+
       let msg = `🚆 *IRCTC JOURNEY DETAILS* 🚆\n` +
                 `━━━━━━━━━━━━━━━━━━━\n` +
                 `👤 *Client / VIP:* ${vipName}\n` +
                 `📅 *Date:* ${r.date || 'N/A'}\n` +
                 `🚂 *Train:* ${r.train || 'N/A'}\n` +
                 `📍 *Route:* ${r.from || ''} ➔ ${r.to || ''}\n` +
+                `${timingInfo}` +
                 `🎫 *PNR:* \`${r.pnr || 'N/A'}\`\n` +
                 `━━━━━━━━━━━━━━━━━━━\n` +
                 `👥 *Passengers (${paxList.length} Pax):*\n${paxLines}` +
@@ -1995,7 +2251,7 @@
       }
 
       const headers = [
-        "SR NO:-", "DATE OF TRAVEL:-", "TRAIN NO/NAME:-", "FROM:-", "TO:-",
+        "SR NO:-", "DATE OF TRAVEL:-", "TRAIN NO/NAME:-", "FROM (DEP):-", "TO (ARR):-",
         "NAME OF PASSENGER:-", "AGE:-", "GENDER:-", "TKT CONFIRMED?:-",
         "IF YES, COACH/SEAT PLEASE:-", "QUOTA:-", "PNR:-", "REMARKS:-",
         "REMARKS1:-", "TOTAL FARE:-", "REFUND AMT,IF ANY:-", "ID:-", "BANK:-"
@@ -2018,13 +2274,16 @@
           quota: r.quota || "GN"
         }];
 
+        const fromWithTime = `${r.from || ''} ${r.fromTime ? '('+r.fromTime+')' : ''}`.trim();
+        const toWithTime = `${r.to || ''} ${r.toTime ? '('+r.toTime+')' : ''}`.trim();
+
         paxList.forEach((p, pIndex) => {
           csvRows.push([
             serialCounter++,
             r.date || "",
             r.train || "",
-            r.from || "",
-            r.to || "",
+            fromWithTime,
+            toWithTime,
             p.name || "",
             p.age || "",
             p.gender || "",
