@@ -1105,7 +1105,7 @@
     const GITHUB_REPO = "Irctc-My-Calculator";
     const GITHUB_FILE = "irctc_encrypted_data.json";
 
-    /* Massive Comprehensive Indian Railways Schedule Database (100+ Trains with Halts) */
+    /* Massive Comprehensive Indian Railways Schedule Database */
     const TRAINS_SCHEDULE = {
       "17007": {
         name: "17007 CHZ DBG EXPRESS",
@@ -1420,7 +1420,7 @@
       });
     }
 
-    /* Train Number type karte hi Auto-Fill Trigger (Local DB + Online Open Fallback) */
+    /* Train Number type karte hi Auto-Fill Trigger */
     async function triggerTrainAutoPopulate() {
       const inputVal = document.getElementById("fTrainNo").value.trim();
       const statusEl = document.getElementById("trainAutoStatus");
@@ -1444,7 +1444,6 @@
         document.getElementById("fTo").value = item.to;
         document.getElementById("fToTime").value = item.toTime;
       } else if (inputVal.length >= 5) {
-        // Fallback for trains not in static list
         statusEl.innerText = "🔍 Checking Railway live registry...";
         statusEl.style.color = "var(--accent-cyan)";
         try {
@@ -1459,7 +1458,7 @@
             }
           }
         } catch(e) { /* online fallback silent */ }
-        statusEl.innerText = "Custom train detected. Fill Name & Times manually.";
+        statusEl.innerText = "Custom train. Fill Name & Times manually.";
         statusEl.style.color = "var(--text-muted)";
       } else {
         statusEl.innerText = "5-digit train number (17007, 13288, 12834, etc.)";
@@ -2350,6 +2349,7 @@
       }
     }
 
+    /* WhatsApp Engine with Integrated Refund & Net Loss Per Pax Breakdown */
     function sendWhatsAppMessage(r) {
       const activeObj = clientAppStore.vips.find(v => v.id === currentVipId);
       const vipName = activeObj ? activeObj.name : "VIP Client";
@@ -2362,9 +2362,9 @@
 
       const fare = parseFloat(r.fare || 0);
       const refund = parseFloat(r.refund || 0);
-      const net = Math.max(0, fare - refund);
+      const netPayable = Math.max(0, fare - refund);
       const count = paxList.length > 0 ? paxList.length : 1;
-      const perSeat = (net / count).toFixed(2);
+      const perSeat = (netPayable / count).toFixed(2);
 
       let timingInfo = "";
       if (r.fromTime || r.toTime) {
@@ -2380,16 +2380,24 @@
                 `${timingInfo}` +
                 `🎫 *PNR:* \`${r.pnr || 'N/A'}\`\n` +
                 `━━━━━━━━━━━━━━━━━━━\n` +
-                `👥 *Passengers (${paxList.length} Pax):*\n${paxLines}` +
-                `━━━━━━━━━━━━━━━━━━━\n` +
-                `💵 *Total Fare:* ₹${fare.toFixed(2)}\n`;
+                `👥 *Passengers (${count} Pax):*\n${paxLines}` +
+                `━━━━━━━━━━━━━━━━━━━\n`;
 
+      // Agar Refund Amount maujood hai toh cancellation details integrate hongi
       if (refund > 0) {
-        msg += `💸 *Refund:* ₹${refund.toFixed(2)}\n`;
-      }
+        const netLoss = refund; // Cancellation me jo refund mila uske baad net cost/deduction
+        const lossPerPax = (refund / count).toFixed(2);
 
-      msg += `✅ *Net Total Amount:* ₹${net.toFixed(2)}\n` +
-             `💺 *Net Per Seat:* ₹${perSeat} (${count} Pax)\n`;
+        msg += `💵 *Original Billed Fare:* ₹${fare.toFixed(2)}\n` +
+               `💸 *Refund Received / Credit:* ₹${refund.toFixed(2)}\n` +
+               `⚠️ *Net Cancellation Deduction (Per Pax):* ₹${lossPerPax} / Pax\n` +
+               `🟢 *Final Net Payable / Balance:* ₹${netPayable.toFixed(2)}\n` +
+               `💺 *Effective Net Per Seat:* ₹${perSeat} (${count} Pax)\n`;
+      } else {
+        msg += `💵 *Total Fare:* ₹${fare.toFixed(2)}\n` +
+               `✅ *Net Total Amount:* ₹${netPayable.toFixed(2)}\n` +
+               `💺 *Net Per Seat:* ₹${perSeat} (${count} Pax)\n`;
+      }
 
       if (r.remarks) msg += `📝 *Remarks:* ${r.remarks}\n`;
       if (r.remarks1) msg += `📌 *Note:* ${r.remarks1}\n`;
