@@ -1748,6 +1748,7 @@
             </div>
             <div style="display:flex; gap:0.3rem;">
               <button class="btn" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="editRecord('${row.id}')" title="Edit">✏️</button>
+              <button class="btn btn-purple" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="duplicateRecord('${row.id}')" title="Duplicate Entry">📑</button>
               <button class="btn btn-whatsapp" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="shareRecordViaWhatsApp('${row.id}')" title="WhatsApp Share">💬</button>
               <button class="btn btn-danger" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="deleteRecord('${row.id}')" title="Delete">🗑</button>
             </div>
@@ -1813,9 +1814,10 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>
-            <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="editRecord('${row.id}')">✏️</button>
-            <button class="btn btn-whatsapp" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="shareRecordViaWhatsApp('${row.id}')">💬</button>
-            <button class="btn btn-danger" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="deleteRecord('${row.id}')">🗑️</button>
+            <button class="btn" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="editRecord('${row.id}')" title="Edit">✏️</button>
+            <button class="btn btn-purple" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="duplicateRecord('${row.id}')" title="Duplicate Entry">📑</button>
+            <button class="btn btn-whatsapp" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="shareRecordViaWhatsApp('${row.id}')" title="WhatsApp Share">💬</button>
+            <button class="btn btn-danger" style="padding:0.2rem 0.4rem; font-size:0.68rem;" onclick="deleteRecord('${row.id}')" title="Delete">🗑️</button>
           </td>
           <td><strong>${index + 1}</strong></td>
           <td>${row.date || '-'}</td>
@@ -1834,6 +1836,32 @@
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    /* Duplicate Entry Engine */
+    async function duplicateRecord(id) {
+      let targetRow = null;
+      let foundCategory = null;
+
+      for (const cat of Object.keys(clientAppStore.data[currentVipId])) {
+        const item = clientAppStore.data[currentVipId][cat].find(r => r.id === id);
+        if (item) {
+          targetRow = item;
+          foundCategory = cat;
+          break;
+        }
+      }
+
+      if (!targetRow) return;
+
+      // Deep clone object with new unique ID
+      const clonedRecord = JSON.parse(JSON.stringify(targetRow));
+      clonedRecord.id = 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+      
+      // Push cloned record into the current category
+      clientAppStore.data[currentVipId][foundCategory].push(clonedRecord);
+      saveLocally();
+      await liveSyncPush();
     }
 
     function openNewVipModal() {
@@ -2383,9 +2411,7 @@
                 `👥 *Passengers (${count} Pax):*\n${paxLines}` +
                 `━━━━━━━━━━━━━━━━━━━\n`;
 
-      // Agar Refund Amount maujood hai toh cancellation details integrate hongi
       if (refund > 0) {
-        const netLoss = refund; // Cancellation me jo refund mila uske baad net cost/deduction
         const lossPerPax = (refund / count).toFixed(2);
 
         msg += `💵 *Original Billed Fare:* ₹${fare.toFixed(2)}\n` +
