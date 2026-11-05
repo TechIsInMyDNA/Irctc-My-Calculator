@@ -1085,6 +1085,11 @@
           <input type="text" value="TechIsInMyDNA/Irctc-My-Calculator" readonly style="color:var(--accent-cyan); font-family:monospace;">
         </div>
         <div class="form-group">
+          <label>Sync Target Branch (Isolated Data Branch)</label>
+          <input type="text" value="data-sync" readonly style="color:var(--accent-green); font-family:monospace;">
+          <small style="color:var(--text-muted); font-size:0.7rem;">Prevents GitHub Pages from redeploying on every save.</small>
+        </div>
+        <div class="form-group">
           <label>GitHub Personal Access Token (PAT)</label>
           <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
           <small style="color:var(--text-muted); font-size:0.7rem;">Needs 'repo' scope.</small>
@@ -1103,6 +1108,7 @@
     const MASTER_KEY = "Irctc@144";
     const GITHUB_OWNER = "TechIsInMyDNA";
     const GITHUB_REPO = "Irctc-My-Calculator";
+    const GITHUB_BRANCH = "data-sync"; // Isolated data branch to stop GitHub Pages redeploys
     const GITHUB_FILE = "irctc_encrypted_data.json";
 
     /* Massive Comprehensive Indian Railways Schedule Database */
@@ -1854,11 +1860,9 @@
 
       if (!targetRow) return;
 
-      // Deep clone object with new unique ID
       const clonedRecord = JSON.parse(JSON.stringify(targetRow));
       clonedRecord.id = 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
       
-      // Push cloned record into the current category
       clientAppStore.data[currentVipId][foundCategory].push(clonedRecord);
       saveLocally();
       await liveSyncPush();
@@ -2643,8 +2647,57 @@
       return JSON.parse(new TextDecoder().decode(decrypted));
     }
 
+    /* Auto Branch Creation & Ensure Isolated Branch Logic */
+    async function ensureDataBranchExists(token) {
+      try {
+        const branchRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/branches/${GITHUB_BRANCH}`, {
+          headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/vnd.github.v3+json"
+          }
+        });
+
+        if (branchRes.status === 404) {
+          // Branch doesn't exist, get repo default branch SHA
+          const repoRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, {
+            headers: {
+              "Authorization": `token ${token}`,
+              "Accept": "application/vnd.github.v3+json"
+            }
+          });
+          const repoData = await repoRes.json();
+          const defBranch = repoData.default_branch || "main";
+
+          const refRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/ref/heads/${defBranch}`, {
+            headers: {
+              "Authorization": `token ${token}`,
+              "Accept": "application/vnd.github.v3+json"
+            }
+          });
+          const refData = await refRes.json();
+          const baseSha = refData.object.sha;
+
+          // Create dedicated data-sync branch
+          await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs`, {
+            method: "POST",
+            headers: {
+              "Authorization": `token ${token}`,
+              "Content-Type": "application/json",
+              "Accept": "application/vnd.github.v3+json"
+            },
+            body: JSON.stringify({
+              ref: `refs/heads/${GITHUB_BRANCH}`,
+              sha: baseSha
+            })
+          });
+        }
+      } catch (err) {
+        console.warn("Branch verification note:", err);
+      }
+    }
+
     async function fetchFreshSha(token) {
-      const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?_nocache=${Date.now()}`;
+      const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?ref=${GITHUB_BRANCH}&_nocache=${Date.now()}`;
       const res = await fetch(url, {
         headers: {
           "Authorization": `token ${token}`,
@@ -2672,6 +2725,7 @@
       setSyncStatus("busy", "Live Syncing...");
 
       try {
+        await ensureDataBranchExists(token);
         const encryptedData = await encryptPayload(clientAppStore, vaultKey);
         const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
@@ -2680,6 +2734,7 @@
         const bodyPayload = {
           message: `Live Sync VIP Update: ${new Date().toISOString()}`,
           content: btoa(unescape(encodeURIComponent(encryptedData))),
+          branch: GITHUB_BRANCH,
           ...(latestSha && { sha: latestSha })
         };
 
@@ -2699,7 +2754,7 @@
 
         const resData = await putRes.json();
         lastKnownRemoteSha = resData.content ? resData.content.sha : latestSha;
-        setSyncStatus("synced", "Real-Time Synced");
+        setSyncStatus("synced", "Real-Time Synced (data-sync)");
       } catch (err) {
         console.error("Live push failed", err);
         setSyncStatus("error", "Sync Error");
@@ -2715,7 +2770,8 @@
       if (!token || !vaultKey || isSyncing) return;
 
       try {
-        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?_nocache=${Date.now()}`;
+        await ensureDataBranchExists(token);
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?ref=${GITHUB_BRANCH}&_nocache=${Date.now()}`;
         const res = await fetch(url, {
           headers: {
             "Authorization": `token ${token}`,
@@ -2727,7 +2783,7 @@
         if (res.ok) {
           const data = await res.json();
           if (!isManualOrInit && data.sha === lastKnownRemoteSha) {
-            setSyncStatus("synced", "Real-Time Synced");
+            setSyncStatus("synced", "Real-Time Synced (data-sync)");
             return;
           }
 
@@ -2750,7 +2806,7 @@
               renderAllViews();
             }
           }
-          setSyncStatus("synced", "Real-Time Synced");
+          setSyncStatus("synced", "Real-Time Synced (data-sync)");
         }
       } catch (err) {
         if (isManualOrInit) {
