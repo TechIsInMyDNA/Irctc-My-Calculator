@@ -579,18 +579,21 @@
       transition: border 0.2s;
     }
 
-    input[type="date"], input[type="time"] {
+    input[type="date"] {
       font-family: 'JetBrains Mono', monospace;
       color-scheme: dark;
       cursor: pointer;
     }
 
-    input[type="date"]::-webkit-calendar-picker-indicator,
-    input[type="time"]::-webkit-calendar-picker-indicator {
+    input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(0.85) sepia(1) saturate(5) hue-rotate(175deg);
       cursor: pointer;
       opacity: 0.95;
       padding: 2px;
+    }
+
+    #fFromTime, #fToTime {
+      font-family: 'JetBrains Mono', monospace;
     }
 
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
@@ -927,7 +930,7 @@
     </div>
   </div>
 
-  <!-- Record Modal with Visual Calendar & Clock Pickers and Auto-Fill Engine -->
+  <!-- Record Modal with Simple Typing Time Fields and Auto-Fill Engine -->
   <div class="modal-overlay" id="recordModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -970,11 +973,11 @@
             <input type="text" id="fFrom" placeholder="e.g. RAIPUR / GONDIA" oninput="triggerStationTimesAutoPopulate()" required>
           </div>
 
-          <!-- Clock View Time Picker (Departure) -->
+          <!-- Simple Typing Departure Time -->
           <div class="form-group">
-            <label>🕒 From Dep Time (Clock View)</label>
-            <input type="time" id="fFromTime" onclick="this.showPicker ? this.showPicker() : null" required>
-            <span class="auto-hint-tag">From badalte hi clock auto-set hogi</span>
+            <label>🕒 From Dep Time</label>
+            <input type="text" id="fFromTime" placeholder="e.g. 15:20" required>
+            <span class="auto-hint-tag">Auto-fill ya direct type karein</span>
           </div>
 
           <div class="form-group">
@@ -982,11 +985,11 @@
             <input type="text" id="fTo" placeholder="e.g. KIUL / AHMEDABAD" oninput="triggerStationTimesAutoPopulate()" required>
           </div>
 
-          <!-- Clock View Time Picker (Arrival) -->
+          <!-- Simple Typing Arrival Time -->
           <div class="form-group">
-            <label>🕒 To Arr Time (Clock View)</label>
-            <input type="time" id="fToTime" onclick="this.showPicker ? this.showPicker() : null" required>
-            <span class="auto-hint-tag">To badalte hi clock auto-set hogi</span>
+            <label>🕒 To Arr Time</label>
+            <input type="text" id="fToTime" placeholder="e.g. 09:35" required>
+            <span class="auto-hint-tag">Auto-fill ya direct type karein</span>
           </div>
 
           <div class="form-group">
@@ -1472,7 +1475,7 @@
       }
     }
 
-    /* Station badalne par Clock Time Auto-Update */
+    /* Station badalne par Time Auto-Update */
     function triggerStationTimesAutoPopulate() {
       const inputTrain = document.getElementById("fTrainNo").value.trim();
       const fromStn = document.getElementById("fFrom").value.trim().toUpperCase();
