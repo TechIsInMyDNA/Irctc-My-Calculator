@@ -337,7 +337,7 @@
     }
 
     .journey-cards-grid {
-      display: grid;
+      display: none;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       gap: 0.85rem;
     }
@@ -478,7 +478,7 @@
       border-radius: var(--radius);
       border: 1px solid var(--border);
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      display: none;
+      display: block;
     }
 
     table {
@@ -592,8 +592,50 @@
       padding: 2px;
     }
 
-    #fFromTime, #fToTime {
+    /* Hybrid Time Input + Clock Button Group */
+    .time-hybrid-box {
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: 100%;
+    }
+
+    .time-hybrid-box input[type="text"] {
+      width: 100%;
+      padding-right: 2.3rem;
       font-family: 'JetBrains Mono', monospace;
+    }
+
+    .clock-trigger-btn {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--accent-cyan);
+      border-radius: 5px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s ease;
+    }
+
+    .clock-trigger-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .hidden-native-time {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
     }
 
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
@@ -793,15 +835,15 @@
         <button class="btn" style="padding:0.35rem 0.6rem; font-size:0.75rem;" onclick="resetTabFilters()">Reset</button>
       </div>
       <div class="view-toggle-btns">
-        <button class="btn btn-purple" id="btnViewCards" onclick="setViewMode('cards')">🗂️ Cards View</button>
-        <button class="btn" id="btnViewTable" onclick="setViewMode('table')">📋 Table View</button>
+        <button class="btn" id="btnViewCards" onclick="setViewMode('cards')">🗂️ Cards View</button>
+        <button class="btn btn-purple" id="btnViewTable" onclick="setViewMode('table')">📋 Table View</button>
       </div>
     </div>
 
-    <!-- Card View (Zero-Scroll Responsive Layout) -->
+    <!-- Card View (Toggleable) -->
     <div class="journey-cards-grid" id="journeyCardsGrid"></div>
 
-    <!-- Classic Table View -->
+    <!-- Classic Table View (Default View) -->
     <div class="table-responsive" id="classicTableView">
       <table id="mainDataTable">
         <thead>
@@ -930,7 +972,7 @@
     </div>
   </div>
 
-  <!-- Record Modal with Simple Typing Time Fields and Auto-Fill Engine -->
+  <!-- Record Modal with 12H AM/PM Format + Smooth Clock Picker + Easy Typing -->
   <div class="modal-overlay" id="recordModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -973,11 +1015,15 @@
             <input type="text" id="fFrom" placeholder="e.g. RAIPUR / GONDIA" oninput="triggerStationTimesAutoPopulate()" required>
           </div>
 
-          <!-- Simple Typing Departure Time -->
+          <!-- Hybrid Departure Time: Easy Typing (01:11 PM) + Smooth Clock Button -->
           <div class="form-group">
-            <label>🕒 From Dep Time</label>
-            <input type="text" id="fFromTime" placeholder="e.g. 15:20" required>
-            <span class="auto-hint-tag">Auto-fill ya direct type karein</span>
+            <label>🕒 From Dep Time (01:11 PM)</label>
+            <div class="time-hybrid-box">
+              <input type="text" id="fFromTime" placeholder="e.g. 03:20 PM" onblur="formatInputTo12Hr(this)" required>
+              <button type="button" class="clock-trigger-btn" title="Select from Clock" onclick="openClockPicker('fFromTimeClock')">🕒</button>
+              <input type="time" id="fFromTimeClock" class="hidden-native-time" onchange="syncClockTo12Hr(this, 'fFromTime')">
+            </div>
+            <span class="auto-hint-tag">Type karein (01:11 PM) ya 🕒 clock se chunein</span>
           </div>
 
           <div class="form-group">
@@ -985,11 +1031,15 @@
             <input type="text" id="fTo" placeholder="e.g. KIUL / AHMEDABAD" oninput="triggerStationTimesAutoPopulate()" required>
           </div>
 
-          <!-- Simple Typing Arrival Time -->
+          <!-- Hybrid Arrival Time: Easy Typing (01:11 PM) + Smooth Clock Button -->
           <div class="form-group">
-            <label>🕒 To Arr Time</label>
-            <input type="text" id="fToTime" placeholder="e.g. 09:35" required>
-            <span class="auto-hint-tag">Auto-fill ya direct type karein</span>
+            <label>🕒 To Arr Time (01:11 PM)</label>
+            <div class="time-hybrid-box">
+              <input type="text" id="fToTime" placeholder="e.g. 09:35 AM" onblur="formatInputTo12Hr(this)" required>
+              <button type="button" class="clock-trigger-btn" title="Select from Clock" onclick="openClockPicker('fToTimeClock')">🕒</button>
+              <input type="time" id="fToTimeClock" class="hidden-native-time" onchange="syncClockTo12Hr(this, 'fToTime')">
+            </div>
+            <span class="auto-hint-tag">Type karein (01:11 PM) ya 🕒 clock se chunein</span>
           </div>
 
           <div class="form-group">
@@ -1111,7 +1161,7 @@
     const MASTER_KEY = "Irctc@144";
     const GITHUB_OWNER = "TechIsInMyDNA";
     const GITHUB_REPO = "Irctc-My-Calculator";
-    const GITHUB_BRANCH = "data-sync"; // Isolated data branch to stop GitHub Pages redeploys
+    const GITHUB_BRANCH = "data-sync";
     const GITHUB_FILE = "irctc_encrypted_data.json";
 
     /* Massive Comprehensive Indian Railways Schedule Database */
@@ -1360,7 +1410,7 @@
 
     let currentVipId = "vip_default";
     let currentTab = "OUTGOING";
-    let currentViewMode = "cards";
+    let currentViewMode = "table"; // Default view set to Table View
     let isSyncing = false;
     let lastKnownRemoteSha = null;
 
@@ -1380,6 +1430,78 @@
       },
       lastModified: Date.now()
     };
+
+    /* Smart 12-Hour AM/PM Formatter & Clock Synchronizer */
+    function to12HourFormat(timeStr) {
+      if (!timeStr) return "";
+      const clean = timeStr.trim().toUpperCase();
+      // Already formatted properly like "01:11 PM"
+      const ampmMatch = clean.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
+      if (ampmMatch) {
+        let h = parseInt(ampmMatch[1], 10);
+        if (h === 0) h = 12;
+        if (h > 12) h = h % 12;
+        return `${String(h).padStart(2, '0')}:${ampmMatch[2]} ${ampmMatch[3]}`;
+      }
+      // Convert 24-hour "15:20" -> "03:20 PM"
+      const m24 = clean.match(/^(\d{1,2}):(\d{2})$/);
+      if (m24) {
+        let h = parseInt(m24[1], 10);
+        const mins = m24[2];
+        if (h >= 0 && h <= 23) {
+          const suffix = h >= 12 ? "PM" : "AM";
+          let h12 = h % 12;
+          if (h12 === 0) h12 = 12;
+          return `${String(h12).padStart(2, '0')}:${mins} ${suffix}`;
+        }
+      }
+      return timeStr;
+    }
+
+    function to24HourFormat(time12Str) {
+      if (!time12Str) return "";
+      const clean = time12Str.trim().toUpperCase();
+      const ampmMatch = clean.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
+      if (ampmMatch) {
+        let h = parseInt(ampmMatch[1], 10);
+        const mins = ampmMatch[2];
+        const mer = ampmMatch[3];
+        if (mer === "PM" && h < 12) h += 12;
+        if (mer === "AM" && h === 12) h = 0;
+        return `${String(h).padStart(2, '0')}:${mins}`;
+      }
+      const m24 = clean.match(/^(\d{1,2}):(\d{2})$/);
+      if (m24) {
+        return `${String(parseInt(m24[1], 10)).padStart(2, '0')}:${m24[2]}`;
+      }
+      return "";
+    }
+
+    function formatInputTo12Hr(inputEl) {
+      if (!inputEl.value.trim()) return;
+      inputEl.value = to12HourFormat(inputEl.value);
+    }
+
+    function openClockPicker(clockInputId) {
+      const clockEl = document.getElementById(clockInputId);
+      const textInputId = clockInputId === 'fFromTimeClock' ? 'fFromTime' : 'fToTime';
+      const currentVal = document.getElementById(textInputId).value;
+      const val24 = to24HourFormat(currentVal);
+      if (val24) clockEl.value = val24;
+
+      if (clockEl.showPicker) {
+        clockEl.showPicker();
+      } else {
+        clockEl.focus();
+        clockEl.click();
+      }
+    }
+
+    function syncClockTo12Hr(clockEl, targetTextId) {
+      if (clockEl.value) {
+        document.getElementById(targetTextId).value = to12HourFormat(clockEl.value);
+      }
+    }
 
     window.addEventListener("DOMContentLoaded", async () => {
       populateTrainSuggestionsList();
@@ -1405,7 +1527,7 @@
       currentVipId = clientAppStore.vips[0].id;
 
       refreshVipDropdown();
-      renderAllViews();
+      setViewMode(currentViewMode);
 
       if (localStorage.getItem("IRCTC_GH_TOKEN") && localStorage.getItem("IRCTC_VAULT_KEY")) {
         await liveSyncPull(true);
@@ -1429,7 +1551,7 @@
       });
     }
 
-    /* Train Number type karte hi Auto-Fill Trigger */
+    /* Train Number type karte hi Auto-Fill Trigger in 12H AM/PM Format */
     async function triggerTrainAutoPopulate() {
       const inputVal = document.getElementById("fTrainNo").value.trim();
       const statusEl = document.getElementById("trainAutoStatus");
@@ -1449,9 +1571,9 @@
         statusEl.style.color = "var(--accent-green)";
 
         document.getElementById("fFrom").value = item.from;
-        document.getElementById("fFromTime").value = item.fromTime;
+        document.getElementById("fFromTime").value = to12HourFormat(item.fromTime);
         document.getElementById("fTo").value = item.to;
-        document.getElementById("fToTime").value = item.toTime;
+        document.getElementById("fToTime").value = to12HourFormat(item.toTime);
       } else if (inputVal.length >= 5) {
         statusEl.innerText = "🔍 Checking Railway live registry...";
         statusEl.style.color = "var(--accent-cyan)";
@@ -1475,7 +1597,7 @@
       }
     }
 
-    /* Station badalne par Time Auto-Update */
+    /* Station badalne par 12H AM/PM Time Auto-Update */
     function triggerStationTimesAutoPopulate() {
       const inputTrain = document.getElementById("fTrainNo").value.trim();
       const fromStn = document.getElementById("fFrom").value.trim().toUpperCase();
@@ -1494,14 +1616,14 @@
 
       for (const stn of Object.keys(halts)) {
         if (fromStn && (fromStn.includes(stn) || stn.includes(fromStn))) {
-          document.getElementById("fFromTime").value = halts[stn];
+          document.getElementById("fFromTime").value = to12HourFormat(halts[stn]);
           break;
         }
       }
 
       for (const stn of Object.keys(halts)) {
         if (toStn && (toStn.includes(stn) || stn.includes(toStn))) {
-          document.getElementById("fToTime").value = halts[stn];
+          document.getElementById("fToTime").value = to12HourFormat(halts[stn]);
           break;
         }
       }
@@ -1739,8 +1861,11 @@
           `;
         }).join('');
 
-        const timeString = (row.fromTime || row.toTime) 
-          ? `⏰ Dep: ${row.fromTime || 'N/A'} ➔ Arr: ${row.toTime || 'N/A'}`
+        const fTimeFormatted = to12HourFormat(row.fromTime);
+        const tTimeFormatted = to12HourFormat(row.toTime);
+
+        const timeString = (fTimeFormatted || tTimeFormatted) 
+          ? `⏰ Dep: ${fTimeFormatted || 'N/A'} ➔ Arr: ${tTimeFormatted || 'N/A'}`
           : '';
 
         const card = document.createElement("div");
@@ -1794,6 +1919,11 @@
       const tbody = document.getElementById("tableBody");
       tbody.innerHTML = "";
 
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="15" style="text-align:center; padding:1.5rem; color:var(--text-muted);">Koi ticket entry match nahi hui.</td></tr>`;
+        return;
+      }
+
       rows.forEach((row, index) => {
         const fare = parseFloat(row.fare) || 0;
         const refund = parseFloat(row.refund) || 0;
@@ -1815,9 +1945,12 @@
           `;
         }).join('');
 
+        const fTimeFormatted = to12HourFormat(row.fromTime);
+        const tTimeFormatted = to12HourFormat(row.toTime);
+
         const timeDetails = `
-          <div>${escapeHtml(row.from || '-')} <small style="color:var(--accent-amber);">(${row.fromTime || 'Dep N/A'})</small></div>
-          <div style="color:var(--text-muted); font-size:0.7rem;">➔ ${escapeHtml(row.to || '-')} <small style="color:var(--accent-green);">(${row.toTime || 'Arr N/A'})</small></div>
+          <div>${escapeHtml(row.from || '-')} <small style="color:var(--accent-amber);">(${fTimeFormatted || 'Dep N/A'})</small></div>
+          <div style="color:var(--text-muted); font-size:0.7rem;">➔ ${escapeHtml(row.to || '-')} <small style="color:var(--accent-green);">(${tTimeFormatted || 'Arr N/A'})</small></div>
         `;
 
         const tr = document.createElement("tr");
@@ -2251,15 +2384,18 @@
         return;
       }
 
+      const rawFromTime = document.getElementById("fFromTime").value.trim();
+      const rawToTime = document.getElementById("fToTime").value.trim();
+
       const record = {
         id: editId || 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
         date: document.getElementById("fDate").value,
         trainNo: document.getElementById("fTrainNo").value.trim(),
         train: document.getElementById("fTrain").value.trim(),
         from: document.getElementById("fFrom").value.trim(),
-        fromTime: document.getElementById("fFromTime").value.trim(),
+        fromTime: to12HourFormat(rawFromTime),
         to: document.getElementById("fTo").value.trim(),
-        toTime: document.getElementById("fToTime").value.trim(),
+        toTime: to12HourFormat(rawToTime),
         passengers: passengersList,
         pnr: document.getElementById("fPnr").value.trim(),
         fare: parseFloat(document.getElementById("fFare").value) || 0,
@@ -2305,9 +2441,9 @@
       document.getElementById("fTrainNo").value = targetRow.trainNo || (targetRow.train ? (targetRow.train.match(/\d+/) || [""])[0] : "");
       document.getElementById("fTrain").value = targetRow.train || "";
       document.getElementById("fFrom").value = targetRow.from || "";
-      document.getElementById("fFromTime").value = targetRow.fromTime || "";
+      document.getElementById("fFromTime").value = to12HourFormat(targetRow.fromTime || "");
       document.getElementById("fTo").value = targetRow.to || "";
-      document.getElementById("fToTime").value = targetRow.toTime || "";
+      document.getElementById("fToTime").value = to12HourFormat(targetRow.toTime || "");
       document.getElementById("fPnr").value = targetRow.pnr || "";
 
       const pContainer = document.getElementById("passengerContainer");
@@ -2368,9 +2504,9 @@
           date: document.getElementById("fDate").value,
           train: document.getElementById("fTrain").value.trim(),
           from: document.getElementById("fFrom").value.trim(),
-          fromTime: document.getElementById("fFromTime").value.trim(),
+          fromTime: to12HourFormat(document.getElementById("fFromTime").value.trim()),
           to: document.getElementById("fTo").value.trim(),
-          toTime: document.getElementById("fToTime").value.trim(),
+          toTime: to12HourFormat(document.getElementById("fToTime").value.trim()),
           passengers: passengersList,
           pnr: document.getElementById("fPnr").value.trim(),
           fare: parseFloat(document.getElementById("fFare").value) || 0,
@@ -2401,9 +2537,12 @@
       const count = paxList.length > 0 ? paxList.length : 1;
       const perSeat = (netPayable / count).toFixed(2);
 
+      const fTimeFormatted = to12HourFormat(r.fromTime);
+      const tTimeFormatted = to12HourFormat(r.toTime);
+
       let timingInfo = "";
-      if (r.fromTime || r.toTime) {
-        timingInfo = `⏱️ *Timings:* Dep: ${r.fromTime || 'N/A'} ➔ Arr: ${r.toTime || 'N/A'}\n`;
+      if (fTimeFormatted || tTimeFormatted) {
+        timingInfo = `⏱️ *Timings:* Dep: ${fTimeFormatted || 'N/A'} ➔ Arr: ${tTimeFormatted || 'N/A'}\n`;
       }
 
       let msg = `🚆 *IRCTC JOURNEY DETAILS* 🚆\n` +
@@ -2475,8 +2614,11 @@
           quota: r.quota || "GN"
         }];
 
-        const fromWithTime = `${r.from || ''} ${r.fromTime ? '('+r.fromTime+')' : ''}`.trim();
-        const toWithTime = `${r.to || ''} ${r.toTime ? '('+r.toTime+')' : ''}`.trim();
+        const fTimeFormatted = to12HourFormat(r.fromTime);
+        const tTimeFormatted = to12HourFormat(r.toTime);
+
+        const fromWithTime = `${r.from || ''} ${fTimeFormatted ? '('+fTimeFormatted+')' : ''}`.trim();
+        const toWithTime = `${r.to || ''} ${tTimeFormatted ? '('+tTimeFormatted+')' : ''}`.trim();
 
         paxList.forEach((p, pIndex) => {
           csvRows.push([
@@ -2661,7 +2803,6 @@
         });
 
         if (branchRes.status === 404) {
-          // Branch doesn't exist, get repo default branch SHA
           const repoRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, {
             headers: {
               "Authorization": `token ${token}`,
@@ -2680,7 +2821,6 @@
           const refData = await refRes.json();
           const baseSha = refData.object.sha;
 
-          // Create dedicated data-sync branch
           await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs`, {
             method: "POST",
             headers: {
